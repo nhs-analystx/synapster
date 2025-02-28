@@ -1,11 +1,11 @@
 # Edit these site settings
 # ------------------------------------------
-title:             AnalystX Academy - Dataversity
+title:             Synapster
 email:             England.analystx@nhs.net
 author:            AnalystX
-description:       "Centre of Excellence - Dataversity"
+description:       "Synapster"
 url:               "https://analystx.uk/"
-baseurl:           "dataversity"
+baseurl:           "synapster"
 github_username:   nhs-analystx
 linkedin_username: 
 date_format:       "%b %-d, %Y"
