@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NHS Solution Exchange Store</title>
+  <link rel="stylesheet" href="path/to/nhsuk-frontend.min.css">
+</head>
+<body>
+  <header class="nhsuk-header">
+    <div class="nhsuk-header__content">
+      <h1 class="nhsuk-header__title">Solution Exchange Store</h1>
+    </div>
+  </header>
+  
+  <main class="nhsuk-width-container">
+    <!-- Provider Section -->
+    <section id="provider-section" class="nhsuk-section">
+      <h2 class="nhsuk-heading-l">Provider Marketplace</h2>
+      <p class="nhsuk-body">Browse products listed by various providers.</p>
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-one-third">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h3 class="nhsuk-card__heading">Provider Product 1</h3>
+              <p class="nhsuk-body">Brief description of Provider Product 1.</p>
+              <a href="#" class="nhsuk-link nhsuk-link--external">Learn More</a>
+            </div>
+          </div>
+        </div>
+        <!-- Repeat for each product in Providers Marketplace -->
+      </div>
+    </section>
+
+    <!-- NHS Products Section -->
+    <section id="nhs-products-section" class="nhsuk-section">
+      <h2 class="nhsuk-heading-l">NHS Product Marketplace</h2>
+      <p class="nhsuk-body">Explore products tailored specifically for NHS needs.</p>
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-one-third">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h3 class="nhsuk-card__heading">NHS Product 1</h3>
+              <p class="nhsuk-body">Brief description of NHS Product 1.</p>
+              <a href="#" class="nhsuk-link nhsuk-link--external">Learn More</a>
+            </div>
+          </div>
+        </div>
+        <!-- Repeat for each product in NHS Products Marketplace -->
+      </div>
+    </section>
+    <section id="nhs-products-section" class="nhsuk-section">
+  <h2 class="nhsuk-heading-l">NHS Product Marketplace</h2>
+  <p class="nhsuk-body">Explore products tailored specifically for NHS needs.</p>
+
+  <!-- Search Bar for NHS GitHub Repositories -->
+  <form id="nhs-github-search-form" class="nhsuk-search" role="search" onsubmit="return searchNHSGitHub(event)">
+    <label class="nhsuk-label" for="search-query">Search NHS Repositories:</label>
+    <input
+      type="text"
+      id="search-query"
+      class="nhsuk-input"
+      placeholder="Enter keywords"
+      required
+    />
+    <button type="submit" class="nhsuk-button">Search</button>
+  </form>
+
+  <!-- Results Section -->
+  <div id="search-results" class="nhsuk-grid-row"></div>
+</section>
+
+  </main>
+  
+  <footer class="nhsuk-footer">
+    <div class="nhsuk-footer__content">
+      <p class="nhsuk-footer__text">NHS Solution Exchange Store © NHS UK</p>
+    </div>
+  </footer>
+
+  <script src="path/to/nhsuk-frontend.min.js"></script>
+</body>
+</html>
