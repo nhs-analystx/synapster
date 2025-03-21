@@ -1,83 +1,156 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NHS Synapster</title>
-  <link rel="stylesheet" href="path/to/nhsuk-frontend.min.css">
-</head>
-<body>
-  <header class="nhsuk-header">
-    <div class="nhsuk-header__content">
-      <h1 class="nhsuk-header__title">Synapster</h1>
-    </div>
-  </header>
-  
-  <main class="nhsuk-width-container">
-    <!-- Provider Section -->
-    <section id="provider-section" class="nhsuk-section">
-      <h2 class="nhsuk-heading-l">Provider Marketplace</h2>
-      <p class="nhsuk-body">Browse products listed by various providers.</p>
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-one-third">
-          <div class="nhsuk-card">
-            <div class="nhsuk-card__content">
-              <h3 class="nhsuk-card__heading">Provider Product 1</h3>
-              <p class="nhsuk-body">Brief description of Provider Product 1.</p>
-              <a href="#" class="nhsuk-link nhsuk-link--external">Learn More</a>
-            </div>
-          </div>
+import React, { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+
+export default function AIHealthcareShowcase() {
+  const [formData, setFormData] = useState({
+    companyName: '',
+    aiAgentName: '',
+    contactInfo: '',
+    description: '',
+  });
+
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+
+  const companies = [
+    { name: 'MediAI', agent: 'HealthBot', rating: 4.5 },
+    { name: 'CuraTech', agent: 'DiagnoPro', rating: 4.2 },
+    { name: 'Wellness AI', agent: 'CareAssist', rating: 4.8 },
+  ];
+
+  const caseStudies = [
+    {
+      title: 'HealthBot in Triage at City Hospital',
+      description: 'Improved patient flow and reduced waiting times by 30%.',
+    },
+    {
+      title: 'DiagnoPro used for Radiology Report Automation',
+      description: 'Increased diagnostic accuracy and clinician efficiency.',
+    },
+    {
+      title: 'CareAssist in Elderly Home Care Monitoring',
+      description: 'Enhanced safety and wellbeing for residents.',
+    },
+  ];
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Submitted data:', formData);
+    alert('Thank you for your interest! We will be in touch.');
+    setFormData({ companyName: '', aiAgentName: '', contactInfo: '', description: '' });
+  };
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    if (newComment.trim()) {
+      setComments([...comments, newComment]);
+      setNewComment('');
+    }
+  };
+
+  return (
+    <div className="p-6 space-y-10">
+      {/* Section 1: Company List */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">AI Companies in Healthcare</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {companies.map((company, index) => (
+            <Card key={index}>
+              <CardContent className="p-4">
+                <h3 className="text-xl font-semibold">{company.name}</h3>
+                <p>AI Agent: {company.agent}</p>
+                <p>Rating: ⭐ {company.rating}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-        <!-- Repeat for each product in Providers Marketplace -->
-      </div>
-    </section>
+      </section>
 
-    <!-- NHS Products Section -->
-    <section id="nhs-products-section" class="nhsuk-section">
-      <h2 class="nhsuk-heading-l">Centre of Excellence</h2>
-      <p class="nhsuk-body">Explore case studies and available products for NHS needs.</p>
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-one-third">
-          <div class="nhsuk-card">
-            <div class="nhsuk-card__content">
-              <h3 class="nhsuk-card__heading">AI Product 1</h3>
-              <p class="nhsuk-body">Brief description of AI Product 1.</p>
-              <a href="#" class="nhsuk-link nhsuk-link--external">Learn More</a>
-            </div>
-          </div>
+      {/* Section 2: Case Studies */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Case Studies</h2>
+        <div className="space-y-4">
+          {caseStudies.map((study, index) => (
+            <Card key={index}>
+              <CardContent className="p-4">
+                <h3 className="text-lg font-semibold">{study.title}</h3>
+                <p>{study.description}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
-        <!-- Repeat for each product in NHS Products Marketplace -->
-      </div>
-    </section>
-    <section id="nhs-products-section" class="nhsuk-section">
-  <h2 class="nhsuk-heading-l">NHS Product Marketplace</h2>
-  <p class="nhsuk-body">Explore products tailored specifically for NHS needs.</p>
+      </section>
 
-  <!-- Search Bar for NHS GitHub Repositories -->
-  <form id="nhs-github-search-form" class="nhsuk-search" role="search" onsubmit="return searchNHSGitHub(event)">
-    <label class="nhsuk-label" for="search-query">Search NHS Repositories:</label>
-    <input
-      type="text"
-      id="search-query"
-      class="nhsuk-input"
-      placeholder="Enter keywords"
-      required
-    />
-    <button type="submit" class="nhsuk-button">Search</button>
-  </form>
+      {/* Section 3: Registration Form */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Register to Showcase Your AI Agent</h2>
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
+          <Input
+            name="companyName"
+            placeholder="Company Name"
+            value={formData.companyName}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            name="aiAgentName"
+            placeholder="AI Agent Name"
+            value={formData.aiAgentName}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            name="contactInfo"
+            placeholder="Contact Information"
+            value={formData.contactInfo}
+            onChange={handleChange}
+            required
+          />
+          <Textarea
+            name="description"
+            placeholder="Brief Description of Your AI Agent"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
+          <Button type="submit">Submit</Button>
+        </form>
+      </section>
 
-  <!-- Results Section -->
-  <div id="search-results" class="nhsuk-grid-row"></div>
-</section>
-
-  </main>
-  
-  <footer class="nhsuk-footer">
-    <div class="nhsuk-footer__content">
-      <p class="nhsuk-footer__text">NHS Solution Exchange Store © NHS UK</p>
+      {/* Section 4: Discussion Forum */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Discussion Forum</h2>
+        <form onSubmit={handleCommentSubmit} className="space-y-4 max-w-xl mb-6">
+          <Textarea
+            placeholder="Leave a comment or share your thoughts..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            required
+          />
+          <Button type="submit">Post Comment</Button>
+        </form>
+        <div className="space-y-2">
+          {comments.length > 0 ? (
+            comments.map((comment, index) => (
+              <Card key={index}>
+                <CardContent className="p-4">
+                  <p>{comment}</p>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <p className="text-gray-500">No comments yet. Be the first to share your thoughts!</p>
+          )}
+        </div>
+      </section>
     </div>
-  </footer>
-
-  <script src="path/to/nhsuk-frontend.min.js"></script>
-</body>
-</html>
+  );
+}
