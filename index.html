@@ -19,12 +19,26 @@
       });
     }
 
+    function setStarRating(element, value) {
+      const stars = element.querySelectorAll('.star');
+      stars.forEach((star, index) => {
+        if (index < value) {
+          star.classList.add('text-yellow-500');
+        } else {
+          star.classList.remove('text-yellow-500');
+        }
+      });
+      element.querySelector('input[name="rating"]').value = value;
+    }
+
     function submitReview(form, cardId) {
-      const rating = form.querySelector('select[name="rating"]').value;
+      const rating = form.querySelector('input[name="rating"]').value;
       const review = form.querySelector('textarea[name="review"]').value;
       const display = document.getElementById(`review-display-${cardId}`);
       display.innerHTML = `<p class='text-sm text-yellow-600'>Rating: ${'⭐'.repeat(rating)}</p><p class='text-sm text-gray-700'>"${review}"</p>`;
       form.reset();
+      const stars = form.querySelectorAll('.star');
+      stars.forEach(star => star.classList.remove('text-yellow-500'));
       return false;
     }
   </script>
@@ -64,14 +78,15 @@
           <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
         </div>
         <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
+          <input type="hidden" name="rating" value="0">
           <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <select name="rating" class="w-full border px-2 py-1 rounded mb-2">
-            <option value="5">5 - Excellent</option>
-            <option value="4">4 - Good</option>
-            <option value="3">3 - Average</option>
-            <option value="2">2 - Poor</option>
-            <option value="1">1 - Terrible</option>
-          </select>
+          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+          </div>
           <label class="block text-sm font-medium mb-1">Your Review:</label>
           <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
           <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
