@@ -1,161 +1,78 @@
---- 
-layout: home_page
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synapster - AI Agent Marketplace</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Header -->
+  <header class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-blue-600">Synapster</h1>
+    <nav class="space-x-4">
+      <a href="#agents" class="hover:text-blue-600">AI Agents</a>
+      <a href="#case-studies" class="hover:text-blue-600">Case Studies</a>
+      <a href="#demos" class="hover:text-blue-600">Demos</a>
+      <a href="#categories" class="hover:text-blue-600">Categories</a>
+    </nav>
+  </header>
 
+  <!-- Hero Section -->
+  <section class="bg-blue-100 p-10 text-center">
+    <h2 class="text-3xl font-semibold mb-2">Discover AI Agents That Work for You</h2>
+    <p class="text-gray-700">Explore, test and rate AI agents with real-world case studies.</p>
+  </section>
 
-import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-
-export default function AIHealthcareShowcase() {
-  const [formData, setFormData] = useState({
-    companyName: '',
-    aiAgentName: '',
-    contactInfo: '',
-    description: '',
-  });
-
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
-
-  const companies = [
-    { name: 'MediAI', agent: 'HealthBot', rating: 4.5 },
-    { name: 'CuraTech', agent: 'DiagnoPro', rating: 4.2 },
-    { name: 'Wellness AI', agent: 'CareAssist', rating: 4.8 },
-  ];
-
-  const caseStudies = [
-    {
-      title: 'HealthBot in Triage at City Hospital',
-      description: 'Improved patient flow and reduced waiting times by 30%.',
-    },
-    {
-      title: 'DiagnoPro used for Radiology Report Automation',
-      description: 'Increased diagnostic accuracy and clinician efficiency.',
-    },
-    {
-      title: 'CareAssist in Elderly Home Care Monitoring',
-      description: 'Enhanced safety and wellbeing for residents.',
-    },
-  ];
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Submitted data:', formData);
-    alert('Thank you for your interest! We will be in touch.');
-    setFormData({ companyName: '', aiAgentName: '', contactInfo: '', description: '' });
-  };
-
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (newComment.trim()) {
-      setComments([...comments, newComment]);
-      setNewComment('');
-    }
-  };
-
-  return (
-    <div className="p-6 space-y-10">
-      {/* Section 1: Company List */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4">AI Companies in Healthcare</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {companies.map((company, index) => (
-            <Card key={index}>
-              <CardContent className="p-4">
-                <h3 className="text-xl font-semibold">{company.name}</h3>
-                <p>AI Agent: {company.agent}</p>
-                <p>Rating: ⭐ {company.rating}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* Section 2: Case Studies */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Case Studies</h2>
-        <div className="space-y-4">
-          {caseStudies.map((study, index) => (
-            <Card key={index}>
-              <CardContent className="p-4">
-                <h3 className="text-lg font-semibold">{study.title}</h3>
-                <p>{study.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* Section 3: Registration Form */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Register to Showcase Your AI Agent</h2>
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
-          <Input
-            name="companyName"
-            placeholder="Company Name"
-            value={formData.companyName}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            name="aiAgentName"
-            placeholder="AI Agent Name"
-            value={formData.aiAgentName}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            name="contactInfo"
-            placeholder="Contact Information"
-            value={formData.contactInfo}
-            onChange={handleChange}
-            required
-          />
-          <Textarea
-            name="description"
-            placeholder="Brief Description of Your AI Agent"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-          <Button type="submit">Submit</Button>
-        </form>
-      </section>
-
-      {/* Section 4: Discussion Forum */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Discussion Forum</h2>
-        <form onSubmit={handleCommentSubmit} className="space-y-4 max-w-xl mb-6">
-          <Textarea
-            placeholder="Leave a comment or share your thoughts..."
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            required
-          />
-          <Button type="submit">Post Comment</Button>
-        </form>
-        <div className="space-y-2">
-          {comments.length > 0 ? (
-            comments.map((comment, index) => (
-              <Card key={index}>
-                <CardContent className="p-4">
-                  <p>{comment}</p>
-                </CardContent>
-              </Card>
-            ))
-          ) : (
-            <p className="text-gray-500">No comments yet. Be the first to share your thoughts!</p>
-          )}
-        </div>
-      </section>
+  <!-- AI Agents Section -->
+  <section id="agents" class="p-6">
+    <h3 class="text-2xl font-semibold mb-4">Featured AI Agents</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Sample Agent Card -->
+      <div class="bg-white shadow rounded p-4">
+        <h4 class="text-lg font-bold">Customer Support Bot</h4>
+        <p class="text-sm text-gray-600">Trained on healthcare service interactions.</p>
+        <p class="mt-2 text-yellow-500">⭐⭐⭐⭐☆</p>
+        <a href="#" class="text-blue-600 hover:underline">View Case Study</a>
+      </div>
+      <!-- Repeat for more agents -->
     </div>
-  );
-}
+  </section>
+
+  <!-- Case Studies Section -->
+  <section id="case-studies" class="bg-gray-100 p-6">
+    <h3 class="text-2xl font-semibold mb-4">Real-Life Case Studies</h3>
+    <div class="space-y-4">
+      <div>
+        <h4 class="font-bold">Automating NHS Patient Triage</h4>
+        <p class="text-gray-600">How AI agents reduced response times by 50% in GP practices.</p>
+      </div>
+      <!-- More case studies -->
+    </div>
+  </section>
+
+  <!-- Demo Area -->
+  <section id="demos" class="p-6">
+    <h3 class="text-2xl font-semibold mb-4">Interactive Demo Area</h3>
+    <p class="mb-2 text-gray-600">Try our AI agents live with your own test data.</p>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Launch Demo</button>
+  </section>
+
+  <!-- Categories Section -->
+  <section id="categories" class="bg-white p-6">
+    <h3 class="text-2xl font-semibold mb-4">Browse by Categories</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-blue-50 p-4 rounded shadow text-center">Healthcare</div>
+      <div class="bg-blue-50 p-4 rounded shadow text-center">Education</div>
+      <div class="bg-blue-50 p-4 rounded shadow text-center">Customer Service</div>
+      <div class="bg-blue-50 p-4 rounded shadow text-center">Finance</div>
+      <!-- Add more categories as needed -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-200 p-4 text-center text-sm text-gray-700">
+    &copy; 2025 Synapster. All rights reserved.
+  </footer>
+</body>
+</html>
