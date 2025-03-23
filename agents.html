@@ -47,8 +47,8 @@
     <header class="bg-white shadow p-4 flex justify-between items-center">
       <h1 class="text-2xl text-blue-600 font-bold">Synapster AI Marketplace</h1>
       <nav>
-        <a href="/" class="mx-2 hover:text-blue-600">Home</a>
-        <a href="/agents" class="mx-2 hover:text-blue-600">Agents</a>
+        <a href="#" class="mx-2 hover:text-blue-600">Home</a>
+        <a href="#" class="mx-2 hover:text-blue-600">Agents</a>
         <a href="#" class="mx-2 hover:text-blue-600">Demos</a>
         <a href="#" class="mx-2 hover:text-blue-600">Case Studies</a>
       </nav>
@@ -63,9 +63,13 @@
     <!-- Featured Agent Cards (2 columns) -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-4 p-8">
       <div class="agent-card bg-white rounded shadow-lg p-4" id="agent-1" data-keywords="diagnostics imaging">
-        <img src="logo.png" alt="Company Logo" class="w-16 h-16 mb-2">
+        <img src="/assets/logos/sensely.jfif" alt="Company Logo" class="w-50 h-16 mb-2">
         <h4 class="font-bold text-xl">Sensely</h4>
         <p class="text-gray-600">AI-powered virtual assistant for medical triage.</p>
+        <video controls class="w-full h-auto my-3">
+          <source src="demo-video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
         <div class="my-3" id="feedback-agent-1"></div>
         <form onsubmit="submitFeedback(event, 'agent-1')">
           <div class="flex space-x-1 cursor-pointer" onclick="event.stopPropagation()">
@@ -83,11 +87,99 @@
     <!-- Other AI Agents (6 columns) -->
     <section class="grid grid-cols-2 md:grid-cols-6 gap-4 p-8">
       <!-- Repeat similar structure for additional agent cards -->
-      <div class="agent-card bg-white rounded shadow-lg p-2" data-keywords="clinical decision support">
-        <img src="logo.png" alt="Company Logo" class="w-12 h-12 mb-1">
-        <h5 class="font-bold">Agent Name</h5>
+            <!-- Sample Agent Card -->
+      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
+        <h4 class="text-lg font-bold">Aidoc</h4>
+        <p class="text-sm text-gray-600">AI for radiology and acute abnormality detection.</p>
+        <div id="review-display-agent-1" class="mt-2">
+          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
+        </div>
+        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
+          <input type="hidden" name="rating" value="0">
+          <label class="block text-sm font-medium mb-1">Your Rating:</label>
+          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+          </div>
+          <label class="block text-sm font-medium mb-1">Your Review:</label>
+          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
+          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
+        </form>
+        <a href="https://www.aidoc.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
       </div>
-      <!-- Repeat for other agents -->
+  
+      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
+        <h4 class="text-lg font-bold">Zebra Medical Vision</h4>
+        <p class="text-sm text-gray-600">  AI-powered radiology tools for cardiovascular, liver, and lung diseases.</p>
+        <div id="review-display-agent-1" class="mt-2">
+          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
+        </div>
+        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
+          <input type="hidden" name="rating" value="0">
+          <label class="block text-sm font-medium mb-1">Your Rating:</label>
+          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+          </div>
+          <label class="block text-sm font-medium mb-1">Your Review:</label>
+          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
+          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
+        </form>
+        <a href="https://www.zebra-med.com/contact-us/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
+      </div>
+
+                  <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
+        <h4 class="text-lg font-bold">Arterys</h4>
+        <p class="text-sm text-gray-600"> AI-based symptom assessment and triage.</p>
+        <div id="review-display-agent-1" class="mt-2">
+          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
+        </div>
+        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
+          <input type="hidden" name="rating" value="0">
+          <label class="block text-sm font-medium mb-1">Your Rating:</label>
+          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+          </div>
+          <label class="block text-sm font-medium mb-1">Your Review:</label>
+          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
+          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
+        </form>
+        <a href="https://www.mediktor.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
+      </div>
+
+                        <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
+        <h4 class="text-lg font-bold">Sensely</h4>
+        <p class="text-sm text-gray-600"> AI-powered virtual assistant for medical triage.</p>
+        <div id="review-display-agent-1" class="mt-2">
+          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
+        </div>
+        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
+          <input type="hidden" name="rating" value="0">
+          <label class="block text-sm font-medium mb-1">Your Rating:</label>
+          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+          </div>
+          <label class="block text-sm font-medium mb-1">Your Review:</label>
+          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
+          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
+        </form>
+        <a href="https://www.sensely.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
+      </div>
+
     </section>
 
     <footer class="bg-white text-center py-4 shadow">
