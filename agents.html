@@ -1,6 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agentic App Store - Synapster</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #4682B4; }
+    .agent-card { border-width: 4px; border-color: #2C3E50; }
+  </style>
+  <script>
+    function searchAgents() {
+      const query = document.getElementById('agentSearch').value.toLowerCase();
+      document.querySelectorAll('.agent-card').forEach(card => {
+        const keywords = card.dataset.keywords;
+        card.style.display = keywords.includes(query) ? 'block' : 'none';
+      });
+    }
 
+    function rateAgent(starContainer, rating) {
+      starContainer.querySelectorAll('.star').forEach((star, i) => {
+        star.classList.toggle('text-yellow-400', i < rating);
+      });
+      starContainer.nextElementSibling.value = rating;
+    }
+
+    function submitFeedback(event, agentId) {
+      event.preventDefault();
+      const form = event.target;
+      const rating = form.rating.value;
+      const review = form.review.value;
+
+      const feedbackDiv = document.getElementById(`feedback-${agentId}`);
+      feedbackDiv.innerHTML = `
+        <div class='text-sm text-gray-600'><strong>Your Rating:</strong> ${'⭐'.repeat(rating)}</div>
+        <div class='italic text-gray-800'>"${review}"</div>
+      `;
+
+      form.reset();
+      form.querySelectorAll('.star').forEach(star => star.classList.remove('text-yellow-400'));
+    }
+  </script>
+</head>
 <body class="bg-gray-100 flex justify-center">
   <div class="container max-w-7xl">
     <header class="bg-white shadow p-4 flex justify-between items-center">
