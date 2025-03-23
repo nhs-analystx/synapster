@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Case Studies - Synapster</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #4682B4; }
+    .case-study-card { border-width: 4px; border-color: #2C3E50; }
+  </style>
+  <script>
+    function toggleDetails(id) {
+      const content = document.getElementById(id);
+      content.classList.toggle('hidden');
+    }
+  </script>
+</head>
+<body class="bg-gray-100 flex justify-center">
+  <div class="container max-w-7xl">
+
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="text-2xl text-blue-600 font-bold">AI Case Studies - Synapster</h1>
+      <nav>
+        <a href="#" class="mx-2 hover:text-blue-600">Home</a>
+        <a href="#" class="mx-2 hover:text-blue-600">Agents</a>
+        <a href="#" class="mx-2 hover:text-blue-600">Demos</a>
+        <a href="#" class="mx-2 hover:text-blue-600">Case Studies</a>
+      </nav>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 p-8">
+
+      <!-- Diagnostics & Imaging Solutions -->
+      <div class="case-study-card bg-white rounded shadow-lg p-4">
+        <h3 class="font-bold text-xl">Diagnostics & Imaging Solutions</h3>
+        <p class="text-gray-600">AI-enhanced radiology improves accuracy by identifying critical conditions swiftly.</p>
+        <button class="text-blue-600 mt-2" onclick="toggleDetails('case1')">Read More</button>
+        <div id="case1" class="hidden mt-2 text-gray-700">
+          Detailed insights reveal a 30% increase in diagnostic accuracy with faster image processing and improved patient outcomes.
+        </div>
+      </div>
+
+      <!-- Clinical Decision Support & Triage -->
+      <div class="case-study-card bg-white rounded shadow-lg p-4">
+        <h3 class="font-bold text-xl">Clinical Decision Support & Triage</h3>
+        <p class="text-gray-600">AI-powered symptom checkers enhance triage effectiveness in emergency departments.</p>
+        <button class="text-blue-600 mt-2" onclick="toggleDetails('case2')">Read More</button>
+        <div id="case2" class="hidden mt-2 text-gray-700">
+          Triage efficiency increased by 25%, significantly reducing patient waiting times and boosting satisfaction.
+        </div>
+      </div>
+
+      <!-- Patient Engagement & Remote Care -->
+      <div class="case-study-card bg-white rounded shadow-lg p-4">
+        <h3 class="font-bold text-xl">Patient Engagement & Remote Care</h3>
+        <p class="text-gray-600">Virtual care assistants enhance patient adherence and engagement.</p>
+        <button class="text-blue-600 mt-2" onclick="toggleDetails('case3')">Read More</button>
+        <div id="case3" class="hidden mt-2 text-gray-700">
+          Patient engagement has improved significantly, with adherence rates rising by 40%.
+        </div>
+      </div>
+
+      <!-- Operational Efficiency & Administration -->
+      <div class="case-study-card bg-white rounded shadow-lg p-4">
+        <h3 class="font-bold text-xl">Operational Efficiency & Administration</h3>
+        <p class="text-gray-600">AI streamlines administrative workflows, improving operational efficiency.</p>
+        <button class="text-blue-600 mt-2" onclick="toggleDetails('case4')">Read More</button>
+        <div id="case4" class="hidden mt-2 text-gray-700">
+          Workflow automation achieved a 20% reduction in administrative overhead, enhancing staff productivity.
+        </div>
+      </div>
+
+      <!-- Drug Discovery & Research -->
+      <div class="case-study-card bg-white rounded shadow-lg p-4">
+        <h3 class="font-bold text-xl">Drug Discovery & Research</h3>
+        <p class="text-gray-600">AI accelerates drug discovery, reducing time and cost.</p>
+        <button class="text-blue-600 mt-2" onclick="toggleDetails('case5')">Read More</button>
+        <div id="case5" class="hidden mt-2 text-gray-700">
+          Accelerated drug discovery cycles by up to 50%, significantly reducing time-to-market for critical medications.
+        </div>
+      </div>
+
+    </section>
+
+    <footer class="bg-white text-center py-4 shadow">
+      <p class="text-gray-600">© 2025 Synapster AI Marketplace</p>
+    </footer>
+
+  </div>
+</body>
+</html>
