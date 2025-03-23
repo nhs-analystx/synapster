@@ -76,6 +76,19 @@
           <button type="submit" class="mt-2 bg-blue-600 text-white px-3 py-1 rounded">Submit</button>
         </form>
         <a href="#" class="inline-block mt-2 text-blue-600 hover:underline">View Agent</a>
+                <img src="logo.png" alt="Company Logo" class="w-16 h-16 mb-2">
+        <h4 class="font-bold text-xl">test2</h4>
+        <p class="text-gray-600">AI-powered virtual assistant for medical triage.</p>
+        <div class="my-3" id="feedback-agent-1"></div>
+        <form onsubmit="submitFeedback(event, 'agent-2')">
+          <div class="flex space-x-1 cursor-pointer" onclick="event.stopPropagation()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="star w-6 h-6" onclick="rateAgent(this.parentElement, 1)" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+          </div>
+          <input type="hidden" name="rating" value="0">
+          <textarea name="review" placeholder="Write your review..." class="mt-2 p-2 border w-full rounded"></textarea>
+          <button type="submit" class="mt-2 bg-blue-600 text-white px-3 py-1 rounded">Submit</button>
+        </form>
+        <a href="#" class="inline-block mt-2 text-blue-600 hover:underline">View Agent</a>
       </div>
 
       <!-- Additional Agent Cards (4x1) -->
