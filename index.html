@@ -3,44 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Agentic App Store - Synapster</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Chatbot Interaction</title>
   <style>
-    body { background-color: #4682B4; }
-    .agent-card { border-width: 4px; border-color: #2C3E50; }
+    .agent-card { display: none; border: 1px solid #ccc; padding: 10px; margin: 5px; }
+    .chat-container { max-width: 600px; margin: auto; }
+    .chat-input { width: 100%; padding: 10px; }
+    .chat-response { margin-top: 15px; padding: 10px; background-color: #f8f8f8; border-radius: 5px; }
   </style>
-  <script>
-    function searchAgents() {
-      const query = document.getElementById('agentSearch').value.toLowerCase();
-      document.querySelectorAll('.agent-card').forEach(card => {
-        const keywords = card.dataset.keywords;
-        card.style.display = keywords.includes(query) ? 'block' : 'none';
-      });
+</head>
+<body>
+
+<div class="chat-container">
+  <input type="text" id="chatInput" class="chat-input" placeholder="Ask a question...">
+  <button onclick="chatbotResponse()">Ask</button>
+
+  <div id="response" class="chat-response"></div>
+
+  <div id="agentList" style="display: none;">
+    <div class="agent-card" data-keywords="AI Agent">
+      <h3>AI Agents</h3>
+      <p>Helps with AI Agents queries including available app, scores, and reviews.</p>
+    </div>
+    <div class="agent-card" data-keywords="data observatory">
+      <h3>data observatory</h3>
+      <p>Supports queries related to datasets, data availabilities, and company info.</p>
+    </div>
+    <div class="agent-card" data-keywords="analytical products">
+      <h3>AnalystX</h3>
+      <p>Provides assistance with accessing templates, software, and analytical products.</p>
+    </div>
+     <div class="agent-card" data-keywords="case studies">
+      <h3>case studies</h3>
+      <p>Provides information and case studies on use of AI agents, software, and practical knowledge.</p>
+    </div>
+         <div class="agent-card" data-keywords="communities">
+      <h3>community</h3>
+      <p>search for chat and conversation regards AI agents, repository, and issues of uses.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function chatbotResponse() {
+    const userInput = document.getElementById('chatInput').value.toLowerCase();
+    const responseContainer = document.getElementById('response');
+    let matchedCards = [];
+
+    document.querySelectorAll('.agent-card').forEach(card => {
+      const keywords = card.dataset.keywords;
+      if (keywords.includes(userInput)) {
+        matchedCards.push(card.innerHTML);
+      }
+    });
+
+    if (matchedCards.length > 0) {
+      responseContainer.innerHTML = matchedCards.join('<hr>');
+    } else {
+      responseContainer.innerHTML = 'Sorry, I couldn\'t find information related to your query. Please try again.';
     }
+  }
+</script>
 
-    function rateAgent(starContainer, rating) {
-      starContainer.querySelectorAll('.star').forEach((star, i) => {
-        star.classList.toggle('text-yellow-400', i < rating);
-      });
-      starContainer.nextElementSibling.value = rating;
-    }
-
-    function submitFeedback(event, agentId) {
-      event.preventDefault();
-      const form = event.target;
-      const rating = form.rating.value;
-      const review = form.review.value;
-
-      const feedbackDiv = document.getElementById(`feedback-${agentId}`);
-      feedbackDiv.innerHTML = `
-        <div class='text-sm text-gray-600'><strong>Your Rating:</strong> ${'⭐⭐⭐⭐⭐'.repeat(rating)}</div>
-        <div class='italic text-gray-800'>"${review}"</div>
-      `;
-
-      form.reset();
-      form.querySelectorAll('.star').forEach(star => star.classList.remove('text-yellow-400'));
-    }
-  </script>
 </head>
 <body class="bg-gray-100 flex justify-center">
   <div class="container max-w-5xl">
