@@ -2,66 +2,102 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chatbot Interaction</title>
+  <title>DeepSeek Integrated Chatbot</title>
   <style>
-    .agent-card { display: none; border: 1px solid #ccc; padding: 10px; margin: 5px; }
-    .chat-container { max-width: 600px; margin: auto; }
-    .chat-input { width: 100%; padding: 10px; }
-    .chat-response { margin-top: 15px; padding: 10px; background-color: #f8f8f8; border-radius: 5px; }
+    .chat-container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+    }
+    .chat-input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+    .chat-submit {
+      padding: 8px 15px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .response {
+      margin-top: 20px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
 
 <div class="chat-container">
-  <input type="text" id="chatInput" class="chat-input" placeholder="Ask a question...">
-  <button onclick="chatbotResponse()">Ask</button>
+  <h3>DeepSeek Chatbot</h3>
+  <input type="text" id="userInput" class="chat-input" placeholder="Ask a question...">
+  <button class="chat-submit" onclick="fetchAnswer()">Ask</button>
 
-  <div id="response" class="chat-response"></div>
-
-  <div id="agentList" style="display: none;">
-    <div class="agent-card" data-keywords="AI Agent">
-      <h3>AI Agents</h3>
-      <p>Helps with AI Agents queries including available app, scores, and reviews.</p>
-    </div>
-    <div class="agent-card" data-keywords="data observatory">
-      <h3>data observatory</h3>
-      <p>Supports queries related to datasets, data availabilities, and company info.</p>
-    </div>
-    <div class="agent-card" data-keywords="analytical products">
-      <h3>AnalystX</h3>
-      <p>Provides assistance with accessing templates, software, and analytical products.</p>
-    </div>
-     <div class="agent-card" data-keywords="case studies">
-      <h3>case studies</h3>
-      <p>Provides information and case studies on use of AI agents, software, and practical knowledge.</p>
-    </div>
-         <div class="agent-card" data-keywords="communities">
-      <h3>community</h3>
-      <p>search for chat and conversation regards AI agents, repository, and issues of uses.</p>
-    </div>
-  </div>
+  <div id="response" class="response"></div>
 </div>
 
 <script>
-  function chatbotResponse() {
-    const userInput = document.getElementById('chatInput').value.toLowerCase();
-    const responseContainer = document.getElementById('response');
-    let matchedCards = [];
+  async function fetchAnswer() {
+    const userQuery = document.getElementById('userInput').value.trim();
+    const responseBox = document.getElementById('response');
 
-    document.querySelectorAll('.agent-card').forEach(card => {
-      const keywords = card.dataset.keywords;
-      if (keywords.includes(userInput)) {
-        matchedCards.push(card.innerHTML);
+    if (!userQuery) {
+      responseBox.textContent = "Please enter a question.";
+      return;
+    }
+
+    responseBox.textContent = "Loading answer...";
+
+    const apiKey = 'YOUR_DEEPSEEK_API_KEY'; // <-- Replace with your DeepSeek API Key
+    const apiUrl = 'https://api.deepseek.com/chat/completions';
+
+    const payload = {
+      model: "deepseek-chat",
+      messages: [
+        {
+          role: "user",
+          content: userQuery
+        }
+      ],
+      stream: false
+    };
+
+    try {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        throw new Error(`API Error: ${res.status}`);
       }
-    });
 
-    if (matchedCards.length > 0) {
-      responseContainer.innerHTML = matchedCards.join('<hr>');
-    } else {
-      responseContainer.innerHTML = 'Sorry, I couldn\'t find information related to your query. Please try again.';
+      const data = await res.json();
+      const answer = data.choices[0].message.content;
+
+      responseBox.textContent = answer;
+
+    } catch (error) {
+      responseBox.textContent = `Error fetching response: ${error.message}`;
     }
   }
+
+  document.getElementById('userInput').addEventListener("keyup", function(event) {
+    if (event.key === 'Enter') {
+      fetchAnswer();
+    }
+  });
 </script>
 
 </head>
