@@ -3,101 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent Marketplace</title>
+    <title>AI Healthcare Company Examples</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom CSS for the grey theme and enhanced dynamic feel */
+        /* Custom CSS adapted from the AI Marketplace for static page */
         :root {
             /* Grey Palette */
             --bg-main: #f1f3f5; /* Main background grey */
-            --header-bg: rgba(255, 255, 255, 0.9); /* White semi-transparent header */
             --card-bg: #ffffff; /* White cards */
-            --card-hover-bg: #ffffff;
-            --tooltip-bg: rgba(33, 37, 41, 0.9); /* Dark tooltip */
-            --tooltip-text: #f8f9fa; /* Light tooltip text */
+            --card-hover-bg: #f8f9fa; /* Slightly off-white hover */
             --text-primary: #212529; /* Very Dark Grey */
             --text-secondary: #495057; /* Dark Grey */
             --text-muted: #6c757d;   /* Medium Grey */
             --border-color: #dee2e6; /* Light Grey Border */
             --accent-color: #495057;  /* Dark Grey for accents */
-            --accent-hover-color: #212529; /* Very Dark Grey for hover */
             --shadow-color: rgba(0, 0, 0, 0.07); /* Slightly softer shadow */
-            --star-color: #fbbc05;
-            --featured-color: #ffeb3b;
-            --link-color: #0d6efd; /* Standard blue link color */
-            --link-hover-color: #0a58ca;
-        }
-
-        html {
-             scroll-behavior: smooth;
         }
 
         body {
             background-color: var(--bg-main);
-            animation: fadeInBackground 1s ease forwards;
             margin: 0;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             color: var(--text-primary);
         }
 
-        @keyframes fadeInBackground {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Loading Screen */
-        #loading-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(255, 255, 255, 0.98);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 10000;
-            transition: opacity 0.7s ease-out;
-        }
-        #loading-screen.fade-out { opacity: 0; visibility: hidden; }
-        .loader {
-            border: 6px solid #e9ecef; border-top: 6px solid var(--accent-color);
-            border-radius: 50%; width: 50px; height: 50px;
-            animation: spin 1.5s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Header */
-        header {
-            background: var(--header-bg);
-            backdrop-filter: blur(10px);
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 2px 8px var(--shadow-color);
-            padding: 1rem 1.5rem;
-        }
-        .header-content {
-            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-            gap: 1rem; max-width: 1400px; margin: 0 auto;
-        }
-        .header-title {
-            font-size: 1.75rem; font-weight: 700; color: var(--text-primary);
-            margin: 0; flex-shrink: 0; text-decoration: none;
-        }
-        header nav { display: flex; gap: 1.5rem; margin: 0 auto; }
-        header nav a {
-            color: var(--text-secondary);
-            text-decoration: none; font-weight: 500; padding: 0.5rem 0; position: relative;
-            transition: color 0.3s ease; cursor: pointer;
-        }
-        header nav a::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
-            background-color: var(--accent-color); transition: width 0.3s ease;
-        }
-        header nav a:hover,
-        header nav a.active { color: var(--text-primary); }
-        header nav a.active::after { width: 100%; }
-        .header-actions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
-
-        /* Card Base Styles (Shared) */
+        /* Card Base Styles */
         .card-base {
             background: var(--card-bg);
             border-radius: 16px;
@@ -106,107 +38,36 @@
             margin-bottom: 25px;
             border: 1px solid var(--border-color);
             position: relative;
-            opacity: 0; transform: translateY(20px);
-            animation: fadeInUp 0.5s ease forwards;
-            display: flex; /* Use flex for internal layout */
-            flex-direction: column; /* Stack content vertically */
-            overflow: hidden; /* Hide overflow */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         .card-base:hover {
             transform: translateY(-5px);
             box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
-        }
-        /* Staggered Animation Delays */
-        .card-base:nth-child(1) { animation-delay: 0.1s; }
-        .card-base:nth-child(2) { animation-delay: 0.15s; }
-        .card-base:nth-child(3) { animation-delay: 0.2s; }
-        .card-base:nth-child(4) { animation-delay: 0.25s; }
-        .card-base:nth-child(5) { animation-delay: 0.3s; }
-        .card-base:nth-child(6) { animation-delay: 0.35s; }
-        /* Add more if needed */
-
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
+            background: var(--card-hover-bg);
         }
 
-        /* App Card Specific */
-        .app-card {
-            cursor: pointer; overflow: visible; /* Allow tooltip */
+        /* App Card Specific Styles (used for company cards here) */
+        .app-card-content {
+             display: flex; align-items: flex-start; padding: 16px; flex-grow: 1;
         }
-        .app-card-content { /* Inner container for app card flex */
-             display: flex;
-             align-items: flex-start; /* Align items to top */
-             padding: 16px; /* Apply padding here */
-             flex-grow: 1; /* Allow content to grow */
-        }
-        .app-card .app-icon { /* Icon specific styles */
+        .app-card .app-icon {
             width: 65px; height: 65px; border-radius: 12px; margin-right: 16px;
         }
-        .app-card .app-info { flex: 1; } /* Allow text info to take remaining space */
+        .app-card .app-info { flex: 1; }
         .app-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-        .app-category {
+        .app-category-label { /* Specific class for category label on this page */
             font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;
             display: inline-block; padding: 3px 10px; border-radius: 12px;
             background-color: #f1f3f5; line-height: 1.3;
         }
         .app-description {
             font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;
-            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-            overflow: hidden; text-overflow: ellipsis; height: calc(1.5 * 3em);
+            /* Allow more lines for description on this static page */
+            /* display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; */
+            /* overflow: hidden; text-overflow: ellipsis; */
         }
-        .featured-app-badge { /* Badge positioned absolutely */
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: linear-gradient(45deg, #fff176, #ffee58);
-            color: #5f4300; padding: 4px 10px; border-radius: 12px;
-            font-size: 0.7rem; font-weight: 700;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            z-index: 2; /* Above card content */
-        }
-
-
-        /* Case Study Card Specific */
-        .case-study-card {
-             padding: 20px;
-             text-decoration: none; /* Remove underline if card is a link */
-             color: inherit; /* Inherit text color */
-        }
-        .case-study-card .app-icon { /* Reuse app-icon style, centered */
-            width: 60px; height: 60px; border-radius: 12px; margin: 0 auto 15px auto;
-        }
-        .case-study-card .agent-title {
-            font-size: 1.15rem; font-weight: 600; color: var(--text-primary);
-            margin-bottom: 6px; text-align: center;
-        }
-        .case-study-card .country-info {
-            font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;
-            text-align: center; font-weight: 500;
-        }
-        .case-study-card .country-info strong { color: var(--text-secondary); }
-        .case-study-card .improvement-details {
-            font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;
-            margin-bottom: 15px; /* Space before link */
-            /* Allow slightly more text */
-            display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
-            overflow: hidden; text-overflow: ellipsis;
-        }
-        .case-study-card .learn-more-link {
-            display: block; /* Make link block */
-            text-align: center;
-            margin-top: auto; /* Push link to bottom */
-            padding-top: 10px; /* Space above link */
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--link-color);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-        .case-study-card .learn-more-link:hover {
-             color: var(--link-hover-color);
-             text-decoration: underline;
-        }
-
 
         /* Common Icon Styles */
         .app-icon {
@@ -216,240 +77,454 @@
         }
         .app-icon img { width: 100%; height: 100%; object-fit: cover; }
 
-
-        /* Modal */
-        #app-details-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(33, 37, 41, 0.75); backdrop-filter: blur(8px);
-            z-index: 10000; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.4s ease;
+        /* Page Title Styles */
+        .page-title {
+            font-size: 2.2rem; font-weight: 700; color: var(--text-primary);
+            margin-bottom: 1rem; padding-bottom: 0.5rem;
+            text-align: center;
         }
-        #app-details-modal.show { display: flex; opacity: 1; }
-        #app-details-content {
-            background: #ffffff; border-radius: 18px; padding: 40px; width: 90%; max-width: 850px;
-            max-height: 90vh; overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            position: relative; transform: scale(0.9);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        #app-details-modal.show #app-details-content { transform: scale(1); }
-        #app-details-content h2 { font-size: 2rem; color: var(--text-primary); margin-bottom: 12px; font-weight: 700; }
-        #app-details-content .modal-app-category {
-            font-size: 0.95rem; margin-bottom: 24px; display: inline-block;
-            padding: 6px 12px; border-radius: 14px; background-color: #f1f3f5; color: var(--text-muted);
-        }
-        #app-details-content p#modal-app-description { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 28px; }
-        #app-details-content .close-button {
-            position: absolute; top: 20px; right: 20px; font-size: 2rem; font-weight: 300; color: #adb5bd;
-            cursor: pointer; transition: color 0.3s ease, transform 0.3s ease; border: none; background: none; padding: 0; line-height: 1;
-        }
-        #app-details-content .close-button:hover { color: #dc3545; transform: rotate(90deg) scale(1.1); }
-        .modal-app-icon {
-            width: 110px; height: 110px; border-radius: 20px; margin-right: 24px;
-            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
-            font-size: 32px; font-weight: 600; color: var(--text-secondary);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); flex-shrink: 0; overflow: hidden;
-        }
-        .modal-app-icon img { width: 100%; height: 100%; object-fit: cover; }
-        .user-rating { display: flex; align-items: center; margin-bottom: 12px; }
-        .star-icon { width: 22px; height: 22px; margin-right: 5px; color: var(--star-color); }
-        .rating-count { font-size: 0.95rem; color: var(--text-secondary); }
-        .comments-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
-        .comment { padding: 14px; margin-bottom: 14px; border-radius: 10px; background-color: #f8f9fa; border: 1px solid var(--border-color); }
-        .comment-author { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-        .comment-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
-
-        /* Filter Dropdown */
-        #filter-dropdown { position: relative; display: inline-block; }
-        #filter-dropdown button {
-            background-color: #ffffff;
-            color: var(--text-secondary); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border-color);
-            cursor: pointer; font-size: 0.9rem; font-weight: 500;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-            display: flex; align-items: center;
-        }
-        #filter-dropdown button:hover {
-            background-color: #f8f9fa; color: var(--text-primary); box-shadow: 0 2px 5px var(--shadow-color);
-        }
-        #filter-dropdown button span { margin-right: 6px; }
-        #filter-dropdown ul {
-            position: absolute; top: calc(100% + 8px); right: 0;
-            background-color: #ffffff; border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); padding: 10px 0; list-style: none;
-            min-width: 260px; opacity: 0; visibility: hidden;
-            transform: translateY(-10px) scale(0.95);
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-            z-index: 1001; border: 1px solid var(--border-color);
-        }
-        #filter-dropdown.show ul { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        #filter-dropdown ul li {
-            padding: 10px 18px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease; white-space: normal; line-height: 1.4;
-        }
-        #filter-dropdown ul li:hover { background-color: #f1f3f5; color: var(--text-primary); }
-        #filter-dropdown ul li.active { font-weight: 600; color: var(--text-primary); background-color: #e9ecef; }
-
-        /* AI Search */
-        #ai-search-container {
-            display: flex; align-items: center; background-color: #ffffff;
-            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color);
-            flex-grow: 1; max-width: 400px;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-         #ai-search-container:focus-within {
-            background-color: #ffffff; box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-        }
-        #ai-search-input {
-            flex-grow: 1; border: none; background: transparent; outline: none;
-            padding: 8px; font-size: 0.9rem; color: var(--text-primary);
-        }
-        #ai-search-input::placeholder { color: var(--text-muted); }
-        #ai-search-button {
-            background: none; border: none; cursor: pointer; padding: 6px; color: var(--text-muted);
-            transition: color 0.3s ease;
-        }
-        #ai-search-button:hover { color: var(--text-primary); }
-        #ai-response-area {
-            margin: 20px auto 0 auto; max-width: 1400px;
-            padding: 18px 24px; background: #ffffff;
-            border-radius: 14px; box-shadow: 0 5px 15px var(--shadow-color);
-            font-size: 1rem; color: var(--text-primary); line-height: 1.6; display: none;
-            border: 1px solid var(--border-color);
-        }
-        #ai-response-area.loading::after { content: 'Thinking...'; display: block; text-align: center; font-style: italic; color: var(--text-muted); margin-top: 12px; }
-        .ai-result-link { font-weight: 500; color: var(--link-color); text-decoration: none; transition: color 0.2s ease; }
-        .ai-result-link:hover { color: var(--link-hover-color); text-decoration: underline; }
-        .ai-result-category { font-size: 0.9em; color: var(--text-muted); margin-left: 6px; }
-
-        /* No Apps Message & View Title */
-        .no-apps-message {
-            text-align: center; font-size: 1.1rem; color: var(--text-muted);
-            margin-top: 50px; padding: 25px; border-radius: 14px;
-            background-color: #ffffff; border: 1px solid var(--border-color);
-        }
-        .view-title {
-            font-size: 2rem; font-weight: 600; color: var(--text-primary);
+         .category-title { /* Title for each category section */
+            font-size: 1.8rem; font-weight: 600; color: var(--text-primary);
+            margin-top: 2.5rem; /* Space above category title */
             margin-bottom: 1.5rem; padding-bottom: 0.5rem;
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* Main Content Area & Views */
+        /* Main Content Area */
         main {
-            flex: 1; padding: 2rem 1.5rem; max-width: 1400px; margin: 0 auto;
+            padding: 2rem 1.5rem; max-width: 1400px; margin: 2rem auto; /* Add top/bottom margin */
             width: 100%; box-sizing: border-box;
         }
-        .view-section { display: none; animation: fadeInView 0.5s ease forwards; }
-        .view-section.active { display: block; }
-        @keyframes fadeInView {
-             from { opacity: 0; transform: translateY(10px); }
-             to { opacity: 1; transform: translateY(0); }
-        }
-        .grid {
+        .grid { /* Grid layout for company cards */
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;
         }
 
-        /* Tooltip */
-        #app-tooltip {
-            position: absolute; background-color: var(--tooltip-bg); color: var(--tooltip-text);
-            padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; line-height: 1.4;
-            z-index: 11000; opacity: 0; visibility: hidden; pointer-events: none;
-            transition: opacity 0.2s ease; max-width: 250px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-         #app-tooltip h3 { font-weight: 600; margin: 0 0 4px 0; font-size: 0.9rem; color: #ffffff; }
-         #app-tooltip p { margin: 0; }
-         #app-tooltip .tooltip-category { color: #ced4da; margin-bottom: 3px; }
-         #app-tooltip .tooltip-rating { color: var(--star-color); }
-
         /* Responsive Adjustments */
-        @media (max-width: 1024px) {
-            .header-content { justify-content: space-between; }
-            header nav { order: 3; width: 100%; justify-content: center; margin-top: 0.5rem; gap: 1rem;}
-            .header-actions { order: 2; }
-            .header-title { order: 1; }
-            #ai-search-container { max-width: 300px; }
-        }
         @media (max-width: 768px) {
-            header { padding: 0.75rem 1rem; }
-            .header-title { font-size: 1.5rem; }
-            header nav { gap: 0.75rem; }
-            header nav a { font-size: 0.9rem; padding: 0.3rem 0; }
-            .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
-             #ai-search-container { width: 100%; max-width: none; order: 1; margin-right: 0; }
-             #filter-dropdown { order: 2; }
-             #filter-dropdown button { padding: 8px 16px; }
-             main { padding: 1.5rem 1rem; }
+             main { padding: 1.5rem 1rem; margin: 1rem auto; }
+             .page-title { font-size: 1.8rem; }
+             .category-title { font-size: 1.5rem; }
              .grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-             #app-details-content { padding: 25px; }
-             #app-details-content h2 { font-size: 1.6rem; }
-             #app-tooltip { display: none; }
-             .view-title { font-size: 1.5rem; margin-bottom: 1rem;}
         }
 
-    </style>
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Healthcare AI Agent Marketplace</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h2, h3 { color: #333; }
-      .category { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-      .application { margin-top: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-      .learn-more { color: blue; text-decoration: none; }
     </style>
 </head>
 <body>
-    <h1>Healthcare AI Agent Marketplace</h1>
 
-    <div class="category">
-        <h2>Diagnostics & Imaging Solutions</h2>
-        <div class="application">
-            <h3>Annalise.ai</h3>
-            <p>Annalise.ai offers AI solutions for rapid and accurate analysis of medical images. Their products include Annalise Enterprise CTB for brain CT scans (detecting up to 130 findings in ≤ 2 minutes), Annalise Enterprise CXR for chest X-rays (detecting up to 124 findings in < 20 seconds), and Annalise CXR Edge for bedside chest X-ray decision support. These tools aim to improve detection rates, prioritise critical cases, and enhance workflow efficiency.</p>
-            <a href="#" class="learn-more">[Learn More]</a>
-        </div>
-    </div>
+    <main>
+        <h1 class="page-title">AI Healthcare Company Examples</h1>
 
-    <div class="category">
-        <h2>Clinical Decision Support & Triage</h2>
-        <div class="application">
-            <h3>Infermedica</h3>
-            <p>Infermedica provides an AI-powered symptom checker and virtual triage platform. Their triage module integrates into various healthcare platforms to offer symptom checks, self-triage, condition insights, patient education, and care navigation. Infermedica's AI performs with high accuracy, assisting patients in understanding their symptoms and guiding them to the appropriate level of care.</p>
-            <a href="#" class="learn-more">[Learn More]</a>
-        </div>
-    </div>
+        <section>
+            <h2 class="category-title">Diagnostics & Imaging Solutions</h2>
+            <div class="grid">
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ZMV</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Zebra Medical Vision</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Develops AI solutions to enhance medical imaging diagnostics, aiming to improve accuracy and speed up decision-making for clinicians.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">RAI</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Rad AI</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Creates AI tools to automate tasks within radiology workflows, aiming to improve report speed, quality, and reduce errors.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">DPC</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Deepc</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Offers an AI operating system (deepcOS®) for radiology to integrate and manage multiple AI tools, streamlining workflows.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">GLM</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Gleamer</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Specialises in AI for radiology, particularly for detecting fractures and abnormalities in X-rays (e.g., BoneView, ChestView).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ANA</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Annalise.ai</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Develops AI diagnostic tools for radiology, trained on large datasets to assist clinicians (e.g., Annalise CXR for chest X-rays).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">OXP</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Oxipit</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Focuses on autonomous medical imaging solutions, like ChestEye AI suite for identifying findings in chest X-rays.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">AID</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Aidoc</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions / Clinical Decision Support</p>
+                            <p class="app-description">Provides AI solutions for flagging acute abnormalities in medical scans (e.g., brain hemorrhages, pulmonary embolisms) and helps prioritise urgent cases.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">SH</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Siemens Healthineers</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">A major medical technology company incorporating AI into imaging and diagnostics (e.g., Syngo Virtual Cockpit).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ART</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Arterys Inc. (Tempus)</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Uses AI and cloud computing for medical image analysis (e.g., CardioAI, LiverAI, LungAI).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">LNT</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Lunit</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Develops AI algorithms for medical imaging, particularly focused on cancer detection.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">PAI</div>
+                        <div class="app-info">
+                            <h3 class="app-title">PathAI</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Focuses on AI for pathology, analysing tissue samples to improve diagnostic accuracy and efficiency.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <div class="category">
-        <h2>Patient Engagement & Remote Care</h2>
-        <div class="application">
-            <h3>Talkdesk AI Agents for Healthcare</h3>
-            <p>Talkdesk AI Agents for Healthcare utilises agentic AI to automate patient and member interactions, providing 24/7 on-demand access for routine tasks like appointment scheduling, benefit checks, prescription refills, and personalised communication. The AI agents integrate with EHR and claims systems to personalise engagement and can escalate complex issues to live agents, improving patient experience and operational efficiency.</p>
-            <a href="#" class="learn-more">[Learn More]</a>
-        </div>
-    </div>
+        <section>
+            <h2 class="category-title">Clinical Decision Support & Triage</h2>
+            <div class="grid">
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">PCS</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Pieces</h3>
+                            <p class="app-category-label">Clinical Decision Support & Triage</p>
+                            <p class="app-description">An AI-powered clinical decision support system connecting health and social care data for comprehensive patient insights.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">VIS</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Visiba</h3>
+                            <p class="app-category-label">Clinical Decision Support & Triage</p>
+                            <p class="app-description">Offers AI-enabled triage technology (Visiba Triage) to route patients efficiently based on submitted symptoms.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">KHS</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Klinik Healthcare Solutions</h3>
+                            <p class="app-category-label">Clinical Decision Support & Triage</p>
+                            <p class="app-description">Provides AI-assisted online triage solutions for primary care to assess urgency and direct patients appropriately.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ARW</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Arrow</h3>
+                            <p class="app-category-label">Clinical Decision Support & Triage</p>
+                            <p class="app-description">Integrates various health data sources (EHRs, labs) to help clinicians make more informed treatment decisions.</p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </section>
 
-    <div class="category">
-        <h2>Operational Efficiency & Administration</h2>
-        <div class="application">
-            <h3>Motics</h3>
-            <p>Motics offers agentic AI applications designed to enhance operational efficiency in healthcare administration. Their suite includes the Scribe Agent for automated clinical note-taking, the Phone Agent for AI-driven patient scheduling and engagement, and the Billing Agent for automating billing and claims processes. Motics aims to reduce administrative burdens, improve data quality, and streamline workflows within healthcare organisations.</p>
-            <a href="#" class="learn-more">[Learn More]</a>
-        </div>
-    </div>
+        <section>
+            <h2 class="category-title">Patient Engagement & Remote Care</h2>
+            <div class="grid">
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">MEM</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Memora Health</h3>
+                            <p class="app-category-label">Patient Engagement & Remote Care</p>
+                            <p class="app-description">Uses an AI platform to automate patient care management, tracking, and engagement post-discharge.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ADA</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Ada Health</h3>
+                            <p class="app-category-label">Patient Engagement & Remote Care</p>
+                            <p class="app-description">Offers AI-powered health assessment and guidance tools for patients.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">AIV</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Aiva</h3>
+                            <p class="app-category-label">Patient Engagement & Remote Care</p>
+                            <p class="app-description">Provides AI-based voice assistant technology for healthcare settings to improve patient communication and requests.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">BIO</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Biofourmis</h3>
+                            <p class="app-category-label">Patient Engagement & Remote Care</p>
+                            <p class="app-description">Combines AI with wearable tech for personalized predictive health analytics and remote monitoring.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">IQV</div>
+                        <div class="app-info">
+                            <h3 class="app-title">IQVIA</h3>
+                            <p class="app-category-label">Patient Engagement & Remote Care</p>
+                            <p class="app-description">Develops AI-driven remote patient monitoring (RPM) solutions and platforms.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">NSH</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Nsight Health</h3>
+                            <p class="app-category-label">Patient Engagement & Remote Care</p>
+                            <p class="app-description">Offers an intelligent care platform combined with nursing services, partnering with AI companies like Hippocratic AI for patient outreach based on remote monitoring data.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">HIP</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Hippocratic AI</h3>
+                            <p class="app-category-label">Patient Engagement & Remote Care</p>
+                            <p class="app-description">Focuses on healthcare-specific Large Language Models (LLMs) for patient-facing non-diagnostic tasks, often used in conjunction with remote care partners.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <div class="category">
-        <h2>Drug Discovery & Research</h2>
-        <div class="application">
-            <h3>Atomwise AtomNet</h3>
-            <p>Atomwise AtomNet is an AI-powered drug discovery platform that uses deep convolutional neural networks to predict the bioactivity of small molecules. AtomNet enables the virtual screening of vast chemical libraries, the design of novel drug candidates, and the prediction of drug-target interactions, significantly accelerating the drug discovery process and offering the potential to identify treatments for previously undruggable targets.</p>
-            <a href="#" class="learn-more">[Learn More]</a>
-        </div>
-    </div>
+        <section>
+            <h2 class="category-title">Operational Efficiency & Administration</h2>
+            <div class="grid">
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">AVA</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Avaamo</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">Provides conversational AI virtual assistants to streamline administrative tasks like scheduling and patient check-ins.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">AKA</div>
+                        <div class="app-info">
+                            <h3 class="app-title">AKASA</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">Offers AI solutions for automating healthcare revenue cycle management (billing, coding, claims).</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">AUG</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Augmedix</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">Uses AI and NLP to automate clinical documentation from doctor-patient conversations.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">COH</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Cohere Health</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">Focuses on AI platforms to streamline prior authorization processes.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">NOT</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Notable</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">(Mentioned in broader contexts) Often develops AI for automating administrative workflows in healthcare.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">AI</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Various AI Platforms</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">AI is used broadly (e.g., by NetSuite, Accenture) for automating billing, scheduling, record management, predicting patient demand, and optimizing supply chains.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-</body>
+        <section>
+            <h2 class="category-title">Drug Discovery & Research</h2>
+            <div class="grid">
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ANB</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Anima Biotech</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Uses its mRNA Lightning.AI platform to discover mRNA biology modulators, partnering with companies like AbbVie, Lilly, and Takeda.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ATW</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Atomwise</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Leverages its AtomNet® AI platform for structure-based small molecule drug discovery, collaborating with companies like Sanofi.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">BPG</div>
+                        <div class="app-info">
+                            <h3 class="app-title">BPGbio (formerly BERG)</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Uses causal AI and supercomputing to identify novel drug targets and biomarkers.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">CRD</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Cradle Bio</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Employs generative AI to help biologists design improved proteins for various applications, including therapeutics.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">IKT</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Iktos</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Uses AI and robotics for small molecule drug discovery and design.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ISO</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Isomorphic Labs</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Focuses on applying AI to drug discovery, co-developed AlphaFold3 with Google DeepMind, and partners with Eli Lilly and Novartis.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">XTP</div>
+                        <div class="app-info">
+                            <h3 class="app-title">XtalPi</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Combines AI, quantum physics, and robotics to accelerate pharmaceutical research and development.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">HLX</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Healx</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Specialises in using AI for drug discovery specifically targeting rare diseases.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">PHA</div>
+                        <div class="app-info">
+                            <h3 class="app-title">PharosAI</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Aims to create a unified AI platform using NHS and Biobank data to accelerate cancer research and AI model development.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">BND</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Bind Research</h3>
+                            <p class="app-category-label">Drug Discovery & Research</p>
+                            <p class="app-description">Uses AI to understand how to target previously "undruggable" disordered proteins.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    </script>
+    </main>
+
 </body>
 </html>
