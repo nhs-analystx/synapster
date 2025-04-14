@@ -15,6 +15,7 @@
             --card-bg: #ffffff; /* White cards */
             --card-hover-bg: #ffffff;
             --story-bg: #ffffff; /* Background for story articles */
+            --frame-bg: #ffffff; /* Background for frame containers */
             --tooltip-bg: rgba(33, 37, 41, 0.9); /* Dark tooltip */
             --tooltip-text: #f8f9fa; /* Light tooltip text */
             --text-primary: #212529; /* Very Dark Grey */
@@ -106,7 +107,7 @@
             border-radius: 16px;
             box-shadow: 0 4px 12px var(--shadow-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 25px;
+            margin-bottom: 25px; /* Applies to grid items */
             border: 1px solid var(--border-color);
             position: relative;
             opacity: 0; transform: translateY(20px);
@@ -467,6 +468,16 @@
              color: var(--link-hover-color); text-decoration: underline;
          }
 
+         /* Frame container for category showcase */
+        .frame-container {
+            background-color: var(--frame-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px 30px; /* Internal padding */
+            box-shadow: 0 5px 15px var(--shadow-color);
+            margin-top: 1rem; /* Space below section title */
+        }
+
 
         /* Tooltip Styles */
         #app-tooltip {
@@ -521,6 +532,7 @@
              #about-view > div {
                   padding: 0 1rem;
              }
+             .frame-container { padding: 15px 20px; } /* Adjust frame padding */
         }
 
     </style>
@@ -595,33 +607,35 @@
 
              <section class="large-section bg-dark">
                  <h2 class="section-title">Explore by Category</h2>
-                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
-                     <div class="category-showcase-card">
-                         <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
-                         <p class="category-card-desc">AI tools providing efficient clinical decision support and triage capabilities.</p>
-                         <a href="#" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
-                     </div>
-                     <div class="category-showcase-card">
-                         <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
-                         <p class="category-card-desc">Accelerate pharmaceutical research and development with AI-powered discovery platforms.</p>
-                          <a href="#" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
-                     </div>
-                     <div class="category-showcase-card">
-                         <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
-                         <p class="category-card-desc">Enhance medical imaging analysis and diagnostic accuracy with intelligent solutions.</p>
-                           <a href="#" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
-                     </div>
-                     <div class="category-showcase-card">
-                         <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
-                         <p class="category-card-desc">Streamline administrative tasks and optimise healthcare operations with AI automation.</p>
-                           <a href="#" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
+                 <div class="frame-container max-w-5xl mx-auto">
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
+                             <p class="category-card-desc">AI tools providing efficient clinical decision support and triage capabilities.</p>
+                             <a href="#" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
+                             <p class="category-card-desc">Accelerate pharmaceutical research and development with AI-powered discovery platforms.</p>
+                              <a href="#" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
+                             <p class="category-card-desc">Enhance medical imaging analysis and diagnostic accuracy with intelligent solutions.</p>
+                               <a href="#" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
+                             <p class="category-card-desc">Streamline administrative tasks and optimise healthcare operations with AI automation.</p>
+                               <a href="#" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
+                         </div>
                      </div>
                  </div>
              </section>
 
-             <div class="grid hidden" id="app-list">
+             <div class="grid hidden" id="app-list" style="padding: 0 1.5rem;">
                 </div>
-             <div id="no-apps-message" class="hidden">
+             <div id="no-apps-message" class="hidden" style="margin: 50px 1.5rem;">
                  <p>No apps found matching the selected category.</p>
              </div>
         </div>
@@ -839,16 +853,16 @@
         let filteredCategory = 'all';
         let tooltipTimeout;
 
-        // --- Function to Display Apps (Marketplace View - Static Sections) ---
+        // --- Function to Display Apps (Marketplace View - Dynamic Grid Part) ---
         function displayApps(apps) {
             if (!appListContainer) return;
             appListContainer.innerHTML = '';
             if (apps.length === 0) {
                 noAppsMessage?.classList.remove('hidden');
-                 appListContainer.classList.add('hidden');
+                 appListContainer.classList.add('hidden'); // Hide grid if empty
             } else {
                 noAppsMessage?.classList.add('hidden');
-                appListContainer.classList.remove('hidden');
+                appListContainer.classList.remove('hidden'); // Ensure grid is visible
                 apps.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 
                 apps.forEach((app, index) => {
@@ -961,6 +975,7 @@
                     const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='18px'; this.parentElement.style.fontWeight='600';`;
                     const fictional = generateFictionalContent(app);
 
+                    // Use template literals to build HTML structure
                     storyElement.innerHTML = `
                         <h3>
                             <div class="app-icon">
@@ -1251,19 +1266,15 @@
              if (filterDropdown) {
                 const filterContainer = filterDropdown.parentElement;
                 if (filterContainer) {
-                    // Show filter/search only on marketplace and agent list view
-                    if (targetViewId === 'marketplace-view' || targetViewId === 'agents-view') {
-                        filterContainer.style.display = 'flex';
-                    } else {
-                        filterContainer.style.display = 'none';
-                        filterDropdown.classList.remove('show');
-                    }
+                    // Show filter/search always now, filter button only shown via CSS below
+                     filterContainer.style.display = 'flex';
                 }
-                 // Hide filter button specifically if not on marketplace view
+                 // Hide filter specifically if not on marketplace view
                 if (targetViewId !== 'marketplace-view') {
                     filterDropdown.style.display = 'none';
+                     filterDropdown.classList.remove('show'); // Close dropdown if open
                 } else {
-                     filterDropdown.style.display = 'inline-block';
+                     filterDropdown.style.display = 'inline-block'; // Show filter only on marketplace
                 }
              }
 
@@ -1311,6 +1322,11 @@
                          window.location.hash = targetViewId === 'marketplace-view' ? '' : `#${link.getAttribute('href').substring(1)}`;
                          switchView(targetViewId);
                      });
+                 }
+                 // For external links, ensure they open in new tab if desired
+                 else if (link.getAttribute('href').startsWith('http')) {
+                     link.setAttribute('target', '_blank');
+                     link.setAttribute('rel', 'noopener noreferrer');
                  }
              });
          }
