@@ -132,7 +132,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* App Card Specific Styles (Marketplace & Agent List View) */
+        /* App Card Specific Styles (Marketplace Grid & Agent List View) */
         .app-card {
             cursor: pointer; overflow: visible; /* Allow tooltip */
         }
@@ -534,9 +534,9 @@
         <div class="header-content">
             <a href="https://synapster.analystx.uk/" class="header-title site-nav-link" data-target="marketplace-view">AI Agent Marketplace</a>
             <nav>
-                <a href="https://synpaster.analystx.uk/cs.html">Case Studies</a>
-                <a href="https://synapster.analystx.uk/agents.html">Agents List</a>
-                <a href="#about" class="site-nav-link" data-target="about-view">About Us</a>
+                <a href="https://synpaster.analystx.uk/cs.html" class="site-nav-link" target="_blank" rel="noopener noreferrer">Case Studies</a>
+                <a href="https://synapster.analystx.uk/agents.html" class="site-nav-link" target="_blank" rel="noopener noreferrer">Agents List</a>
+                <a href="https://synapster.analystx.uk/about.html" class="site-nav-link" data-target="about-view">About Us</a>
             </nav>
             <div class="header-actions">
                 <div id="ai-search-container">
@@ -599,22 +599,22 @@
                      <div class="category-showcase-card">
                          <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
                          <p class="category-card-desc">AI tools providing efficient clinical decision support and triage capabilities.</p>
-                         <a href="https://synapster.analystx.uk/clinical.html" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
+                         <a href="#" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
                      </div>
                      <div class="category-showcase-card">
                          <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
                          <p class="category-card-desc">Accelerate pharmaceutical research and development with AI-powered discovery platforms.</p>
-                          <a href="https://synapster.analystx.uk/drug.html" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
+                          <a href="#" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
                      </div>
                      <div class="category-showcase-card">
                          <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
                          <p class="category-card-desc">Enhance medical imaging analysis and diagnostic accuracy with intelligent solutions.</p>
-                           <a href="https://synapster.analystx.uk/diagnostics.html" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
+                           <a href="#" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
                      </div>
                      <div class="category-showcase-card">
                          <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
                          <p class="category-card-desc">Streamline administrative tasks and optimise healthcare operations with AI automation.</p>
-                           <a href="https://synapster.analystx.uk/oe.html" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
+                           <a href="#" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
                      </div>
                  </div>
              </section>
@@ -815,7 +815,7 @@
 
         // --- DOM Element References ---
         const appListContainer = document.getElementById('app-list');
-        const caseStudiesStoryContainer = document.getElementById('case-studies-story-container'); // Use new ID
+        const caseStudiesStoryContainer = document.getElementById('case-studies-story-container');
         const agentListContainer = document.getElementById('agent-list-grid');
         const noAgentsMessage = document.getElementById('no-agents-message');
         const appDetailsModal = document.getElementById('app-details-modal');
@@ -840,16 +840,15 @@
         let tooltipTimeout;
 
         // --- Function to Display Apps (Marketplace View - Static Sections) ---
-        // This function is now primarily for populating the dynamic grid if filtering is applied
         function displayApps(apps) {
             if (!appListContainer) return;
             appListContainer.innerHTML = '';
             if (apps.length === 0) {
                 noAppsMessage?.classList.remove('hidden');
-                 appListContainer.classList.add('hidden'); // Hide grid if empty
+                 appListContainer.classList.add('hidden');
             } else {
                 noAppsMessage?.classList.add('hidden');
-                appListContainer.classList.remove('hidden'); // Ensure grid is visible
+                appListContainer.classList.remove('hidden');
                 apps.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 
                 apps.forEach((app, index) => {
@@ -989,8 +988,8 @@
                         <p>${fictional.nextStep}</p>
 
                         <div class="case-study-links">
-                            <a href="#" target="_blank" rel="noopener noreferrer">Read Full Study (Placeholder)</a>
-                            <a href="#" target="_blank" rel="noopener noreferrer">Visit Product Page (Placeholder)</a>
+                            <a href="https://synapster.analystx.uk/casestudy/${app.id}.html" target="_blank" rel="noopener noreferrer">Read Full Study</a>
+                            <a href="https://synapster.analystx.uk/product/${app.id}.html" target="_blank" rel="noopener noreferrer">Visit Product Page</a>
                         </div>
                     `;
                     caseStudiesStoryContainer.appendChild(storyElement);
@@ -1137,9 +1136,9 @@
                 : appData.filter(app => app.category === category);
 
             // When filtering, hide static sections and show the dynamic grid
-            const staticSections = marketplaceView.querySelectorAll('section');
+            const staticSections = marketplaceView.querySelectorAll(':scope > section'); // Select direct children sections
             staticSections.forEach(sec => sec.style.display = 'none');
-            appListContainer.classList.remove('hidden'); // Show the dynamic grid
+            appListContainer?.classList.remove('hidden'); // Show the dynamic grid
             displayApps(appsToDisplay); // Populate the dynamic grid with filtered apps
 
             if (aiResponseArea) {
@@ -1242,6 +1241,7 @@
              if (navLinks) {
                 navLinks.forEach(link => {
                     link.classList.remove('active');
+                    // Check data-target for internal links, href for external (though active state won't apply to external)
                     if (link.dataset.target === targetViewId || (targetViewId === 'marketplace-view' && link.classList.contains('header-title'))) {
                         link.classList.add('active');
                     }
@@ -1251,15 +1251,19 @@
              if (filterDropdown) {
                 const filterContainer = filterDropdown.parentElement;
                 if (filterContainer) {
-                    // Show filter/search always now, filter button only shown via CSS below
-                     filterContainer.style.display = 'flex';
+                    // Show filter/search only on marketplace and agent list view
+                    if (targetViewId === 'marketplace-view' || targetViewId === 'agents-view') {
+                        filterContainer.style.display = 'flex';
+                    } else {
+                        filterContainer.style.display = 'none';
+                        filterDropdown.classList.remove('show');
+                    }
                 }
-                 // Hide filter specifically if not on marketplace view (using CSS now)
+                 // Hide filter button specifically if not on marketplace view
                 if (targetViewId !== 'marketplace-view') {
                     filterDropdown.style.display = 'none';
-                     filterDropdown.classList.remove('show'); // Close dropdown if open
                 } else {
-                     filterDropdown.style.display = 'inline-block'; // Show filter only on marketplace
+                     filterDropdown.style.display = 'inline-block';
                 }
              }
 
@@ -1274,7 +1278,7 @@
                  // and dynamic grid is hidden (unless filtering was applied previously)
                  const marketplaceView = document.getElementById('marketplace-view');
                  if(marketplaceView){
-                     const staticSections = marketplaceView.querySelectorAll(':scope > section'); // Select direct children sections
+                     const staticSections = marketplaceView.querySelectorAll(':scope > section');
                      staticSections.forEach(sec => sec.style.display = 'block'); // Or 'grid'/'flex' as appropriate
                      appListContainer?.classList.add('hidden'); // Hide dynamic grid
                      noAppsMessage?.classList.add('hidden');
@@ -1298,15 +1302,16 @@
          // --- Add Event Listeners to Navigation Links ---
          if (navLinks) {
              navLinks.forEach(link => {
-                 // Prevent adding listener to links that are now external
-                 if (link.getAttribute('href').startsWith('http')) return;
-
-                 link.addEventListener('click', (event) => {
-                     event.preventDefault();
-                     const targetViewId = link.dataset.target || 'marketplace-view';
-                     window.location.hash = targetViewId === 'marketplace-view' ? '' : `#${link.getAttribute('href').substring(1)}`;
-                     switchView(targetViewId);
-                 });
+                 // Only add JS listener for internal links (those with data-target)
+                 if (link.dataset.target) {
+                     link.addEventListener('click', (event) => {
+                         event.preventDefault();
+                         const targetViewId = link.dataset.target || 'marketplace-view';
+                         // Update hash only for internal navigation
+                         window.location.hash = targetViewId === 'marketplace-view' ? '' : `#${link.getAttribute('href').substring(1)}`;
+                         switchView(targetViewId);
+                     });
+                 }
              });
          }
 
@@ -1316,7 +1321,8 @@
             try { // Wrap initialization in try-catch
                 const hash = window.location.hash.substring(1);
                 let initialViewId = 'marketplace-view';
-                const activeNavLink = navLinks ? Array.from(navLinks).find(link => link.getAttribute('href') === `#${hash}`) : null;
+                // Find the nav link corresponding to the hash *that has a data-target*
+                const activeNavLink = navLinks ? Array.from(navLinks).find(link => link.getAttribute('href') === `#${hash}` && link.dataset.target) : null;
                 if(activeNavLink && activeNavLink.dataset.target) {
                     initialViewId = activeNavLink.dataset.target;
                 }
