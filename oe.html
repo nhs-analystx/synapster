@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Operational Efficiency & Administration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS adapted for static page - Grey Theme */
+        :root {
+            /* Grey Palette */
+            --bg-main: #f1f3f5; /* Main background grey */
+            --header-bg: rgba(255, 255, 255, 0.9); /* White semi-transparent header */
+            --card-bg: #ffffff; /* White cards */
+            --card-hover-bg: #f8f9fa; /* Slightly off-white hover */
+            --text-primary: #212529; /* Very Dark Grey */
+            --text-secondary: #495057; /* Dark Grey */
+            --text-muted: #6c757d;   /* Medium Grey */
+            --border-color: #dee2e6; /* Light Grey Border */
+            --accent-color: #495057;  /* Dark Grey for accents */
+            --shadow-color: rgba(0, 0, 0, 0.07); /* Slightly softer shadow */
+            --link-color: #0d6efd;
+            --link-hover-color: #0a58ca;
+            --button-bg: #e9ecef; /* Light grey button */
+            --button-hover-bg: #dee2e6; /* Darker grey hover */
+        }
+
+        body {
+            background-color: var(--bg-main);
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            color: var(--text-primary);
+        }
+
+        /* Header Styles (Copied from main app) */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            padding: 1rem 1.5rem;
+        }
+        .header-content {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            gap: 1rem; max-width: 1400px; margin: 0 auto;
+        }
+        .header-title {
+            font-size: 1.75rem; font-weight: 700; color: var(--text-primary);
+            margin: 0; flex-shrink: 0; text-decoration: none;
+        }
+        header nav { display: flex; gap: 1.5rem; margin: 0 auto; }
+        header nav a {
+            color: var(--text-secondary);
+            text-decoration: none; font-weight: 500; padding: 0.5rem 0; position: relative;
+            transition: color 0.3s ease; cursor: pointer;
+        }
+        header nav a::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+            background-color: var(--accent-color); transition: width 0.3s ease;
+        }
+        header nav a:hover { color: var(--text-primary); }
+        header nav a:hover::after { width: 100%; }
+        .header-actions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+
+        /* Filter Dropdown Styles (Visual Only) */
+        #filter-dropdown { position: relative; display: inline-block; }
+        #filter-dropdown button {
+            background-color: #ffffff;
+            color: var(--text-secondary); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border-color);
+            cursor: default; font-size: 0.9rem; font-weight: 500;
+            display: flex; align-items: center; opacity: 0.6;
+        }
+        #filter-dropdown button span { margin-right: 6px; }
+        #filter-dropdown ul { display: none; }
+
+        /* AI Search Styles (Visual Only) */
+        #ai-search-container {
+            display: flex; align-items: center; background-color: #ffffff;
+            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color);
+            flex-grow: 1; max-width: 400px; opacity: 0.6;
+        }
+        #ai-search-input {
+            flex-grow: 1; border: none; background: transparent; outline: none;
+            padding: 8px; font-size: 0.9rem; color: var(--text-primary);
+        }
+        #ai-search-input::placeholder { color: var(--text-muted); }
+        #ai-search-button {
+            background: none; border: none; cursor: default; padding: 6px; color: var(--text-muted);
+        }
+
+        /* Page Titles */
+        .page-title {
+            font-size: 2.2rem; font-weight: 700; color: var(--text-primary);
+            margin-bottom: 1rem; padding-bottom: 0.5rem;
+            text-align: center;
+        }
+         .section-title {
+            font-size: 1.8rem; font-weight: 600; color: var(--text-primary);
+            margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .intro-text {
+            font-size: 1.1rem; color: var(--text-secondary);
+            max-width: 800px; margin: 0 auto 2.5rem auto;
+            text-align: center; line-height: 1.6;
+        }
+
+        /* Card Base Styles */
+        .card-base {
+            background: var(--card-bg); border-radius: 16px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 25px; border: 1px solid var(--border-color);
+            position: relative; display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .card-base:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
+            background: var(--card-hover-bg);
+        }
+
+        /* Standard Agent Card Styles */
+        .app-card-content {
+             display: flex; align-items: flex-start; padding: 16px; flex-grow: 1;
+        }
+        .app-card .app-icon {
+            width: 65px; height: 65px; border-radius: 12px; margin-right: 16px;
+        }
+        .app-card .app-info { flex: 1; }
+        .app-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .app-category-label {
+            font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;
+            display: inline-block; padding: 3px 10px; border-radius: 12px;
+            background-color: #f1f3f5; line-height: 1.3;
+        }
+        .app-description {
+            font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden; text-overflow: ellipsis; height: calc(1.5 * 3em);
+        }
+
+        /* Featured Agent Card Styles */
+        .featured-agent-card {
+            background-color: var(--card-bg);
+            border-radius: 20px; padding: 2rem; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+             display: flex; flex-direction: column;
+        }
+        .featured-agent-card .app-icon {
+            width: 80px; height: 80px; margin: 0 auto 1.5rem auto;
+            border-radius: 18px; font-size: 28px;
+        }
+        .featured-agent-card .app-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .featured-agent-card .app-category-label { font-size: 0.9rem; margin-bottom: 1rem; }
+        .featured-agent-card .app-description {
+            font-size: 0.95rem; height: auto; -webkit-line-clamp: unset;
+            margin-bottom: 1.5rem; text-align: left;
+            flex-grow: 1;
+        }
+
+        /* Case Study Section within Featured Card */
+        .case-study-collapsible {
+            margin-top: 1.5rem; text-align: left; max-height: 0;
+            overflow: hidden; transition: max-height 0.5s ease-out;
+        }
+        .case-study-collapsible.expanded {
+            max-height: 1000px; transition: max-height 0.5s ease-in;
+        }
+        .case-study-collapsible h4 {
+            font-size: 1.1rem; font-weight: 600; color: var(--text-secondary);
+            margin-bottom: 0.5rem; margin-top: 1rem;
+            padding-top: 1rem; border-top: 1px solid var(--border-color);
+        }
+         .case-study-collapsible h4:first-of-type {
+            margin-top: 0; padding-top: 0; border-top: none;
+        }
+        .case-study-collapsible p {
+            font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .case-study-collapsible strong { color: var(--text-primary); font-weight: 600; }
+        .case-study-links a {
+            display: inline-block; margin-right: 15px; color: var(--link-color);
+            text-decoration: none; font-weight: 500; font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+        .case-study-links a:hover { color: var(--link-hover-color); text-decoration: underline; }
+
+        /* Expand/Collapse Button */
+        .expand-case-study-btn {
+            display: inline-block; background-color: var(--button-bg);
+            color: var(--text-secondary); border: 1px solid var(--border-color);
+            padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;
+            font-weight: 500; cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-top: 1rem;
+        }
+        .expand-case-study-btn:hover {
+            background-color: var(--button-hover-bg); color: var(--text-primary);
+        }
+
+        /* Common Icon Styles */
+        .app-icon {
+            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
+            font-size: 22px; font-weight: 600; color: var(--text-secondary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); flex-shrink: 0; overflow: hidden;
+        }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Main Content Area */
+        main {
+            padding: 2rem 1.5rem; max-width: 1400px; margin: 1rem auto 2rem auto;
+            width: 100%; box-sizing: border-box;
+        }
+        .grid { display: grid; gap: 25px; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .md\:grid-cols-2 {
+             @media (min-width: 768px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+         .lg\:grid-cols-3 {
+             @media (min-width: 1024px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .header-content { justify-content: space-between; }
+            header nav { order: 3; width: 100%; justify-content: center; margin-top: 0.5rem; gap: 1rem;}
+            .header-actions { order: 2; }
+            .header-title { order: 1; }
+            #ai-search-container { max-width: 300px; }
+        }
+        @media (max-width: 768px) {
+             header { padding: 0.75rem 1rem; }
+             .header-title { font-size: 1.5rem; }
+             header nav { gap: 0.75rem; }
+             header nav a { font-size: 0.9rem; padding: 0.3rem 0; }
+             .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
+             #ai-search-container { width: 100%; max-width: none; order: 1; margin-right: 0; }
+             #filter-dropdown { order: 2; }
+             #filter-dropdown button { padding: 8px 16px; }
+             main { padding: 1.5rem 1rem; margin: 1rem auto; }
+             .page-title { font-size: 1.8rem; }
+             .section-title { font-size: 1.5rem; }
+             .intro-text { font-size: 1rem; }
+             .grid { gap: 20px; }
+             .featured-agent-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="#" class="header-title">AI Agent Marketplace</a>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">Case Studies</a>
+                <a href="#">Agents List</a>
+                <a href="#">About Us</a>
+            </nav>
+            <div class="header-actions">
+                <div id="ai-search-container">
+                    <input type="text" id="ai-search-input" placeholder="Search..." disabled>
+                    <button id="ai-search-button" aria-label="Search" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                </div>
+                <div id="filter-dropdown">
+                    <button disabled>
+                        <span>Filter</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>
+                    </button>
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1 class="page-title">AI for Operational Efficiency & Administration</h1>
+        <p class="intro-text">
+            Streamline healthcare operations, reduce administrative burden, and optimise resource management with AI agents. These solutions automate tasks like billing, scheduling, documentation, and revenue cycle management, freeing up staff to focus on patient care and improving the overall efficiency of healthcare organisations.
+        </p>
+
+        <section>
+            <h2 class="section-title">Featured Agents & Case Studies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <div class="featured-agent-card">
+                    <div class="app-icon mx-auto mb-6">AKA</div>
+                    <h3 class="app-title">AKASA</h3>
+                    <p class="app-category-label">Operational Efficiency & Administration</p>
+                    <p class="app-description">Offers AI solutions for automating healthcare revenue cycle management (billing, coding, claims).</p>
+                    <button class="expand-case-study-btn" aria-expanded="false" data-target="akasa-case-study">
+                        Read Case Study
+                    </button>
+                    <div id="akasa-case-study" class="case-study-collapsible">
+                        <h4>Case Study: US Provider Revenue Cycle Optimisation</h4>
+                         <p><strong>Problem:</strong> Multiple US healthcare providers experienced significant revenue loss and administrative burden due to errors in medical coding, complex billing procedures, and high rates of claim denials from payers.</p>
+                        <p><strong>Solution:</strong> The AKASA AI platform integrated with existing EHR and billing systems to automate various revenue cycle tasks. It used machine learning to identify and correct coding errors pre-submission, predict potential denials, manage appeals, and streamline payment posting.</p>
+                        <p><strong>Outcome:</strong> Clients using AKASA reported an average <strong>reduced claim denial rates by 22%</strong> and a significant acceleration in payment cycles.</p>
+                        <div class="case-study-links">
+                            <a href="#" target="_blank" rel="noopener noreferrer">Read Full Study (Placeholder)</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="featured-agent-card">
+                    <div class="app-icon mx-auto mb-6">AUG</div>
+                    <h3 class="app-title">Augmedix</h3>
+                    <p class="app-category-label">Operational Efficiency & Administration</p>
+                    <p class="app-description">Uses AI and NLP to automate clinical documentation from doctor-patient conversations, reducing physician burnout.</p>
+                    <button class="expand-case-study-btn" aria-expanded="false" data-target="augmedix-case-study">
+                        Read Case Study
+                    </button>
+                    <div id="augmedix-case-study" class="case-study-collapsible">
+                        <h4>Case Study: Reducing Physician Documentation Burden</h4>
+                        <p><strong>Problem:</strong> Primary care physicians across the US reported high levels of burnout attributed largely to the increasing burden of clinical documentation within Electronic Health Records (EHRs), taking time away from direct patient interaction.</p>
+                        <p><strong>Solution:</strong> The Augmedix Live service provided physicians with remote medical documentation specialists assisted by AI and NLP. The AI helped structure conversations and generate draft clinical notes in real-time during visits.</p>
+                        <p><strong>Outcome:</strong> This significantly reduced the physician's documentation time, <strong>saving an average of 2-3 hours per day</strong> and allowing for more focused patient care and improved job satisfaction.</p>
+                        <div class="case-study-links">
+                            <a href="#" target="_blank" rel="noopener noreferrer">Read Full Study (Placeholder)</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Other Agents in Operational Efficiency</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">AVA</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Avaamo</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">Provides conversational AI virtual assistants to streamline administrative tasks like scheduling and patient check-ins.</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">COH</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Cohere Health</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">Focuses on AI platforms to streamline prior authorization processes and reduce administrative burdens.</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">NOT</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Notable</h3>
+                            <p class="app-category-label">Operational Efficiency & Administration</p>
+                            <p class="app-description">Develops AI for automating various administrative workflows in healthcare settings.</p>
+                        </div>
+                    </div>
+                </div>
+
+                 </div>
+        </section>
+
+    </main>
+
+    <script>
+        // JavaScript for Expand/Collapse functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            try { // Add error handling
+                const expandButtons = document.querySelectorAll('.expand-case-study-btn');
+
+                expandButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const targetId = button.dataset.target;
+                        const targetElement = document.getElementById(targetId);
+
+                        if (targetElement) {
+                            const isExpanded = targetElement.classList.contains('expanded');
+
+                            if (isExpanded) {
+                                // Collapse
+                                targetElement.classList.remove('expanded');
+                                targetElement.style.maxHeight = '0';
+                                button.textContent = 'Read Case Study';
+                                button.setAttribute('aria-expanded', 'false');
+                            } else {
+                                // Expand
+                                targetElement.classList.add('expanded');
+                                // Set max-height to scrollHeight to fit content dynamically
+                                targetElement.style.maxHeight = targetElement.scrollHeight + 'px';
+                                button.textContent = 'Hide Case Study';
+                                button.setAttribute('aria-expanded', 'true');
+
+                                // Optional: Reset max-height after transition for flexibility
+                                targetElement.addEventListener('transitionend', () => {
+                                    if (targetElement.classList.contains('expanded')) {
+                                        targetElement.style.maxHeight = null; // Use null to revert to CSS or auto height
+                                    }
+                                }, { once: true });
+                            }
+                        } else {
+                            console.error(`Target element with ID ${targetId} not found.`);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error("Error setting up expand/collapse functionality:", error);
+            }
+        });
+    </script>
+
+</body>
+</html>
