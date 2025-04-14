@@ -132,7 +132,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* App Card Specific Styles (Marketplace Grid & Agent List View) */
+        /* App Card Specific Styles (Marketplace & Agent List View) */
         .app-card {
             cursor: pointer; overflow: visible; /* Allow tooltip */
         }
@@ -353,6 +353,17 @@
         .grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;
         }
+        /* Add padding specifically for grid containers inside views */
+        #marketplace-view > .grid,
+        #agents-view > .grid {
+             padding: 0 1.5rem; /* Match main padding */
+        }
+         /* Add padding for non-grid views */
+        #casestudies-view > div,
+        #about-view > div {
+             padding: 0 1.5rem;
+        }
+
 
         /* Apple-Inspired Section Styles */
         .large-section {
@@ -500,7 +511,16 @@
              .section-subtitle { font-size: 1rem; }
              .featured-agent-card { padding: 1.5rem; }
              .category-showcase-card { padding: 1.5rem; min-height: 200px;}
-             #marketplace-view .grid { padding: 0 1rem; } /* Add padding to grid container */
+             /* Add padding to grid containers inside views on mobile */
+             #marketplace-view > .grid,
+             #agents-view > .grid {
+                  padding: 0 1rem;
+             }
+             /* Add padding for non-grid views on mobile */
+             #casestudies-view > div,
+             #about-view > div {
+                  padding: 0 1rem;
+             }
         }
 
     </style>
@@ -514,8 +534,8 @@
         <div class="header-content">
             <a href="#marketplace" class="header-title site-nav-link" data-target="marketplace-view">AI Agent Marketplace</a>
             <nav>
-                <a href="https://synapster.analystx.uk/cs.html" class="site-nav-link" data-target="casestudies-view">Case Studies</a>
-                <a href="#https://synapster.analystx.uk/agents.html" class="site-nav-link" data-target="agents-view">Agents List</a>
+                <a href="https://synpaster.analystx.uk/cs.html" class="site-nav-link" data-target="casestudies-view" target="_blank" rel="noopener noreferrer">Case Studies</a>
+                <a href="https://synapster.analystx.uk/agents.html" class="site-nav-link" data-target="agents-view" target="_blank" rel="noopener noreferrer">Agents List</a>
                 <a href="#about" class="site-nav-link" data-target="about-view">About Us</a>
             </nav>
             <div class="header-actions">
@@ -551,7 +571,7 @@
                 <p class="section-subtitle">
                     Explore a curated marketplace of cutting-edge AI agents designed to revolutionise industries. From healthcare diagnostics to operational efficiency, find intelligent solutions tailored to your needs.
                 </p>
-                </section>
+            </section>
 
             <section class="large-section bg-light">
                 <h2 class="section-title">Featured Agents</h2>
@@ -577,27 +597,24 @@
                  <h2 class="section-title">Explore by Category</h2>
                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
                      <div class="category-showcase-card">
-                         <div class="category-icon">🩺</div>
-                         <h3 class="category-card-title">Clinical Decision</h3>
+                         <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
                          <p class="category-card-desc">AI tools providing efficient clinical decision support and triage capabilities.</p>
-                         <a href="#" class="learn-more-link" onclick="switchView('marketplace-view'); filterApps('clinical-decision'); return false;">Explore &rarr;</a>
+                         <a href="#" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
                      </div>
                      <div class="category-showcase-card">
-                         <div class="category-icon">🔬</div>
-                         <h3 class="category-card-title">Drug Discovery</h3>
+                         <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
                          <p class="category-card-desc">Accelerate pharmaceutical research and development with AI-powered discovery platforms.</p>
-                         <a href="#" class="learn-more-link" onclick="switchView('marketplace-view'); filterApps('drug-discovery'); return false;">Explore &rarr;</a>
+                          <a href="#" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
                      </div>
                      <div class="category-showcase-card">
                          <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
                          <p class="category-card-desc">Enhance medical imaging analysis and diagnostic accuracy with intelligent solutions.</p>
-                          <a href="#" class="learn-more-link" onclick="switchView('marketplace-view'); filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
+                           <a href="#" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
                      </div>
                      <div class="category-showcase-card">
-                         <div class="category-icon">⚙️</div>
-                         <h3 class="category-card-title">Operational Efficiency</h3>
+                         <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
                          <p class="category-card-desc">Streamline administrative tasks and optimise healthcare operations with AI automation.</p>
-                          <a href="#" class="learn-more-link" onclick="switchView('marketplace-view'); filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
+                           <a href="#" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
                      </div>
                  </div>
              </section>
@@ -823,20 +840,51 @@
         let tooltipTimeout;
 
         // --- Function to Display Apps (Marketplace View - Static Sections) ---
-        // This function might be called if filtering is re-enabled,
-        // but the initial view is now static HTML.
+        // This function is now primarily for populating the dynamic grid if filtering is applied
         function displayApps(apps) {
             if (!appListContainer) return;
-            appListContainer.innerHTML = ''; // Clear the dynamic grid if it exists
-             // Hide the dynamic grid container itself if we are showing static sections
-             appListContainer.classList.add('hidden');
-             noAppsMessage?.classList.add('hidden');
+            appListContainer.innerHTML = '';
+            if (apps.length === 0) {
+                noAppsMessage?.classList.remove('hidden');
+                 appListContainer.classList.add('hidden'); // Hide grid if empty
+            } else {
+                noAppsMessage?.classList.add('hidden');
+                appListContainer.classList.remove('hidden'); // Ensure grid is visible
+                apps.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 
-            // Note: The actual display logic for the marketplace view is now primarily
-            // handled by the static HTML sections added directly into #marketplace-view.
-            // This function remains for potential future use with filtering, but
-            // it won't populate the initial static view.
-            console.log("displayApps called, but marketplace view uses static sections.");
+                apps.forEach((app, index) => {
+                    try {
+                        const appCard = document.createElement('div');
+                        appCard.className = 'app-card card-base';
+                        appCard.style.animationDelay = `${index * 0.05}s`;
+                        appCard.dataset.appData = JSON.stringify(app);
+
+                        const featuredBadge = app.featured ? `<div class="featured-app-badge">Featured App</div>` : '';
+                        const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='22px'; this.parentElement.style.fontWeight='600';`;
+
+                        appCard.innerHTML = `
+                            ${featuredBadge}
+                            <div class="app-card-content">
+                                <div class="app-icon">
+                                    <img src="${app.iconUrl || '#'}" alt="${app.title || 'App'} icon" loading="lazy" onerror="${fallbackImage}">
+                                </div>
+                                <div class="app-info">
+                                    <h3 class="app-title">${app.title || 'Unknown Agent'}</h3>
+                                    <p class="app-category">${categoryMap[app.category] || app.category || 'Uncategorized'}</p>
+                                    <p class="app-description">${app.description || ''}</p>
+                                </div>
+                            </div>
+                        `;
+                        appCard.addEventListener('mouseenter', handleMouseEnter);
+                        appCard.addEventListener('mouseleave', handleMouseLeave);
+                        appCard.addEventListener('mousemove', handleMouseMove);
+                        appCard.addEventListener('click', () => showAppDetails(app));
+                        appListContainer.appendChild(appCard);
+                    } catch (e) {
+                        console.error("Error creating app card:", e, app);
+                    }
+                });
+            }
         }
 
         // --- Function to Display Agent List ---
@@ -885,8 +933,8 @@
 
          // --- Function to Display Case Studies (Story Format) ---
          function displayCaseStudies() {
-            if (!caseStudiesStoryContainer) return; // Target the new container
-            caseStudiesStoryContainer.innerHTML = ''; // Clear previous studies
+            if (!caseStudiesStoryContainer) return;
+            caseStudiesStoryContainer.innerHTML = '';
             const appsWithStudies = appData.filter(app => app.caseStudy);
 
             if (appsWithStudies.length === 0) {
@@ -894,7 +942,6 @@
                 return;
             }
 
-            // Generate fictional content more dynamically
             const generateFictionalContent = (app) => {
                 const methodology = app.caseStudy.solution || `The ${app.title || 'AI'} platform was implemented within the client's existing infrastructure. It leveraged its core AI capabilities, processing relevant data streams (e.g., ${app.category === 'diagnostics-imaging' ? 'medical images, reports' : app.category === 'patient-engagement' ? 'wearable data, patient communications' : 'operational metrics, EHR data'}) to provide actionable insights. Integration with systems like PACS or EHR was established where necessary to ensure seamless workflow. Staff were trained on utilising the platform's outputs for enhanced decision-making.`;
                 const conclusion = `The deployment successfully addressed the core problem statement. Key outcomes included: ${app.caseStudy.improvement}. This demonstrates the effectiveness of ${app.title || 'the AI agent'} in enhancing healthcare efficiency and outcomes in ${app.caseStudy.country || 'this region'}.`;
@@ -908,14 +955,13 @@
 
             appsWithStudies.forEach((app, index) => {
                  try {
-                    const storyElement = document.createElement('div'); // Use div as the container for each story
-                    storyElement.className = 'case-study-story'; // Apply story styles
-                    storyElement.style.animationDelay = `${index * 0.05}s`; // Apply animation
+                    const storyElement = document.createElement('div');
+                    storyElement.className = 'case-study-story';
+                    storyElement.style.animationDelay = `${index * 0.05}s`;
 
                     const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='18px'; this.parentElement.style.fontWeight='600';`;
-                    const fictional = generateFictionalContent(app); // Generate dynamic fictional content
+                    const fictional = generateFictionalContent(app);
 
-                    // Build the story HTML with requested sections
                     storyElement.innerHTML = `
                         <h3>
                             <div class="app-icon">
@@ -947,7 +993,7 @@
                             <a href="#" target="_blank" rel="noopener noreferrer">Visit Product Page (Placeholder)</a>
                         </div>
                     `;
-                    caseStudiesStoryContainer.appendChild(storyElement); // Append story to container
+                    caseStudiesStoryContainer.appendChild(storyElement);
                  } catch(e) {
                      console.error("Error creating case study story:", e, app);
                  }
@@ -1090,12 +1136,11 @@
                 ? appData
                 : appData.filter(app => app.category === category);
 
-            // Instead of calling displayApps, we need to handle the static view
-            // Option 1: Hide static sections, show dynamic grid
+            // When filtering, hide static sections and show the dynamic grid
             const staticSections = marketplaceView.querySelectorAll('section');
             staticSections.forEach(sec => sec.style.display = 'none');
             appListContainer.classList.remove('hidden'); // Show the dynamic grid
-            displayApps(appsToDisplay); // Populate the dynamic grid
+            displayApps(appsToDisplay); // Populate the dynamic grid with filtered apps
 
             if (aiResponseArea) {
                 aiResponseArea.style.display = 'none';
@@ -1108,7 +1153,7 @@
         if (filterOptions && filterDropdown) {
              filterOptions.forEach(option => {
                 option.addEventListener('click', () => {
-                    // Don't switch view here, let filterApps handle it if needed
+                    // Filtering now implies showing the dynamic grid, not the static sections
                     filterApps(option.dataset.category);
                     filterDropdown.classList.remove('show');
                 });
@@ -1131,17 +1176,24 @@
                 if (!lowerCaseQuery) {
                     response = "Please ask a question or tell me what you're looking for (e.g., 'imaging solutions', 'drug discovery tools').";
                 } else {
+                    // UPDATED: Search includes case study fields now
                     const foundApps = appData.filter(app => {
                          const fullCategoryName = (categoryMap[app.category] || app.category).toLowerCase();
-                         return app.title.toLowerCase().includes(lowerCaseQuery) ||
-                                app.description.toLowerCase().includes(lowerCaseQuery) ||
-                                app.category.toLowerCase().includes(lowerCaseQuery) ||
-                                fullCategoryName.includes(lowerCaseQuery);
+                         const titleMatch = app.title?.toLowerCase().includes(lowerCaseQuery);
+                         const descMatch = app.description?.toLowerCase().includes(lowerCaseQuery);
+                         const catMatch = app.category?.toLowerCase().includes(lowerCaseQuery);
+                         const catNameMatch = fullCategoryName.includes(lowerCaseQuery);
+                         // Case Study Search
+                         const csProblemMatch = app.caseStudy?.problem?.toLowerCase().includes(lowerCaseQuery);
+                         const csSolutionMatch = app.caseStudy?.solution?.toLowerCase().includes(lowerCaseQuery);
+                         const csImprovementMatch = app.caseStudy?.improvement?.toLowerCase().includes(lowerCaseQuery);
+                         const csCountryMatch = app.caseStudy?.country?.toLowerCase().includes(lowerCaseQuery);
+
+                         return titleMatch || descMatch || catMatch || catNameMatch || csProblemMatch || csSolutionMatch || csImprovementMatch || csCountryMatch;
                     });
 
                     if (foundApps.length > 0) {
-                        // Don't switch view automatically on search, just show results
-                        // switchView('marketplace-view');
+                        // Don't switch view, just show results. User can click to see details.
                         response = `I found ${foundApps.length} app(s) related to "${query}":<br><ul>`;
                         foundApps.forEach(app => {
                             response += `<li class="mt-2"><a href="#" data-appid="${app.id}" class="ai-result-link">${app.title}</a> <span class="ai-result-category">(${categoryMap[app.category] || app.category})</span></li>`;
@@ -1219,11 +1271,20 @@
                  displayAgents();
              } else if (targetViewId === 'marketplace-view') {
                  // If switching back to marketplace, ensure static sections are visible
-                 // and dynamic grid is hidden (unless filtering was applied)
-                 const staticSections = document.querySelectorAll('#marketplace-view > section');
-                 staticSections.forEach(sec => sec.style.display = 'block'); // Or 'grid'/'flex' depending on section
-                 appListContainer?.classList.add('hidden'); // Hide dynamic grid
-                 noAppsMessage?.classList.add('hidden');
+                 // and dynamic grid is hidden (unless filtering was applied previously)
+                 const marketplaceView = document.getElementById('marketplace-view');
+                 if(marketplaceView){
+                     const staticSections = marketplaceView.querySelectorAll(':scope > section'); // Select direct children sections
+                     staticSections.forEach(sec => sec.style.display = 'block'); // Or 'grid'/'flex' as appropriate
+                     appListContainer?.classList.add('hidden'); // Hide dynamic grid
+                     noAppsMessage?.classList.add('hidden');
+                     // Reset filter dropdown to 'All Categories' visually
+                      if (filterOptions) {
+                        filterOptions.forEach(option => option.classList.remove('active'));
+                        document.querySelector('#filter-dropdown ul li[data-category="all"]')?.classList.add('active');
+                      }
+                      filteredCategory = 'all';
+                 }
              }
 
 
@@ -1237,6 +1298,9 @@
          // --- Add Event Listeners to Navigation Links ---
          if (navLinks) {
              navLinks.forEach(link => {
+                 // Prevent adding listener to links that are now external
+                 if (link.getAttribute('href').startsWith('http')) return;
+
                  link.addEventListener('click', (event) => {
                      event.preventDefault();
                      const targetViewId = link.dataset.target || 'marketplace-view';
