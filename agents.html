@@ -1,540 +1,803 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Agentic App Store - Synapster</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    body { background-color: #4682B4; }
-    .agent-card { border-width: 4px; border-color: #2C3E50; }
-  </style>
-  <script>
-    function searchAgents() {
-      const query = document.getElementById('agentSearch').value.toLowerCase();
-      document.querySelectorAll('.agent-card').forEach(card => {
-        const keywords = card.dataset.keywords;
-        card.style.display = keywords.includes(query) ? 'block' : 'none';
-      });
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for the grey theme and enhanced dynamic feel */
+        :root {
+            /* Grey Palette */
+            --bg-main: #f1f3f5; /* Main background grey */
+            --header-bg: rgba(255, 255, 255, 0.9); /* White semi-transparent header */
+            --card-bg: #ffffff; /* White cards */
+            --card-hover-bg: #ffffff;
+            --tooltip-bg: rgba(33, 37, 41, 0.9); /* Dark tooltip */
+            --tooltip-text: #f8f9fa; /* Light tooltip text */
+            --text-primary: #212529; /* Very Dark Grey */
+            --text-secondary: #495057; /* Dark Grey */
+            --text-muted: #6c757d;   /* Medium Grey */
+            --border-color: #dee2e6; /* Light Grey Border */
+            --accent-color: #495057;  /* Dark Grey for accents */
+            --accent-hover-color: #212529; /* Very Dark Grey for hover */
+            --shadow-color: rgba(0, 0, 0, 0.07); /* Slightly softer shadow */
+            --star-color: #fbbc05;
+            --featured-color: #ffeb3b;
+        }
 
-    function rateAgent(starContainer, rating) {
-      starContainer.querySelectorAll('.star').forEach((star, i) => {
-        star.classList.toggle('text-yellow-400', i < rating);
-      });
-      starContainer.nextElementSibling.value = rating;
-    }
+        body {
+            background-color: var(--bg-main); /* Solid grey background */
+            animation: fadeInBackground 1s ease forwards; /* Faster fade-in */
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            color: var(--text-primary);
+        }
 
-    function submitFeedback(event, agentId) {
-      event.preventDefault();
-      const form = event.target;
-      const rating = form.rating.value;
-      const review = form.review.value;
+        @keyframes fadeInBackground {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-      const feedbackDiv = document.getElementById(`feedback-${agentId}`);
-      feedbackDiv.innerHTML = `
-        <div class='text-sm text-gray-600'><strong>Your Rating:</strong> ${'⭐'.repeat(rating)}</div>
-        <div class='italic text-gray-800'>"${review}"</div>
-      `;
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10000;
+            transition: opacity 0.7s ease-out;
+        }
+        #loading-screen.fade-out { opacity: 0; visibility: hidden; }
+        .loader {
+            border: 6px solid #e9ecef; border-top: 6px solid var(--accent-color);
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1.5s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-      form.reset();
-      form.querySelectorAll('.star').forEach(star => star.classList.remove('text-yellow-400'));
-    }
-  </script>
+        /* Header */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            padding: 1rem 1.5rem;
+        }
+        .header-content {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            gap: 1rem; max-width: 1400px; margin: 0 auto;
+        }
+        .header-title {
+            font-size: 1.75rem; font-weight: 700; color: var(--text-primary);
+            margin: 0; flex-shrink: 0;
+        }
+        /* Header Navigation */
+        header nav { display: flex; gap: 1.5rem; margin: 0 auto; }
+        header nav a {
+            color: var(--text-secondary);
+            text-decoration: none; font-weight: 500; padding: 0.5rem 0; position: relative;
+            transition: color 0.3s ease;
+        }
+        header nav a::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        header nav a:hover { color: var(--text-primary); }
+        header nav a:hover::after { width: 100%; }
+        .header-actions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+
+        /* App Card */
+        .app-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px); border-radius: 16px; /* Slightly less rounded */
+            box-shadow: 0 4px 12px var(--shadow-color); /* Adjusted shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            margin-bottom: 25px; cursor: pointer; overflow: visible; /* Allow tooltip potential overflow */
+            opacity: 0; transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+            border: 1px solid var(--border-color); /* Use border color variable */
+            position: relative; /* Needed for potential absolute positioning inside if desired */
+        }
+        .app-card:hover {
+            transform: translateY(-5px); /* Slightly less lift */
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1); /* Adjusted hover shadow */
+            background: var(--card-hover-bg);
+        }
+        .app-card:nth-child(1) { animation-delay: 0.1s; }
+        .app-card:nth-child(2) { animation-delay: 0.15s; }
+        .app-card:nth-child(3) { animation-delay: 0.2s; }
+        .app-card:nth-child(4) { animation-delay: 0.25s; }
+        .app-card:nth-child(5) { animation-delay: 0.3s; }
+        .app-card:nth-child(6) { animation-delay: 0.35s; }
+        /* Add more if needed */
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .app-icon {
+            width: 70px; height: 70px; border-radius: 14px; /* Match card rounding */
+            margin-right: 16px; background-color: #f8f9fa; /* Off-white */
+            display: flex; justify-content: center; align-items: center;
+            font-size: 22px; font-weight: 600; color: var(--text-secondary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); flex-shrink: 0; overflow: hidden;
+        }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .app-title { font-size: 1.15rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .app-category {
+            font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;
+            display: inline-block; padding: 3px 10px; border-radius: 12px;
+            background-color: #f1f3f5; line-height: 1.3;
+        }
+        .app-description {
+            font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden; text-overflow: ellipsis; height: calc(1.5 * 3em);
+        }
+        .featured-app-badge {
+            background: linear-gradient(45deg, #fff176, #ffee58);
+            color: #5f4300; padding: 5px 12px; border-radius: 16px;
+            font-size: 0.75rem; font-weight: 700; margin-bottom: 10px;
+            display: inline-block; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal */
+        #app-details-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(33, 37, 41, 0.75); /* Darker overlay */
+            backdrop-filter: blur(8px);
+            z-index: 10000; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        #app-details-modal.show { display: flex; opacity: 1; }
+        #app-details-content {
+            background: #ffffff; border-radius: 18px; padding: 40px; width: 90%; max-width: 850px;
+            max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            position: relative; transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #app-details-modal.show #app-details-content { transform: scale(1); }
+        #app-details-content h2 { font-size: 2rem; color: var(--text-primary); margin-bottom: 12px; font-weight: 700; }
+        #app-details-content .modal-app-category {
+            font-size: 0.95rem; margin-bottom: 24px; display: inline-block;
+            padding: 6px 12px; border-radius: 14px; background-color: #f1f3f5; color: var(--text-muted);
+        }
+        #app-details-content p#modal-app-description { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 28px; }
+        #app-details-content .close-button {
+            position: absolute; top: 20px; right: 20px; font-size: 2rem; font-weight: 300; color: #adb5bd;
+            cursor: pointer; transition: color 0.3s ease, transform 0.3s ease; border: none; background: none; padding: 0; line-height: 1;
+        }
+        #app-details-content .close-button:hover { color: #dc3545; transform: rotate(90deg) scale(1.1); }
+        .modal-app-icon {
+            width: 110px; height: 110px; border-radius: 20px; margin-right: 24px;
+            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
+            font-size: 32px; font-weight: 600; color: var(--text-secondary);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); flex-shrink: 0; overflow: hidden;
+        }
+        .modal-app-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .user-rating { display: flex; align-items: center; margin-bottom: 12px; }
+        .star-icon { width: 22px; height: 22px; margin-right: 5px; color: var(--star-color); }
+        .rating-count { font-size: 0.95rem; color: var(--text-secondary); }
+        .comments-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+        .comment { padding: 14px; margin-bottom: 14px; border-radius: 10px; background-color: #f8f9fa; border: 1px solid var(--border-color); }
+        .comment-author { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .comment-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
+
+        /* Filter Dropdown */
+        #filter-dropdown { position: relative; display: inline-block; }
+        #filter-dropdown button {
+            background-color: #ffffff; /* White button */
+            color: var(--text-secondary); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border-color);
+            cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+            display: flex; align-items: center;
+        }
+        #filter-dropdown button:hover {
+            background-color: #f8f9fa; /* Off-white hover */
+            color: var(--text-primary);
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+        #filter-dropdown button span { margin-right: 6px; }
+        #filter-dropdown ul {
+            position: absolute; top: calc(100% + 8px); right: 0;
+            background-color: #ffffff; border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); padding: 10px 0; list-style: none;
+            min-width: 260px; opacity: 0; visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 1001; border: 1px solid var(--border-color);
+        }
+        #filter-dropdown.show ul { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        #filter-dropdown ul li {
+            padding: 10px 18px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease; white-space: normal; line-height: 1.4;
+        }
+        #filter-dropdown ul li:hover { background-color: #f1f3f5; color: var(--text-primary); }
+        #filter-dropdown ul li.active { font-weight: 600; color: var(--text-primary); background-color: #e9ecef; }
+
+        /* AI Search */
+        #ai-search-container {
+            display: flex; align-items: center; background-color: #ffffff;
+            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color);
+            flex-grow: 1; max-width: 400px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+         #ai-search-container:focus-within {
+            background-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+        #ai-search-input {
+            flex-grow: 1; border: none; background: transparent; outline: none;
+            padding: 8px; font-size: 0.9rem; color: var(--text-primary);
+        }
+        #ai-search-input::placeholder { color: var(--text-muted); }
+        #ai-search-button {
+            background: none; border: none; cursor: pointer; padding: 6px; color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+        #ai-search-button:hover { color: var(--text-primary); }
+        #ai-response-area {
+            margin: 20px auto 0 auto; max-width: 1400px;
+            padding: 18px 24px; background: #ffffff;
+            border-radius: 14px; box-shadow: 0 5px 15px var(--shadow-color);
+            font-size: 1rem; color: var(--text-primary); line-height: 1.6; display: none;
+            border: 1px solid var(--border-color);
+        }
+        #ai-response-area.loading::after { content: 'Thinking...'; display: block; text-align: center; font-style: italic; color: var(--text-muted); margin-top: 12px; }
+        .ai-result-link { font-weight: 500; color: var(--accent-color); text-decoration: none; transition: color 0.2s ease; }
+        .ai-result-link:hover { color: var(--accent-hover-color); text-decoration: underline; }
+        .ai-result-category { font-size: 0.9em; color: var(--text-muted); margin-left: 6px; }
+
+        /* No Apps Message */
+        .no-apps-message {
+            text-align: center; font-size: 1.1rem; color: var(--text-muted);
+            margin-top: 50px; padding: 25px; border-radius: 14px;
+            background-color: #ffffff; /* White background */
+            border: 1px solid var(--border-color);
+        }
+
+        /* Main Content Area */
+        main {
+            flex: 1; padding: 2rem 1.5rem; max-width: 1400px; margin: 0 auto;
+        }
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;
+        }
+
+        /* Tooltip */
+        #app-tooltip {
+            position: absolute;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            z-index: 11000; /* Above everything */
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none; /* Prevent tooltip from blocking mouse events */
+            transition: opacity 0.2s ease;
+            max-width: 250px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+         #app-tooltip h3 {
+            font-weight: 600;
+            margin: 0 0 4px 0;
+            font-size: 0.9rem;
+            color: #ffffff; /* White title */
+         }
+         #app-tooltip p {
+            margin: 0;
+         }
+         #app-tooltip .tooltip-category {
+            color: #ced4da; /* Lighter grey for category */
+            margin-bottom: 3px;
+         }
+         #app-tooltip .tooltip-rating {
+            color: var(--star-color); /* Yellow for rating */
+         }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .header-content { justify-content: space-between; }
+            header nav { order: 3; width: 100%; justify-content: center; margin-top: 0.5rem; gap: 1rem;}
+            .header-actions { order: 2; }
+            .header-title { order: 1; }
+            #ai-search-container { max-width: 300px; }
+        }
+        @media (max-width: 768px) {
+            header { padding: 0.75rem 1rem; }
+            .header-title { font-size: 1.5rem; }
+            header nav { gap: 0.75rem; }
+            header nav a { font-size: 0.9rem; padding: 0.3rem 0; }
+            .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
+             #ai-search-container { width: 100%; max-width: none; order: 1; margin-right: 0; }
+             #filter-dropdown { order: 2; }
+             #filter-dropdown button { padding: 8px 16px; }
+             main { padding: 1.5rem 1rem; }
+             .grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+             #app-details-content { padding: 25px; }
+             #app-details-content h2 { font-size: 1.6rem; }
+             #app-tooltip { display: none; } /* Hide tooltip on small screens for simplicity */
+        }
+
+    </style>
 </head>
-<body class="bg-gray-100 flex justify-center">
-  <div class="container max-w-7xl">
-    <header class="bg-white shadow p-4 flex justify-between items-center">
-      <h1 class="text-2xl text-blue-600 font-bold">Synapster AI Marketplace</h1>
-      <nav>
-        <a href="https://synapster.analystx.uk/" class="mx-2 hover:text-blue-600">Home</a>
-        <a href="https://synapster.analystx.uk/agents.html" class="mx-2 hover:text-blue-600">Agents</a>
-        <a href="https://synapster.analystx.uk/demo.html" class="mx-2 hover:text-blue-600">Demos</a>
-        <a href="https://synapster.analystx.uk/cs.html" class="mx-2 hover:text-blue-600">Case Studies</a>
-      </nav>
+<body class="min-h-screen flex flex-col">
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">AI Agent Marketplace</h1>
+            <nav>
+                <a href="https://synapster.analystx.uk/cs.html">Case Studies</a>
+                <a href="#">Agents List</a>
+                <a href="#">About Us</a>
+            </nav>
+            <div class="header-actions">
+                <div id="ai-search-container">
+                    <input type="text" id="ai-search-input" placeholder="Ask the AI Agent...">
+                    <button id="ai-search-button" aria-label="Search">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                </div>
+                <div id="filter-dropdown">
+                    <button>
+                        <span>Filter</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>
+                    </button>
+                    <ul>
+                        <li data-category="all">All Categories</li>
+                        <li data-category="diagnostics-imaging">Diagnostics & Imaging Solutions</li>
+                        <li data-category="clinical-decision">Clinical Decision Support & Triage</li>
+                        <li data-category="patient-engagement">Patient Engagement & Remote Care</li>
+                        <li data-category="operational-efficiency">Operational Efficiency & Administration</li>
+                        <li data-category="drug-discovery">Drug Discovery & Research</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ai-response-area"></div>
     </header>
 
-    <section class="text-center py-8 bg-gradient-to-r from-blue-50 to-blue-100">
-      <h2 class="text-3xl font-semibold">Explore Next-Gen AI Agents</h2>
-      <p class="text-gray-700">Interact, rate, and choose agents tailored for your healthcare needs.</p>
-      <input type="text" id="agentSearch" placeholder="Search agents by category..." class="mt-4 p-2 w-1/3 rounded shadow border" oninput="searchAgents()">
-    </section>
-
-    <!-- Featured Agent Cards (2 columns) -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 p-8">
-      <div class="agent-card bg-white rounded shadow-lg p-4" id="agent-1" data-keywords="diagnostics imaging">
-        <img src="/assets/logos/sensley.jfif" alt="Company Logo" class="w-50 h-16 mb-2">
-        <h4 class="font-bold text-xl">Sensely</h4>
-        <p class="text-gray-600">AI-powered virtual assistant for medical triage.</p>
-        <video controls class="w-full h-auto my-3">
-          <source src="demo-video.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-        <div class="my-3" id="feedback-agent-1"></div>
-        <form onsubmit="submitFeedback(event, 'agent-1')">
-          <div class="flex space-x-1 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star w-6 h-6" onclick="rateAgent(this.parentElement, 1)" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <input type="hidden" name="rating" value="0">
-          <textarea name="review" placeholder="Write your review..." class="mt-2 p-2 border w-full rounded"></textarea>
-          <button type="submit" class="mt-2 bg-blue-600 text-white px-3 py-1 rounded">Submit</button>
-        </form>
-        <a href="#" class="inline-block mt-2 text-blue-600 hover:underline">View Agent</a>
-      </div>
-      <!-- Add another featured agent card similarly -->
-    </section>
-
-    <!-- Other AI Agents (6 columns) -->
-  <!-- AI Agents Section -->
-  <section id="agents" class="p-6">
-    <h3 class="text-2xl font-semibold mb-4">Clinical Decision Support & Triage</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Sample Agent Card -->
-      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Buoy Health</h4>
-        <p class="text-sm text-gray-600">AI-driven symptom checker for patient triage.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
+    <main>
+        <div class="grid" id="app-list">
+            </div>
+        <div id="no-apps-message" class="hidden">
+            <p>No apps found matching the selected category.</p>
         </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.buoyhealth.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-  
-      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">DreaMed Diabetese</h4>
-        <p class="text-sm text-gray-600"> AI-based insulin therapy decision support.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.dreamed-diabetes.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
+    </main>
 
-                  <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Mediktor</h4>
-        <p class="text-sm text-gray-600"> AI-based symptom assessment and triage.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
+    <div id="app-details-modal">
+        <div id="app-details-content">
+            <button class="close-button" id="close-modal-button" aria-label="Close modal">&times;</button>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center mb-6">
+                <div class="modal-app-icon" id="modal-app-icon">
+                    </div>
+                <div class="ml-0 sm:ml-6 mt-4 sm:mt-0">
+                    <h2 id="modal-app-title">App Title</h2>
+                    <p id="modal-app-category" class="modal-app-category">Category</p>
+                </div>
+            </div>
+            <p id="modal-app-description" class="mb-6">App Description</p>
+            <div class="app-details">
+                <div class="user-rating mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="lucide lucide-star star-icon"><path d="M12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2Z"/></svg>
+                    <span id="modal-app-rating" class="rating-count ml-1">4.5 (120 ratings)</span>
+                </div>
+                <div class="comments-section">
+                    <h3 class="text-lg font-semibold mb-4">User Comments</h3>
+                    <div id="modal-app-comments">
+                        </div>
+                </div>
+            </div>
         </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.mediktor.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-
-                        <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Sensely</h4>
-        <p class="text-sm text-gray-600"> AI-powered virtual assistant for medical triage.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.sensely.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-    
     </div>
-  </section>
-  
-  <!-- AI Agents Section -->
-  <section id="agents" class="p-6">
-    <h3 class="text-2xl font-semibold mb-4">Diagnostics & Imaging Solutions</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Sample Agent Card -->
-      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Aidoc</h4>
-        <p class="text-sm text-gray-600">AI for radiology and acute abnormality detection.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.aidoc.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-  
-      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Zebra Medical Vision</h4>
-        <p class="text-sm text-gray-600">  AI-powered radiology tools for cardiovascular, liver, and lung diseases.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.zebra-med.com/contact-us/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
 
-                  <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Arterys</h4>
-        <p class="text-sm text-gray-600"> AI-based symptom assessment and triage.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.mediktor.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
+    <div id="app-tooltip"></div>
 
-                        <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">PathAI</h4>
-        <p class="text-sm text-gray-600">AI-powered pathology diagnostics.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.pathai.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-    
-    </div>
-  </section>
+    <script>
+        // --- Category Mapping ---
+        const categoryMap = {
+            'all': 'All Categories',
+            'diagnostics-imaging': 'Diagnostics & Imaging Solutions',
+            'clinical-decision': 'Clinical Decision Support & Triage',
+            'patient-engagement': 'Patient Engagement & Remote Care',
+            'operational-efficiency': 'Operational Efficiency & Administration',
+            'drug-discovery': 'Drug Discovery & Research'
+        };
 
-    <!-- AI Agents Section -->
-  <section id="agents" class="p-6">
-    <h3 class="text-2xl font-semibold mb-4">Drug Discovery & Research</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Sample Agent Card -->
-      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Atomwise</h4>
-        <p class="text-sm text-gray-600">AI-driven drug discovery and molecular modeling.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.atomwise.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-  
-      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">BenevolentAI </h4>
-        <p class="text-sm text-gray-600">AI platform for accelerating biomedical research.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.benevolent.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-
-                  <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Insilico Medicine</h4>
-        <p class="text-sm text-gray-600">AI-based small molecule drug discovery </p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://insilico.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-
-                        <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Recursion Pharma</h4>
-        <p class="text-sm text-gray-600">AI-powered platform for high-throughput biological experiments.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.recursion.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-    
-                        <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Schrödinger AI</h4>
-        <p class="text-sm text-gray-600">AI-driven computational chemistry and drug modeling.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.schrodinger.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-    
-    </div>
-  </section>
-
-      <!-- AI Agents Section -->
-  <section id="agents" class="p-6">
-    <h3 class="text-2xl font-semibold mb-4">Operational Efficiency & Administration</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Sample Agent Card -->
-      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Olive AI</h4>
-        <p class="text-sm text-gray-600">AI-powered RPA for healthcare process automation.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.oliveai.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-  
-      <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">CloudMed</h4>
-        <p class="text-sm text-gray-600">AI-based revenue cycle management solutions.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.cloudmed.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-
-                  <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Health Catalyst</h4>
-        <p class="text-sm text-gray-600">AI analytics platform for healthcare data insight </p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.healthcatalyst.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-
-                        <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">Reveleer</h4>
-        <p class="text-sm text-gray-600">AI-driven medical record automation and compliance.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.reveleer.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-    
-                        <div class="agent-card bg-white shadow rounded p-4" id="agent-1">
-        <h4 class="text-lg font-bold">LeanTaaS</h4>
-        <p class="text-sm text-gray-600">AI-powered predictive analytics for hospital operations.</p>
-        <div id="review-display-agent-1" class="mt-2">
-          <p class="text-yellow-500">⭐⭐⭐⭐☆</p>
-        </div>
-        <form onsubmit="return submitReview(this, 'agent-1')" class="mt-4">
-          <input type="hidden" name="rating" value="0">
-          <label class="block text-sm font-medium mb-1">Your Rating:</label>
-          <div class="flex space-x-1 mb-2 cursor-pointer" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 1)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 2)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 3)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 4)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="star h-6 w-6" fill="currentColor" viewBox="0 0 20 20" onclick="setStarRating(this.parentElement, 5)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.538 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.783.57-1.838-.197-1.538-1.118l1.286-3.957a1 1 0 00-.364-1.118L2.06 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-          </div>
-          <label class="block text-sm font-medium mb-1">Your Review:</label>
-          <textarea name="review" rows="2" class="w-full border px-2 py-1 rounded mb-2" placeholder="Write your feedback..."></textarea>
-          <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Submit</button>
-        </form>
-        <a href="https://www.leantaas.com/contact/" class="text-blue-600 hover:underline mt-2 inline-block">View agent</a>
-      </div>
-    
-    </div>
-  </section>
+        // --- Real App Data (Sample based on research) ---
+        const appData = [
+             // Diagnostics & Imaging Solutions
+            {
+                id: 'diag01', title: 'Zebra Medical Vision', category: 'diagnostics-imaging',
+                description: 'Develops AI solutions to enhance medical imaging diagnostics, aiming to improve accuracy and speed up decision-making for clinicians.',
+                rating: 4.7, ratingsCount: 280, comments: [{ author: 'Radiologist A', text: 'Great tool for second opinions.' }, { author: 'Clinic B', text: 'Improved our workflow.' }],
+                icon: 'ZMV', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=ZMV', featured: true, // Grey icon bg
+            },
+            {
+                id: 'diag02', title: 'Rad AI', category: 'diagnostics-imaging',
+                description: 'Creates AI tools to automate tasks within radiology workflows, aiming to improve report speed, quality, and reduce errors.',
+                rating: 4.6, ratingsCount: 215, comments: [{ author: 'Tech Lead', text: 'Efficient automation.' }],
+                icon: 'RAI', iconUrl: 'https://placehold.co/80x80/CED4DA/ffffff?text=RAI', featured: false,
+            },
+             {
+                id: 'diag03', title: 'Gleamer', category: 'diagnostics-imaging',
+                description: 'Specializes in AI for radiology, particularly for detecting fractures and abnormalities in X-rays (e.g., BoneView).',
+                rating: 4.8, ratingsCount: 305, comments: [{ author: 'Ortho Specialist', text: 'Very accurate for fracture detection.' }],
+                icon: 'GLM', iconUrl: 'https://placehold.co/80x80/DEE2E6/495057?text=GLM', featured: false, // Dark text on light grey
+            },
+            // Clinical Decision Support & Triage
+            {
+                id: 'clin01', title: 'Pieces', category: 'clinical-decision',
+                description: 'An AI-powered clinical decision support system connecting health and social care data for comprehensive patient insights.',
+                rating: 4.5, ratingsCount: 190, comments: [{ author: 'Case Manager', text: 'Helps connect the dots.' }],
+                icon: 'PCS', iconUrl: 'https://placehold.co/80x80/6C757D/ffffff?text=PCS', featured: false, // Medium grey bg
+            },
+            {
+                id: 'clin02', title: 'Visiba', category: 'clinical-decision',
+                description: 'Offers AI-enabled triage technology (Visiba Triage) to route patients efficiently based on submitted symptoms.',
+                rating: 4.6, ratingsCount: 220, comments: [{ author: 'Urgent Care', text: 'Streamlines patient flow.' }, { author: 'Admin', text: 'Easy to implement.' }],
+                icon: 'VIS', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=VIS', featured: true,
+            },
+             {
+                id: 'clin03', title: 'Klinik Healthcare Solutions', category: 'clinical-decision',
+                description: 'Provides AI-assisted online triage solutions for primary care to assess urgency and direct patients appropriately.',
+                rating: 4.4, ratingsCount: 175, comments: [{ author: 'GP Practice', text: 'Reduces phone calls.' }],
+                icon: 'KHS', iconUrl: 'https://placehold.co/80x80/CED4DA/495057?text=KHS', featured: false,
+            },
+            // Patient Engagement & Remote Care
+            {
+                id: 'pat01', title: 'Memora Health', category: 'patient-engagement',
+                description: 'Uses an AI platform to automate patient care management, tracking, and engagement post-discharge.',
+                rating: 4.7, ratingsCount: 255, comments: [{ author: 'Hospital Discharge Team', text: 'Reduces readmissions.' }],
+                icon: 'MEM', iconUrl: 'https://placehold.co/80x80/DEE2E6/ffffff?text=MEM', featured: true,
+            },
+            {
+                id: 'pat02', title: 'Ada Health', category: 'patient-engagement',
+                description: 'Offers AI-powered health assessment and guidance tools for patients, helping them understand symptoms.',
+                rating: 4.8, ratingsCount: 350, comments: [{ author: 'Patient User', text: 'Helpful for initial checks.' }, { author: 'Health Advocate', text: 'Empowers patients.' }],
+                icon: 'ADA', iconUrl: 'https://placehold.co/80x80/E9ECEF/495057?text=ADA', featured: false,
+            },
+            {
+                id: 'pat03', title: 'Biofourmis', category: 'patient-engagement',
+                description: 'Combines AI with wearable tech for personalized predictive health analytics and remote monitoring.',
+                rating: 4.6, ratingsCount: 290, comments: [{ author: 'Cardiologist', text: 'Great for remote monitoring.' }],
+                icon: 'BIO', iconUrl: 'https://placehold.co/80x80/F8F9FA/6C757D?text=BIO', featured: false, // Off-white bg
+            },
+            // Operational Efficiency & Administration
+            {
+                id: 'ops01', title: 'Avaamo', category: 'operational-efficiency',
+                description: 'Provides conversational AI virtual assistants to streamline administrative tasks like scheduling and patient check-ins.',
+                rating: 4.5, ratingsCount: 180, comments: [{ author: 'Clinic Manager', text: 'Frees up front desk staff.' }],
+                icon: 'AVA', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=AVA', featured: false,
+            },
+            {
+                id: 'ops02', title: 'AKASA', category: 'operational-efficiency',
+                description: 'Offers AI solutions for automating healthcare revenue cycle management (billing, coding, claims).',
+                rating: 4.6, ratingsCount: 200, comments: [{ author: 'Billing Dept', text: 'Reduced errors significantly.' }, { author: 'CFO', text: 'Improved revenue cycle.' }],
+                icon: 'AKA', iconUrl: 'https://placehold.co/80x80/6C757D/ffffff?text=AKA', featured: true,
+            },
+            {
+                id: 'ops03', title: 'Augmedix', category: 'operational-efficiency',
+                description: 'Uses AI and NLP to automate clinical documentation from doctor-patient conversations, reducing physician burnout.',
+                rating: 4.7, ratingsCount: 240, comments: [{ author: 'Physician', text: 'Saves me hours of paperwork.' }],
+                icon: 'AUG', iconUrl: 'https://placehold.co/80x80/CED4DA/495057?text=AUG', featured: false,
+            },
+            // Drug Discovery & Research
+            {
+                id: 'drug01', title: 'Atomwise', category: 'drug-discovery',
+                description: 'Leverages its AtomNet® AI platform for structure-based small molecule drug discovery.',
+                rating: 4.8, ratingsCount: 310, comments: [{ author: 'Researcher', text: 'Powerful platform.' }, { author: 'Pharma Partner', text: 'Accelerates discovery.' }],
+                icon: 'ATW', iconUrl: 'https://placehold.co/80x80/DEE2E6/ffffff?text=ATW', featured: true,
+            },
+            {
+                id: 'drug02', title: 'Isomorphic Labs', category: 'drug-discovery',
+                description: 'Alphabet subsidiary focusing on applying AI to drug discovery, co-developed AlphaFold3.',
+                rating: 4.9, ratingsCount: 400, comments: [{ author: 'Scientist', text: 'Cutting-edge research.' }],
+                icon: 'ISO', iconUrl: 'https://placehold.co/80x80/E9ECEF/495057?text=ISO', featured: false,
+            },
+            {
+                id: 'drug03', title: 'XtalPi', category: 'drug-discovery',
+                description: 'Combines AI, quantum physics, and robotics to accelerate pharmaceutical research and development.',
+                rating: 4.7, ratingsCount: 275, comments: [{ author: 'Lab Director', text: 'Innovative approach.' }],
+                icon: 'XTP', iconUrl: 'https://placehold.co/80x80/F8F9FA/6C757D?text=XTP', featured: false,
+            },
+             {
+                id: 'drug04', title: 'Healx', category: 'drug-discovery',
+                description: 'Specializes in using AI for drug discovery specifically targeting rare diseases, aiming to find treatments faster.',
+                rating: 4.8, ratingsCount: 295, comments: [{ author: 'Patient Group', text: 'Giving hope for rare diseases.' }, { author: 'Biotech Investor', text: 'Strong mission and tech.' }],
+                icon: 'HLX', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=HLX', featured: true,
+            },
+        ];
 
 
-    <footer class="bg-white text-center py-4 shadow">
-      <p class="text-gray-600">© 2025 Synapster AI Marketplace</p>
-    </footer>
-  </div>
+        // --- DOM Element References ---
+        const appListContainer = document.getElementById('app-list');
+        const appDetailsModal = document.getElementById('app-details-modal');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const noAppsMessage = document.getElementById('no-apps-message');
+        const filterDropdown = document.getElementById('filter-dropdown');
+        const filterOptions = document.querySelectorAll('#filter-dropdown ul li');
+        const aiSearchInput = document.getElementById('ai-search-input');
+        const aiSearchButton = document.getElementById('ai-search-button');
+        const aiResponseArea = document.getElementById('ai-response-area');
+        const appTooltip = document.getElementById('app-tooltip'); // Tooltip Element
+
+        let filteredCategory = 'all'; // Track current filter
+        let tooltipTimeout; // Timeout for delayed tooltip hide
+
+        // --- Function to Display Apps ---
+        function displayApps(apps) {
+            appListContainer.innerHTML = ''; // Clear previous app listings
+            if (apps.length === 0) {
+                noAppsMessage.classList.remove('hidden');
+            } else {
+                noAppsMessage.classList.add('hidden');
+                apps.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+
+                apps.forEach((app, index) => {
+                    const appCard = document.createElement('div');
+                    appCard.className = 'app-card p-4';
+                    appCard.style.animationDelay = `${index * 0.05}s`;
+                    // Store app data directly on the element for tooltip access
+                    appCard.dataset.appData = JSON.stringify(app);
+
+                    const featuredBadge = app.featured ? `<div class="featured-app-badge">Featured App</div>` : '';
+                    const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon}'; this.parentElement.style.fontSize='22px'; this.parentElement.style.fontWeight='600';`;
+
+                    appCard.innerHTML = `
+                        ${featuredBadge}
+                        <div class="flex items-start">
+                            <div class="app-icon">
+                                <img src="${app.iconUrl}" alt="${app.title} icon" loading="lazy" onerror="${fallbackImage}">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="app-title">${app.title}</h3>
+                                <p class="app-category">${categoryMap[app.category] || app.category}</p>
+                                <p class="app-description">${app.description}</p>
+                            </div>
+                        </div>
+                    `;
+                    // Add event listeners for tooltip
+                    appCard.addEventListener('mouseenter', handleMouseEnter);
+                    appCard.addEventListener('mouseleave', handleMouseLeave);
+                    appCard.addEventListener('mousemove', handleMouseMove);
+                    // Add click listener for modal
+                    appCard.addEventListener('click', () => showAppDetails(app));
+
+                    appListContainer.appendChild(appCard);
+                });
+            }
+        }
+
+        // --- Tooltip Handlers ---
+        function handleMouseEnter(event) {
+            clearTimeout(tooltipTimeout); // Clear any pending hide timeout
+            const card = event.currentTarget;
+            const app = JSON.parse(card.dataset.appData);
+
+            // Create tooltip content
+            const tooltipContent = `
+                <h3>${app.title}</h3>
+                <p class="tooltip-category">${categoryMap[app.category] || app.category}</p>
+                <p class="tooltip-rating">Rating: ${app.rating} ★</p>
+            `;
+            appTooltip.innerHTML = tooltipContent;
+
+            // Position and show tooltip (initial position)
+            updateTooltipPosition(event);
+            appTooltip.style.opacity = '1';
+            appTooltip.style.visibility = 'visible';
+        }
+
+        function handleMouseLeave() {
+            // Delay hiding the tooltip slightly
+            tooltipTimeout = setTimeout(() => {
+                appTooltip.style.opacity = '0';
+                appTooltip.style.visibility = 'hidden';
+            }, 100); // 100ms delay
+        }
+
+        function handleMouseMove(event) {
+             // Keep updating position only if tooltip is visible
+            if (appTooltip.style.visibility === 'visible') {
+                 updateTooltipPosition(event);
+            }
+        }
+
+        function updateTooltipPosition(event) {
+            const tooltipRect = appTooltip.getBoundingClientRect();
+            const offsetX = 15; // Offset from cursor
+            const offsetY = 15;
+            let x = event.pageX + offsetX;
+            let y = event.pageY + offsetY;
+
+            // Prevent tooltip going off-screen (right edge)
+            if (x + tooltipRect.width > window.innerWidth) {
+                x = event.pageX - tooltipRect.width - offsetX;
+            }
+             // Prevent tooltip going off-screen (bottom edge)
+            if (y + tooltipRect.height > window.innerHeight + window.scrollY) { // Account for scroll
+                 y = event.pageY - tooltipRect.height - offsetY;
+            }
+             // Prevent tooltip going off-screen (left edge)
+             if (x < 0) {
+                 x = event.pageX + offsetX; // Revert to right side if collision
+             }
+              // Prevent tooltip going off-screen (top edge)
+             if (y < window.scrollY) { // Account for scroll
+                 y = event.pageY + offsetY; // Revert to bottom side if collision
+             }
+
+
+            appTooltip.style.left = `${x}px`;
+            appTooltip.style.top = `${y}px`;
+        }
+
+        // --- Function to Show App Details Modal ---
+        function showAppDetails(app) {
+             // Hide tooltip immediately when card is clicked
+            appTooltip.style.opacity = '0';
+            appTooltip.style.visibility = 'hidden';
+            clearTimeout(tooltipTimeout);
+
+            const modalAppIcon = document.getElementById('modal-app-icon');
+            const modalAppTitle = document.getElementById('modal-app-title');
+            const modalAppCategory = document.getElementById('modal-app-category');
+            const modalAppDescription = document.getElementById('modal-app-description');
+            const modalAppRating = document.getElementById('modal-app-rating');
+            const modalAppComments = document.getElementById('modal-app-comments');
+
+            const fallbackModalImage = `this.onerror=null; this.parentElement.textContent = '${app.icon}'; this.parentElement.style.fontSize='32px'; this.parentElement.style.fontWeight='600';`;
+            const largeIconUrl = app.iconUrl.includes('placehold.co') ? app.iconUrl.replace('/80x80/', '/120x120/') : app.iconUrl;
+            modalAppIcon.innerHTML = `<img src="${largeIconUrl}" alt="${app.title} icon" loading="lazy" onerror="${fallbackModalImage}">`;
+
+            modalAppTitle.textContent = app.title;
+            modalAppCategory.textContent = categoryMap[app.category] || app.category;
+            modalAppDescription.textContent = app.description;
+            modalAppRating.textContent = `${app.rating} (${app.ratingsCount} ratings)`;
+
+            modalAppComments.innerHTML = '';
+            if (app.comments && app.comments.length > 0) {
+                 modalAppComments.innerHTML = app.comments.map(comment => `
+                    <div class="comment">
+                        <p class="comment-author">${comment.author}</p>
+                        <p class="comment-text">${comment.text}</p>
+                    </div>
+                `).join('');
+            } else {
+                modalAppComments.innerHTML = '<p class="text-sm text-gray-500 italic">No comments yet.</p>';
+            }
+
+            appDetailsModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // --- Event Listeners for Modal ---
+        closeModalButton.addEventListener('click', () => {
+            appDetailsModal.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+        appDetailsModal.addEventListener('click', (event) => {
+            if (event.target === appDetailsModal) {
+                appDetailsModal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // --- Function to Filter Apps by Category ---
+        function filterApps(category) {
+            filteredCategory = category;
+            filterOptions.forEach(option => {
+                option.classList.toggle('active', option.dataset.category === category);
+            });
+            const appsToDisplay = (category === 'all')
+                ? appData
+                : appData.filter(app => app.category === category);
+            displayApps(appsToDisplay); // Re-display apps which re-attaches listeners
+            aiResponseArea.style.display = 'none';
+            aiResponseArea.innerHTML = '';
+        }
+
+        // --- Add Event Listeners to Filter Options ---
+        filterOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                filterApps(option.dataset.category);
+                filterDropdown.classList.remove('show');
+            });
+        });
+
+        // --- Function to Handle AI Search Query ---
+        function handleAiSearch(query) {
+            aiResponseArea.innerHTML = '';
+            aiResponseArea.classList.add('loading');
+            aiResponseArea.style.display = 'block';
+
+            setTimeout(() => {
+                aiResponseArea.classList.remove('loading');
+                const lowerCaseQuery = query.toLowerCase().trim();
+                let response = "";
+
+                if (!lowerCaseQuery) {
+                    response = "Please ask a question or tell me what you're looking for (e.g., 'imaging solutions', 'drug discovery tools').";
+                } else {
+                    const foundApps = appData.filter(app => {
+                         const fullCategoryName = (categoryMap[app.category] || app.category).toLowerCase();
+                         return app.title.toLowerCase().includes(lowerCaseQuery) ||
+                                app.description.toLowerCase().includes(lowerCaseQuery) ||
+                                app.category.toLowerCase().includes(lowerCaseQuery) ||
+                                fullCategoryName.includes(lowerCaseQuery);
+                    });
+
+                    if (foundApps.length > 0) {
+                        response = `I found ${foundApps.length} app(s) related to "${query}":<br><ul>`;
+                        foundApps.forEach(app => {
+                            response += `<li class="mt-2"><a href="#" data-appid="${app.id}" class="ai-result-link">${app.title}</a> <span class="ai-result-category">(${categoryMap[app.category] || app.category})</span></li>`;
+                        });
+                        response += "</ul><p class='mt-3 text-sm text-gray-600'>Click on an app name to see details.</p>";
+                    } else {
+                        response = `Sorry, I couldn't find any apps matching "${query}". Try searching for categories like 'Diagnostics', 'Clinical Decision', 'Patient Engagement', 'Operational Efficiency', or 'Drug Discovery'.`;
+                    }
+                }
+                aiResponseArea.innerHTML = response;
+            }, 800);
+        }
+
+        // --- Event Listeners for AI Search ---
+        aiSearchButton.addEventListener('click', () => handleAiSearch(aiSearchInput.value));
+        aiSearchInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleAiSearch(aiSearchInput.value);
+            }
+        });
+        aiResponseArea.addEventListener('click', (event) => {
+            if (event.target.classList.contains('ai-result-link')) {
+                event.preventDefault();
+                const app = appData.find(a => a.id === event.target.dataset.appid);
+                if (app) showAppDetails(app);
+            }
+        });
+
+        // --- Initial Display & Loading Screen ---
+        document.addEventListener('DOMContentLoaded', () => {
+             displayApps(appData); // Initial display attaches listeners
+             filterOptions.forEach(option => option.classList.toggle('active', option.dataset.category === 'all'));
+
+             const loadingScreen = document.getElementById('loading-screen');
+             if (loadingScreen) {
+                 setTimeout(() => {
+                     loadingScreen.classList.add('fade-out');
+                     setTimeout(() => loadingScreen.remove(), 700);
+                 }, 100);
+             }
+        });
+
+
+        // --- Filter Dropdown Toggle & Close ---
+        filterDropdown.querySelector('button').addEventListener('click', (event) => {
+            event.stopPropagation();
+            filterDropdown.classList.toggle('show');
+        });
+        document.addEventListener('click', (event) => {
+            if (!filterDropdown.contains(event.target)) {
+                filterDropdown.classList.remove('show');
+            }
+        });
+
+    </script>
 </body>
 </html>
