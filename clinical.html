@@ -34,18 +34,18 @@
             color: var(--text-primary);
         }
 
+        /* Header Styles Removed */
+
         /* Page Frame Container Styles */
         #page-frame-container {
             background-color: var(--frame-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px; /* Match card rounding */
+            border-radius: 16px;
             padding: 25px 30px; /* Internal padding */
             box-shadow: 0 5px 15px var(--shadow-color);
-            margin-top: 1.5rem; /* Space above frame */
-            margin-bottom: 1.5rem; /* Space below frame */
             max-width: 1400px; /* Max width */
-            margin-left: auto;
-            margin-right: auto;
+            margin: 1.5rem auto; /* Centering and vertical margin */
+            overflow: hidden; /* Prevent content spilling out */
         }
 
         /* Page Titles */
@@ -73,7 +73,8 @@
             background: var(--card-bg); border-radius: 16px;
             box-shadow: 0 4px 12px var(--shadow-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 25px; border: 1px solid var(--border-color);
+            margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
+            border: 1px solid var(--border-color);
             position: relative; display: flex; flex-direction: column;
             overflow: hidden;
         }
@@ -111,6 +112,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             border: 1px solid var(--border-color);
              display: flex; flex-direction: column;
+             margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
         }
         .featured-agent-card .app-icon {
             width: 80px; height: 80px; margin: 0 auto 1.5rem auto;
@@ -175,8 +177,8 @@
 
         /* Main Content Area */
         main {
-            /* Remove specific padding/margin, handled by frame */
-            padding: 1rem 1.5rem; /* Add some padding around the frame */
+            /* Removed max-width and margin from main */
+            padding: 1.5rem; /* Add padding around the frame */
             width: 100%;
             box-sizing: border-box;
         }
@@ -241,7 +243,7 @@
                         <button class="expand-case-study-btn" aria-expanded="false" data-target="pieces-case-study">
                             Read Case Study
                         </button>
-                        <div id="pieces-case-study" class="case-study-collapsible">
+                         <div id="pieces-case-study" class="case-study-collapsible">
                             <h4>Case Study: Dallas Hospital Readmission Reduction</h4>
                             <p><strong>Problem:</strong> A major Dallas hospital identified high readmission rates among patients with complex conditions, often exacerbated by fragmented communication and siloed data.</p>
                             <p><strong>Solution:</strong> The Pieces platform integrated clinical and social determinants data, using AI to identify high-risk patients in real-time and alert care managers to specific needs, enabling proactive interventions.</p>
