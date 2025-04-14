@@ -11,7 +11,6 @@
         :root {
             /* Grey Palette */
             --bg-main: #f1f3f5; /* Main background grey */
-            --header-bg: rgba(255, 255, 255, 0.9); /* White semi-transparent header */
             --card-bg: #ffffff; /* White cards */
             --card-hover-bg: #f8f9fa; /* Slightly off-white hover */
             --text-primary: #212529; /* Very Dark Grey */
@@ -34,61 +33,7 @@
             color: var(--text-primary);
         }
 
-        /* Header Styles (Copied from main app) */
-        header {
-            background: var(--header-bg);
-            backdrop-filter: blur(10px);
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 2px 8px var(--shadow-color);
-            padding: 1rem 1.5rem;
-        }
-        .header-content {
-            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-            gap: 1rem; max-width: 1400px; margin: 0 auto;
-        }
-        .header-title {
-            font-size: 1.75rem; font-weight: 700; color: var(--text-primary);
-            margin: 0; flex-shrink: 0; text-decoration: none;
-        }
-        header nav { display: flex; gap: 1.5rem; margin: 0 auto; }
-        header nav a {
-            color: var(--text-secondary);
-            text-decoration: none; font-weight: 500; padding: 0.5rem 0; position: relative;
-            transition: color 0.3s ease; cursor: pointer;
-        }
-        header nav a::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
-            background-color: var(--accent-color); transition: width 0.3s ease;
-        }
-        header nav a:hover { color: var(--text-primary); }
-        header nav a:hover::after { width: 100%; }
-        .header-actions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
-
-        /* Filter Dropdown Styles (Visual Only) */
-        #filter-dropdown { position: relative; display: inline-block; }
-        #filter-dropdown button {
-            background-color: #ffffff;
-            color: var(--text-secondary); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border-color);
-            cursor: default; font-size: 0.9rem; font-weight: 500;
-            display: flex; align-items: center; opacity: 0.6;
-        }
-        #filter-dropdown button span { margin-right: 6px; }
-        #filter-dropdown ul { display: none; }
-
-        /* AI Search Styles (Visual Only) */
-        #ai-search-container {
-            display: flex; align-items: center; background-color: #ffffff;
-            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color);
-            flex-grow: 1; max-width: 400px; opacity: 0.6;
-        }
-        #ai-search-input {
-            flex-grow: 1; border: none; background: transparent; outline: none;
-            padding: 8px; font-size: 0.9rem; color: var(--text-primary);
-        }
-        #ai-search-input::placeholder { color: var(--text-muted); }
-        #ai-search-button {
-            background: none; border: none; cursor: default; padding: 6px; color: var(--text-muted);
-        }
+        /* Header Styles Removed */
 
         /* Page Titles */
         .page-title {
@@ -112,7 +57,8 @@
             background: var(--card-bg); border-radius: 16px;
             box-shadow: 0 4px 12px var(--shadow-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 25px; border: 1px solid var(--border-color);
+            margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
+            border: 1px solid var(--border-color);
             position: relative; display: flex; flex-direction: column;
             overflow: hidden;
         }
@@ -138,6 +84,7 @@
         }
         .app-description {
             font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;
+             /* Truncate description on standard cards */
             display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
             overflow: hidden; text-overflow: ellipsis; height: calc(1.5 * 3em);
         }
@@ -149,6 +96,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             border: 1px solid var(--border-color);
              display: flex; flex-direction: column;
+             margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
         }
         .featured-agent-card .app-icon {
             width: 80px; height: 80px; margin: 0 auto 1.5rem auto;
@@ -226,22 +174,7 @@
         }
 
         /* Responsive Adjustments */
-        @media (max-width: 1024px) {
-            .header-content { justify-content: space-between; }
-            header nav { order: 3; width: 100%; justify-content: center; margin-top: 0.5rem; gap: 1rem;}
-            .header-actions { order: 2; }
-            .header-title { order: 1; }
-            #ai-search-container { max-width: 300px; }
-        }
         @media (max-width: 768px) {
-             header { padding: 0.75rem 1rem; }
-             .header-title { font-size: 1.5rem; }
-             header nav { gap: 0.75rem; }
-             header nav a { font-size: 0.9rem; padding: 0.3rem 0; }
-             .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
-             #ai-search-container { width: 100%; max-width: none; order: 1; margin-right: 0; }
-             #filter-dropdown { order: 2; }
-             #filter-dropdown button { padding: 8px 16px; }
              main { padding: 1.5rem 1rem; margin: 1rem auto; }
              .page-title { font-size: 1.8rem; }
              .section-title { font-size: 1.5rem; }
@@ -249,36 +182,10 @@
              .grid { gap: 20px; }
              .featured-agent-card { padding: 1.5rem; }
         }
+
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <a href="#" class="header-title">AI Agent Marketplace</a>
-            <nav>
-                <a href="#">Home</a>
-                <a href="#">Case Studies</a>
-                <a href="#">Agents List</a>
-                <a href="#">About Us</a>
-            </nav>
-            <div class="header-actions">
-                <div id="ai-search-container">
-                    <input type="text" id="ai-search-input" placeholder="Search..." disabled>
-                    <button id="ai-search-button" aria-label="Search" disabled>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    </button>
-                </div>
-                <div id="filter-dropdown">
-                    <button disabled>
-                        <span>Filter</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>
-                    </button>
-                    <ul></ul>
-                </div>
-            </div>
-        </div>
-    </header>
-
     <main>
         <h1 class="page-title">AI for Drug Discovery & Research</h1>
         <p class="intro-text">
@@ -299,7 +206,7 @@
                     </button>
                     <div id="atomwise-case-study" class="case-study-collapsible">
                         <h4>Case Study: Global Partnership Acceleration</h4>
-                         <p><strong>Problem:</strong> Traditional drug discovery faced bottlenecks in the early hit-finding stage due to the time and cost of high-throughput screening (HTS).</p>
+                        <p><strong>Problem:</strong> Traditional drug discovery faced bottlenecks in the early hit-finding stage due to the time and cost of high-throughput screening (HTS).</p>
                         <p><strong>Solution:</strong> The AtomNet® AI platform used deep learning to predict molecule binding affinity, screening billions of compounds virtually against specific protein targets for partners worldwide.</p>
                         <p><strong>Outcome:</strong> Successfully <strong>identified potential drug candidates for various targets significantly faster</strong> than traditional HTS methods, accelerating the hit-finding stage for numerous research programmes.</p>
                         <div class="case-study-links">
@@ -319,7 +226,7 @@
                     <div id="healx-case-study" class="case-study-collapsible">
                         <h4>Case Study: UK Rare Disease Drug Repurposing</h4>
                         <p><strong>Problem:</strong> Developing treatments for rare diseases faced challenges due to small patient populations and the high cost/risk of traditional drug development.</p>
-                        <p><strong>Solution:</strong> The Healnet AI platform analysed vast biomedical data (literature, patents, genetics) to find non-obvious links between existing drugs and rare diseases, predicting potential therapeutic benefits.</p>
+                        <p><strong>Solution:</strong> The Healnet AI platform analysed vast biomedical data (literature, patents, genetics) to find non-obvious links between existing drugs and rare diseases, accelerating the identification of potential repurposed treatments.</p>
                         <p><strong>Outcome:</strong> Successfully <strong>identified potential treatments for several rare diseases by repurposing existing drugs</strong>, moving candidates towards clinical trials much faster than starting from scratch.</p>
                         <div class="case-study-links">
                             <a href="#" target="_blank" rel="noopener noreferrer">Read Full Study (Placeholder)</a>
@@ -432,10 +339,18 @@
         document.addEventListener('DOMContentLoaded', () => {
             try { // Add error handling
                 const expandButtons = document.querySelectorAll('.expand-case-study-btn');
+                if (!expandButtons) {
+                    console.warn("No expand buttons found on this page.");
+                    return;
+                }
 
                 expandButtons.forEach(button => {
                     button.addEventListener('click', () => {
                         const targetId = button.dataset.target;
+                        if (!targetId) {
+                            console.error("Button missing data-target attribute:", button);
+                            return;
+                        }
                         const targetElement = document.getElementById(targetId);
 
                         if (targetElement) {
@@ -469,6 +384,11 @@
                 });
             } catch (error) {
                 console.error("Error setting up expand/collapse functionality:", error);
+                 const body = document.querySelector('body');
+                 if (body) {
+                     // Avoid wiping the whole body if just the script fails
+                     console.error("Expand/collapse feature failed to initialize.");
+                 }
             }
         });
     </script>
