@@ -333,7 +333,7 @@
         .ai-result-category { font-size: 0.9em; color: var(--text-muted); margin-left: 6px; }
 
         /* No Apps/Agents Message & View Title Styles */
-        .no-apps-message, .no-agents-message {
+        .no-apps-message, .no-agents-message, #no-search-results-msg {
             text-align: center; font-size: 1.1rem; color: var(--text-muted);
             margin-top: 50px; padding: 25px; border-radius: 14px;
             background-color: #ffffff; border: 1px solid var(--border-color);
@@ -605,58 +605,8 @@
 
                 <section class="large-section bg-light !p-0 mt-8"> <h2 class="section-title">Live Feed</h2>
                     <p class="section-subtitle">See the latest updates, discussions, and agent additions.</p>
-                    <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto text-left">
-                        <div class="lg:w-2/3 space-y-4">
-                             <h3 class="text-xl font-semibold mb-4 text-center lg:text-left">Twitter Feed (Agentic AI)</h3>
-                             <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                                 <div class="flex items-start space-x-3">
-                                     <span class="text-2xl">🐦</span> <div>
-                                         <p class="font-semibold">AI News Hub <span class="text-gray-500 font-normal">@AINewsHub · 1h</span></p>
-                                         <p>Breakthrough in agentic AI allows autonomous task planning with 30% higher efficiency in complex simulations. #AI #AgenticAI #Research</p>
-                                         <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
-                                             <span>💬 15</span> <span>🔁 55</span> <span>❤️ 120</span>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                                 <div class="flex items-start space-x-3">
-                                      <span class="text-2xl">🔬</span> <div>
-                                         <p class="font-semibold">Healthcare AI Today <span class="text-gray-500 font-normal">@HealthAIToday · 3h</span></p>
-                                         <p>New study shows agentic systems improving diagnostic accuracy for rare conditions by assisting clinicians. Read more: [link placeholder] #HealthTech #AIinHealthcare</p>
-                                          <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
-                                             <span>💬 8</span> <span>🔁 30</span> <span>❤️ 95</span>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                              <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                                 <div class="flex items-start space-x-3">
-                                      <span class="text-2xl">🤖</span> <div>
-                                         <p class="font-semibold">FutureTech Insights <span class="text-gray-500 font-normal">@FutureTech · 5h</span></p>
-                                         <p>Exploring the ethical considerations of fully autonomous AI agents in critical decision-making roles. What are your thoughts? #AIEthics #AutonomousSystems</p>
-                                          <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
-                                             <span>💬 42</span> <span>🔁 88</span> <span>❤️ 210</span>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                        </div>
-                        <div class="lg:w-1/3 space-y-4">
-                            <h3 class="text-xl font-semibold mb-4 text-center lg:text-left">Forum Feed</h3>
-                            <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                                 <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Integration challenges with EHR X?</a>
-                                 <p class="text-sm text-gray-500">User345 - 2h ago · 3 replies</p>
-                            </div>
-                             <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                                 <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Accuracy validation methods for Agent Y</a>
-                                 <p class="text-sm text-gray-500">ClinicianAI - 6h ago · 7 replies</p>
-                            </div>
-                             <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                                 <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Feature Request: Custom Reporting</a>
-                                 <p class="text-sm text-gray-500">PowerUser99 - 1d ago · 1 reply</p>
-                            </div>
-                        </div>
+                    <div id="rss-feed-content" class="max-w-4xl mx-auto text-left space-y-4">
+                        <p class="text-center text-gray-500 italic">Loading RSS feed...</p>
                     </div>
                 </section>
 
@@ -729,6 +679,19 @@
              <div class="view-container max-w-5xl mx-auto py-8"> {/* Container with padding */}
                  <div class="content-frame"> <h2 class="view-title">About Us</h2>
                      <p class="text-center text-muted py-10">Information about the AI Agent Marketplace coming soon...</p>
+                 </div>
+            </div>
+        </div>
+
+        <div id="search-results-view" class="view-section">
+             <div class="view-container max-w-7xl mx-auto py-8"> {/* Container with padding */}
+                 <div class="content-frame"> <h2 class="view-title">Search Results</h2>
+                     <p id="search-query-display" class="mb-4 text-lg">Results for: <span class="font-semibold"></span></p>
+                     <div id="search-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                         </div>
+                     <div id="no-search-results-msg" class="no-apps-message hidden">
+                         <p>No agents found matching your search.</p>
+                     </div>
                  </div>
             </div>
         </div>
@@ -915,10 +878,13 @@
         const caseStudyDisplayArea = document.getElementById('case-study-display-area'); // Ref for Case Study view
         const caseStudyIndexList = document.getElementById('case-study-index-list'); // Ref for Case Study view
         const categoryFilterGrid = document.getElementById('category-filter-grid'); // Ref for Case Study view
+        const searchResultsGrid = document.getElementById('search-results-grid'); // Ref for Search Results view
+        const noSearchResultsMsg = document.getElementById('no-search-results-msg'); // Ref for Search Results view
+        const searchQueryDisplaySpan = document.querySelector('#search-query-display span'); // Ref for Search Results view
 
 
         // Check if critical elements exist
-        if (!appListContainer || !agentListContainer || !appDetailsModal || !filterDropdown || !appTooltip || !caseStudyDisplayArea || !caseStudyIndexList || !categoryFilterGrid) {
+        if (!appListContainer || !agentListContainer || !appDetailsModal || !filterDropdown || !appTooltip || !caseStudyDisplayArea || !caseStudyIndexList || !categoryFilterGrid || !searchResultsGrid || !noSearchResultsMsg || !searchQueryDisplaySpan) {
             console.warn("Initialization Warning: One or more container elements might be missing (expected if not on relevant view).");
         }
 
@@ -1325,57 +1291,95 @@
             });
         }
 
+        // --- Function to Display Search Results ---
+        function displaySearchResults(apps) {
+            if (!searchResultsGrid || !noSearchResultsMsg) {
+                console.error("[Search] Search results grid or message element not found!");
+                return;
+            }
+            searchResultsGrid.innerHTML = ''; // Clear previous results
 
-        // --- Function to Handle AI Search Query (Now Filters Grid) ---
+            if (!apps || apps.length === 0) {
+                noSearchResultsMsg.classList.remove('hidden');
+                searchResultsGrid.classList.add('hidden');
+            } else {
+                noSearchResultsMsg.classList.add('hidden');
+                searchResultsGrid.classList.remove('hidden');
+
+                apps.forEach((app, index) => {
+                    try {
+                        const appCard = document.createElement('div');
+                        appCard.className = 'app-card card-base';
+                        appCard.style.animationDelay = `${index * 0.05}s`; // Apply animation delay
+                        appCard.dataset.appData = JSON.stringify(app);
+
+                        const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='22px'; this.parentElement.style.fontWeight='600';`;
+
+                        appCard.innerHTML = `
+                            <div class="app-card-content">
+                                <div class="app-icon">
+                                    <img src="${app.iconUrl || '#'}" alt="${app.title || 'App'} icon" loading="lazy" onerror="${fallbackImage}">
+                                </div>
+                                <div class="app-info">
+                                    <h3 class="app-title">${app.title || 'Unknown Agent'}</h3>
+                                    <p class="app-category">${categoryMap[app.category] || app.category || 'Uncategorized'}</p>
+                                    <p class="app-description">${app.description || ''}</p>
+                                </div>
+                            </div>
+                        `;
+                        // Add event listeners for tooltip and modal
+                        appCard.addEventListener('mouseenter', handleMouseEnter);
+                        appCard.addEventListener('mouseleave', handleMouseLeave);
+                        appCard.addEventListener('mousemove', handleMouseMove);
+                        appCard.addEventListener('click', () => showAppDetails(app));
+                        searchResultsGrid.appendChild(appCard);
+                    } catch (e) {
+                        console.error("Error creating search result card:", e, app);
+                    }
+                });
+            }
+        }
+
+
+        // --- Function to Handle AI Search Query (Now Switches to Search View) ---
          function handleAiSearch(query) {
-            if (!aiResponseArea || !appListContainer) return;
-            aiResponseArea.style.display = 'none'; // Hide AI response area
-            aiResponseArea.innerHTML = '';
+            if (!searchQueryDisplaySpan) {
+                 console.error("[Search] Search query display element not found!");
+                 return;
+            }
 
             const lowerCaseQuery = query.toLowerCase().trim();
-            console.log("Handling search for:", lowerCaseQuery);
+            console.log("[Search] Handling search for:", lowerCaseQuery);
 
             if (!lowerCaseQuery) {
-                 // If search is empty, revert to showing static sections or 'all' category
-                 switchView('marketplace-view'); // This resets to static view
-                 if(filterOptions) { // Reset dropdown filter
-                     filterOptions.forEach(option => option.classList.remove('active'));
-                     document.querySelector('#filter-dropdown ul li[data-category="all"]')?.classList.add('active');
-                 }
-                 filteredCategory = 'all';
+                 console.log("[Search] Empty query, reverting to default view.");
+                 switchView('marketplace-view'); // Revert to marketplace if search is cleared
                  return;
             }
 
             // Filter data based on title and description
+            console.log("[Search] Filtering appData...");
             const foundApps = appData.filter(app =>
                  (app.title?.toLowerCase().includes(lowerCaseQuery)) ||
                  (app.description?.toLowerCase().includes(lowerCaseQuery))
             );
+            console.log(`[Search] Found ${foundApps.length} apps.`);
 
-            // Switch to marketplace view if not already there
-             const marketplaceView = document.getElementById('marketplace-view');
-             if (!marketplaceView || !marketplaceView.classList.contains('active')) {
-                 switchView('marketplace-view');
-                 // Need delay to ensure view switch happens before hiding/showing elements
-                 setTimeout(() => {
-                     const staticSections = marketplaceView?.querySelectorAll(':scope > section');
-                     staticSections?.forEach(sec => sec.style.display = 'none');
-                     appListContainer?.classList.remove('hidden');
-                     displayApps(foundApps);
-                 }, 50);
-             } else {
-                 // Already on marketplace view, just update content
-                  const staticSections = marketplaceView.querySelectorAll(':scope > section');
-                  staticSections.forEach(sec => sec.style.display = 'none');
-                  appListContainer?.classList.remove('hidden');
-                  displayApps(foundApps);
-             }
+            // Switch to the search results view
+            switchView('search-results-view');
 
-            // Deactivate category filter dropdown
+            // Update the displayed query
+            searchQueryDisplaySpan.textContent = query; // Show original query
+
+            // Display the results in the search results grid
+            displaySearchResults(foundApps);
+
+            // Deactivate category filter dropdown (if applicable)
             if (filterOptions) {
                 filterOptions.forEach(option => option.classList.remove('active'));
             }
             filteredCategory = 'search'; // Indicate search is active
+            console.log("[Search] Search results view updated.");
         }
 
 
@@ -1388,7 +1392,8 @@
                     handleAiSearch(aiSearchInput.value);
                 }
             });
-            // Removed listener for clicking links within aiResponseArea as it's no longer used
+        } else {
+            console.error("Search input or button element not found!");
         }
 
 
@@ -1408,7 +1413,14 @@
              } else {
                  console.error(`Target view section not found: ${targetViewId}`);
                  document.getElementById('marketplace-view')?.classList.add('active');
-                 targetViewId = 'marketplace-view';
+                 targetViewId = 'marketplace-view'; // Fallback
+             }
+
+             // Clear previous search results if navigating away
+             if (targetViewId !== 'search-results-view') {
+                 if (searchResultsGrid) searchResultsGrid.innerHTML = '';
+                 if (noSearchResultsMsg) noSearchResultsMsg.classList.add('hidden');
+                 if (searchQueryDisplaySpan) searchQueryDisplaySpan.textContent = '';
              }
 
 
@@ -1427,6 +1439,7 @@
                 if (filterContainer) {
                      filterContainer.style.display = 'flex';
                 }
+                // Show filter dropdown only on marketplace view
                 if (targetViewId !== 'marketplace-view') {
                     filterDropdown.style.display = 'none';
                      filterDropdown.classList.remove('show');
@@ -1447,15 +1460,17 @@
                  console.log("Activating marketplace view...");
                  const marketplaceView = document.getElementById('marketplace-view');
                  if(marketplaceView){
+                     // Ensure static sections are visible and dynamic list is hidden
                      const staticSections = marketplaceView.querySelectorAll(':scope > section');
-                     staticSections.forEach(sec => sec.style.display = 'block');
+                     staticSections.forEach(sec => sec.style.display = 'block'); // Use block or appropriate display type
                      appListContainer?.classList.add('hidden');
                      noAppsMessage?.classList.add('hidden');
-                      if (filterOptions) {
+                      if (filterOptions) { // Reset filter dropdown
                         filterOptions.forEach(option => option.classList.remove('active'));
                         document.querySelector('#filter-dropdown ul li[data-category="all"]')?.classList.add('active');
                       }
                       filteredCategory = 'all';
+                       if(aiSearchInput) aiSearchInput.value = ''; // Clear search input when switching back
                  }
              }
 
@@ -1474,13 +1489,12 @@
                      link.addEventListener('click', (event) => {
                          event.preventDefault();
                          const targetViewId = link.dataset.target || 'marketplace-view';
-                         window.location.hash = targetViewId === 'marketplace-view' ? '' : `#${link.getAttribute('href').substring(1)}`;
+                         // Update hash only for internal navigation
+                         // window.location.hash = targetViewId === 'marketplace-view' ? '' : `#${link.getAttribute('href').substring(1)}`;
                          switchView(targetViewId);
                      });
                  }
-                 else if (link.getAttribute('href').startsWith('http')) {
-                     // Removed target="_blank" logic - handled in HTML now
-                 }
+                 // External links are handled by default browser behavior (no target="_blank")
              });
          }
 
@@ -1493,7 +1507,8 @@
             try { // Wrap initialization in try-catch
                 const hash = window.location.hash.substring(1);
                 let initialViewId = 'marketplace-view';
-                const activeNavLink = navLinks ? Array.from(navLinks).find(link => link.getAttribute('href') === `#${hash}` && link.dataset.target) : null;
+                // Find the nav link corresponding to the hash *that has a data-target*
+                const activeNavLink = navLinks ? Array.from(navLinks).find(link => link.dataset.target === hash) : null; // Match data-target with hash
                 if(activeNavLink && activeNavLink.dataset.target) {
                     initialViewId = activeNavLink.dataset.target;
                 }
