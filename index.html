@@ -120,8 +120,6 @@
             transform: translateY(-5px);
             box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
         }
-        /* Staggered Animation Delays */
-        /* Apply delays directly to grid children if needed */
 
         /* Entrance Animation */
         @keyframes fadeInUp {
@@ -473,7 +471,7 @@
              color: var(--link-hover-color); text-decoration: underline;
          }
 
-         /* Frame container - Used for Case Study view and other views */
+         /* Frame container - Used for multiple views */
         .content-frame { /* Renamed for general use */
             background-color: var(--frame-bg);
             border: 1px solid var(--border-color);
@@ -547,9 +545,9 @@
         <div class="header-content">
             <a href="https://synapster.analystx.uk/" class="header-title site-nav-link" data-target="marketplace-view">AI Agent Marketplace</a>
             <nav>
-                <a href="https://synapster.analystx.uk/cs.html" class="site-nav-link" target="_blank" rel="noopener noreferrer">Case Studies</a>
-                <a href="https://synapster.analystx.uk/agents.html" class="site-nav-link" target="_blank" rel="noopener noreferrer">Agents List</a>
-                <a href="https://synapster.analystx.uk/discussion.html" class="site-nav-link" target="_blank" rel="noopener noreferrer">Forum</a> <a href="https://synapster.analystx.uk/about.html" class="site-nav-link" data-target="about-view">About Us</a>
+                <a href="https://synapster.analystx.uk/cs.html" class="site-nav-link" >Case Studies</a>
+                <a href="https://synapster.analystx.uk/agents.html" class="site-nav-link" >Agents List</a>
+                <a href="https://synapster.analystx.uk/discussion.html" class="site-nav-link" >Forum</a> <a href="https://synapster.analystx.uk/about.html" class="site-nav-link" data-target="about-view">About Us</a>
             </nav>
             <div class="header-actions">
                 <div id="ai-search-container">
@@ -666,23 +664,19 @@
                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
                          <div class="category-showcase-card">
                              <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
-                             <p class="category-card-desc">AI tools providing efficient clinical decision support and triage capabilities.</p>
-                             <a href="#" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
+                             <a href="https://synapster.analystx.uk/clinical.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">Explore &rarr;</a>
                          </div>
                          <div class="category-showcase-card">
                              <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
-                             <p class="category-card-desc">Accelerate pharmaceutical research and development with AI-powered discovery platforms.</p>
-                              <a href="#" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
+                              <a href="https://synapster.analystx.uk/drug.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">Explore &rarr;</a>
                          </div>
                          <div class="category-showcase-card">
                              <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
-                             <p class="category-card-desc">Enhance medical imaging analysis and diagnostic accuracy with intelligent solutions.</p>
-                               <a href="#" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
+                               <a href="https://synapster.analystx.uk/diagnostics.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">Explore &rarr;</a>
                          </div>
                          <div class="category-showcase-card">
                              <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
-                             <p class="category-card-desc">Streamline administrative tasks and optimise healthcare operations with AI automation.</p>
-                               <a href="#" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
+                               <a href="https://synapster.analystx.uk/oe.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">Explore &rarr;</a>
                          </div>
                      </div>
                  </section>
@@ -1485,8 +1479,7 @@
                      });
                  }
                  else if (link.getAttribute('href').startsWith('http')) {
-                     link.setAttribute('target', '_blank');
-                     link.setAttribute('rel', 'noopener noreferrer');
+                     // Removed target="_blank" logic - handled in HTML now
                  }
              });
          }
