@@ -107,7 +107,7 @@
             border-radius: 16px;
             box-shadow: 0 4px 12px var(--shadow-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 25px; /* Applies to grid items */
+            margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
             border: 1px solid var(--border-color);
             position: relative;
             opacity: 0; transform: translateY(20px);
@@ -121,12 +121,7 @@
             box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
         }
         /* Staggered Animation Delays */
-        .card-base:nth-child(1) { animation-delay: 0.1s; }
-        .card-base:nth-child(2) { animation-delay: 0.15s; }
-        .card-base:nth-child(3) { animation-delay: 0.2s; }
-        .card-base:nth-child(4) { animation-delay: 0.25s; }
-        .card-base:nth-child(5) { animation-delay: 0.3s; }
-        .card-base:nth-child(6) { animation-delay: 0.35s; }
+        /* Apply delays directly to grid children if needed */
 
         /* Entrance Animation */
         @keyframes fadeInUp {
@@ -358,25 +353,21 @@
             margin: 0 auto;
             width: 100%; box-sizing: border-box;
         }
-        .view-section { display: none; animation: fadeInView 0.5s ease forwards; }
+        .view-section { display: none; animation: fadeInView 0.5s ease forwards; padding: 1.5rem; } /* Add padding to view sections */
         .view-section.active { display: block; }
         @keyframes fadeInView {
              from { opacity: 0; transform: translateY(10px); }
              to { opacity: 1; transform: translateY(0); }
         }
-        /* Grid layout only used where needed now */
+        /* Grid layout */
         .grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;
         }
-        /* Add padding specifically for grid containers inside views */
-        #marketplace-view > .grid,
-        #agents-view > .grid {
-             padding: 0 1.5rem; /* Match main padding */
-        }
-         /* Add padding for non-grid views */
-        #casestudies-view > .view-container, /* Target new container */
-        #about-view > .view-container { /* Target new container */
-             padding: 0 1.5rem;
+        /* Specific styles for #app-list when visible */
+        #app-list:not(.hidden) {
+             padding: 2rem 0; /* Add vertical padding when shown */
+             max-width: 1400px; /* Ensure max-width */
+             margin: 0 auto; /* Center grid */
         }
 
 
@@ -482,7 +473,7 @@
              color: var(--link-hover-color); text-decoration: underline;
          }
 
-         /* Frame container for category showcase - Kept for Case Study view */
+         /* Frame container - Used for Case Study view */
         .frame-container {
             background-color: var(--frame-bg);
             border: 1px solid var(--border-color);
@@ -527,27 +518,19 @@
              #filter-dropdown { order: 2; }
              #filter-dropdown button { padding: 8px 16px; }
              main { padding: 0; } /* Remove main padding, handled by sections */
+             .view-section { padding: 1rem; } /* Adjust view padding */
              .large-section { padding: 3rem 1rem; }
              .grid { grid-template-columns: 1fr; gap: 20px; } /* Stack grids on small screens */
+             #app-list:not(.hidden) { padding: 2rem 0; } /* Adjust dynamic grid padding */
              #app-details-content { padding: 25px; }
              #app-details-content h2 { font-size: 1.6rem; }
              #app-tooltip { display: none; }
-             .view-title { font-size: 1.5rem; margin-bottom: 1rem; padding: 0 1rem;} /* Add padding to view titles */
+             .view-title { font-size: 1.5rem; margin-bottom: 1rem; padding: 0;} /* Remove padding from view titles */
              .case-study-story { padding: 15px 20px; }
              .section-title { font-size: 1.8rem; }
              .section-subtitle { font-size: 1rem; }
              .featured-agent-card { padding: 1.5rem; }
              .category-showcase-card { padding: 1.5rem; min-height: 200px;}
-             /* Add padding to grid containers inside views on mobile */
-             #marketplace-view > .grid,
-             #agents-view > .grid {
-                  padding: 0 1rem;
-             }
-             /* Add padding for non-grid views on mobile */
-             #casestudies-view > .view-container, /* Target new container */
-             #about-view > .view-container { /* Target new container */
-                  padding: 0 1rem;
-             }
              .frame-container { padding: 15px 20px; } /* Adjust frame padding */
              #category-filter-grid { grid-template-columns: repeat(2, 1fr); } /* Ensure 2 columns on small */
         }
@@ -705,9 +688,9 @@
                  </div>
              </section>
 
-             <div class="grid hidden" id="app-list" style="padding: 0 1.5rem;">
-                </div>
-             <div id="no-apps-message" class="hidden" style="margin: 50px 1.5rem;">
+             <div id="app-list" class="grid hidden">
+                 </div>
+             <div id="no-apps-message" class="no-apps-message hidden" style="margin: 50px 1.5rem;">
                  <p>No apps found matching the selected category.</p>
              </div>
         </div>
