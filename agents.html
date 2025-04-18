@@ -3,74 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent Marketplace</title>
+    <title>AI Agents List</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom CSS for the grey theme and enhanced dynamic feel */
+        /* Custom CSS for the Agents List Page - Grey Theme */
         :root {
             /* Grey Palette */
             --bg-main: #f1f3f5; /* Main background grey */
             --header-bg: rgba(255, 255, 255, 0.9); /* White semi-transparent header */
             --card-bg: #ffffff; /* White cards */
-            --card-hover-bg: #ffffff;
-            --story-bg: #ffffff; /* Background for story articles */
-            --frame-bg: #ffffff; /* Background for frame containers */
-            --tooltip-bg: rgba(33, 37, 41, 0.9); /* Dark tooltip */
-            --tooltip-text: #f8f9fa; /* Light tooltip text */
+            --card-hover-bg: #f8f9fa; /* Slightly off-white hover */
             --text-primary: #212529; /* Very Dark Grey */
             --text-secondary: #495057; /* Dark Grey */
             --text-muted: #6c757d;   /* Medium Grey */
             --border-color: #dee2e6; /* Light Grey Border */
             --accent-color: #495057;  /* Dark Grey for accents */
-            --accent-hover-color: #212529; /* Very Dark Grey for hover */
             --shadow-color: rgba(0, 0, 0, 0.07); /* Slightly softer shadow */
-            --star-color: #fbbc05;
-            --featured-color: #ffeb3b;
-            --link-color: #0d6efd; /* Standard blue link color */
+            --link-color: #0d6efd;
             --link-hover-color: #0a58ca;
-            --section-bg-light: #ffffff;
-            --section-bg-dark: #f8f9fa; /* Slightly off-white */
-        }
-
-        html {
-             scroll-behavior: smooth;
+            --button-bg: #e9ecef;
+            --button-hover-bg: #dee2e6;
+            --active-bg: #495057; /* Accent color for active states */
+            --active-text: #ffffff;
         }
 
         body {
             background-color: var(--bg-main);
-            animation: fadeInBackground 1s ease forwards;
             margin: 0;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             color: var(--text-primary);
         }
 
-        @keyframes fadeInBackground {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Loading Screen Styles */
-        #loading-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(255, 255, 255, 0.98);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 10000;
-            transition: opacity 0.7s ease-out;
-        }
-        #loading-screen.fade-out { opacity: 0; visibility: hidden; }
-        .loader {
-            border: 6px solid #e9ecef; border-top: 6px solid var(--accent-color);
-            border-radius: 50%; width: 50px; height: 50px;
-            animation: spin 1.5s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Header Styles */
+         /* Header Styles */
         header {
             background: var(--header-bg);
             backdrop-filter: blur(10px);
@@ -96,216 +62,28 @@
             content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
             background-color: var(--accent-color); transition: width 0.3s ease;
         }
-        header nav a:hover,
-        header nav a.active { color: var(--text-primary); }
-        header nav a.active::after { width: 100%; }
+        header nav a:hover { color: var(--text-primary); }
+        header nav a:hover::after { width: 100%; }
         .header-actions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
 
-        /* Card Base Styles (Shared by App/Agent cards) */
-        .card-base {
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 4px 12px var(--shadow-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
-            border: 1px solid var(--border-color);
-            position: relative;
-            opacity: 0; transform: translateY(10px);
-            animation: fadeInUp 0.5s ease forwards;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .card-base:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Entrance Animation */
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* App Card Specific Styles (Marketplace Grid & Agent List View) */
-        .app-card {
-            cursor: pointer; overflow: visible; /* Allow tooltip */
-        }
-        .app-card-content {
-             display: flex; align-items: flex-start; padding: 16px; flex-grow: 1;
-        }
-        .app-card .app-icon {
-            width: 65px; height: 65px; border-radius: 12px; margin-right: 16px;
-        }
-        .app-card .app-info { flex: 1; }
-        .app-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-        .app-category {
-            font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;
-            display: inline-block; padding: 3px 10px; border-radius: 12px;
-            background-color: #f1f3f5; line-height: 1.3;
-        }
-        .app-description {
-            font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;
-            /* Truncate description on cards */
-            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-            overflow: hidden; text-overflow: ellipsis; height: calc(1.5 * 3em);
-        }
-        .featured-app-badge {
-            position: absolute; top: 10px; right: 10px;
-            background: linear-gradient(45deg, #fff176, #ffee58);
-            color: #5f4300; padding: 4px 10px; border-radius: 12px;
-            font-size: 0.7rem; font-weight: 700;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); z-index: 2;
-        }
-
-
-        /* Case Study View Styles */
-        #case-studies-frame { /* The outer frame for the case study view */
-            background-color: var(--frame-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 25px 30px;
-            box-shadow: 0 5px 15px var(--shadow-color);
-            margin-top: 1rem;
-        }
-        #category-filter-grid { /* 1xN grid for category filters */
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
-            gap: 0.75rem;
-            margin-bottom: 2rem;
-        }
-         @media (min-width: 640px) { /* 3 columns on sm screens */
-            #category-filter-grid { grid-template-columns: repeat(3, 1fr); }
-         }
-         @media (min-width: 1024px) { /* 6 columns on lg screens */
-            #category-filter-grid { grid-template-columns: repeat(6, 1fr); }
-         }
-        .category-filter-btn {
-            background-color: #ffffff; border: 1px solid var(--border-color);
-            padding: 10px 15px; border-radius: 10px; text-align: center;
-            font-weight: 500; color: var(--text-secondary); cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-            font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .category-filter-btn:hover { background-color: #f8f9fa; color: var(--text-primary); }
-        .category-filter-btn.active { background-color: var(--accent-color); color: white; border-color: var(--accent-color); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-
-        .case-study-layout { /* 2-column layout for content and index */
-            display: flex; flex-direction: column; gap: 2rem;
-        }
-         @media (min-width: 1024px) { .case-study-layout { flex-direction: row; } }
-
-        #case-study-display-area { flex: 3; min-width: 0; transition: opacity 0.3s ease-in-out; }
-        #case-study-display-area.loading { opacity: 0.5; }
-
-        #case-study-index { flex: 1; min-width: 220px; max-height: 75vh; overflow-y: auto; padding-right: 10px; border-left: 1px solid var(--border-color); padding-left: 1.5rem; }
-         @media (max-width: 1023px) { #case-study-index { max-height: 300px; border-left: none; border-top: 1px solid var(--border-color); padding-left: 0; padding-top: 1.5rem; } }
-        #case-study-index h4 { font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1rem; }
-        #case-study-index ul { list-style: none; padding: 0; margin: 0; }
-        #case-study-index li button { display: block; width: 100%; text-align: left; padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--text-secondary); font-size: 0.9rem; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
-        #case-study-index li button:hover { background-color: #e9ecef; color: var(--text-primary); }
-        #case-study-index li button.active { background-color: var(--accent-color); color: white; font-weight: 500; }
-        #case-study-index li button span { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-        #case-study-index li button.active span { color: rgba(255,255,255,0.7); }
-
-        /* Case Study Story Styles (within display area) */
-        .case-study-story { padding: 0; margin-bottom: 0; opacity: 1; transform: none; animation: fadeInView 0.4s ease; }
-        .case-study-story h3 { font-size: 1.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; }
-        .case-study-story .app-icon { width: 45px; height: 45px; border-radius: 10px; margin-right: 15px; font-size: 18px; }
-        .case-study-story h4 { font-size: 1.15rem; font-weight: 600; color: var(--text-secondary); margin-top: 1.75rem; margin-bottom: 0.75rem; }
-        .case-study-story p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem; }
-        .case-study-story .outcome strong { color: var(--text-primary); font-weight: 600; }
-        .case-study-links { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); }
-        .case-study-links a { display: inline-block; margin-right: 15px; color: var(--link-color); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s ease; }
-        .case-study-links a:hover { color: var(--link-hover-color); text-decoration: underline; }
-
-
-        /* Common Icon Styles */
-        .app-icon {
-            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
-            font-size: 22px; font-weight: 600; color: var(--text-secondary);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); flex-shrink: 0; overflow: hidden;
-        }
-        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
-
-
-        /* Modal Styles */
-        #app-details-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(33, 37, 41, 0.75); backdrop-filter: blur(8px);
-            z-index: 10000; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.4s ease;
-        }
-        #app-details-modal.show { display: flex; opacity: 1; }
-        #app-details-content {
-            background: #ffffff; border-radius: 18px; padding: 40px; width: 90%; max-width: 850px;
-            max-height: 90vh; overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            position: relative; transform: scale(0.9);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        #app-details-modal.show #app-details-content { transform: scale(1); }
-        #app-details-content h2 { font-size: 2rem; color: var(--text-primary); margin-bottom: 12px; font-weight: 700; }
-        #app-details-content .modal-app-category {
-            font-size: 0.95rem; margin-bottom: 24px; display: inline-block;
-            padding: 6px 12px; border-radius: 14px; background-color: #f1f3f5; color: var(--text-muted);
-        }
-        #app-details-content p#modal-app-description { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 28px; }
-        #app-details-content .close-button {
-            position: absolute; top: 20px; right: 20px; font-size: 2rem; font-weight: 300; color: #adb5bd;
-            cursor: pointer; transition: color 0.3s ease, transform 0.3s ease; border: none; background: none; padding: 0; line-height: 1;
-        }
-        #app-details-content .close-button:hover { color: #dc3545; transform: rotate(90deg) scale(1.1); }
-        .modal-app-icon {
-            width: 110px; height: 110px; border-radius: 20px; margin-right: 24px;
-            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
-            font-size: 32px; font-weight: 600; color: var(--text-secondary);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); flex-shrink: 0; overflow: hidden;
-        }
-        .modal-app-icon img { width: 100%; height: 100%; object-fit: cover; }
-        .user-rating { display: flex; align-items: center; margin-bottom: 12px; }
-        .star-icon { width: 22px; height: 22px; margin-right: 5px; color: var(--star-color); }
-        .rating-count { font-size: 0.95rem; color: var(--text-secondary); }
-        .comments-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
-        .comment { padding: 14px; margin-bottom: 14px; border-radius: 10px; background-color: #f8f9fa; border: 1px solid var(--border-color); }
-        .comment-author { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-        .comment-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
-
-        /* Filter Dropdown Styles */
+        /* Filter Dropdown Styles (Visual Only on this page) */
         #filter-dropdown { position: relative; display: inline-block; }
         #filter-dropdown button {
             background-color: #ffffff;
             color: var(--text-secondary); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border-color);
-            cursor: pointer; font-size: 0.9rem; font-weight: 500;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-            display: flex; align-items: center;
-        }
-        #filter-dropdown button:hover {
-            background-color: #f8f9fa; color: var(--text-primary); box-shadow: 0 2px 5px var(--shadow-color);
+            cursor: default; font-size: 0.9rem; font-weight: 500;
+            display: flex; align-items: center; opacity: 0.6; /* Keep dimmed as it's non-functional here */
         }
         #filter-dropdown button span { margin-right: 6px; }
-        #filter-dropdown ul {
-            position: absolute; top: calc(100% + 8px); right: 0;
-            background-color: #ffffff; border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); padding: 10px 0; list-style: none;
-            min-width: 260px; opacity: 0; visibility: hidden;
-            transform: translateY(-10px) scale(0.95);
-            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-            z-index: 1001; border: 1px solid var(--border-color);
-        }
-        #filter-dropdown.show ul { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        #filter-dropdown ul li {
-            padding: 10px 18px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease; white-space: normal; line-height: 1.4;
-        }
-        #filter-dropdown ul li:hover { background-color: #f1f3f5; color: var(--text-primary); }
-        #filter-dropdown ul li.active { font-weight: 600; color: var(--text-primary); background-color: #e9ecef; }
+        #filter-dropdown ul { display: none; }
 
-        /* AI Search Styles */
+        /* AI Search Styles (Now functional on this page) */
         #ai-search-container {
             display: flex; align-items: center; background-color: #ffffff;
             padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color);
             flex-grow: 1; max-width: 400px;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            /* opacity: 1; Removed opacity */
         }
          #ai-search-container:focus-within {
             background-color: #ffffff; box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
@@ -317,263 +95,197 @@
         #ai-search-input::placeholder { color: var(--text-muted); }
         #ai-search-button {
             background: none; border: none; cursor: pointer; padding: 6px; color: var(--text-muted);
-            transition: color 0.3s ease;
+             transition: color 0.3s ease;
         }
         #ai-search-button:hover { color: var(--text-primary); }
-        #ai-response-area {
-            margin: 20px auto 0 auto; max-width: 1400px;
-            padding: 18px 24px; background: #ffffff;
-            border-radius: 14px; box-shadow: 0 5px 15px var(--shadow-color);
-            font-size: 1rem; color: var(--text-primary); line-height: 1.6; display: none;
-            border: 1px solid var(--border-color);
-        }
-        #ai-response-area.loading::after { content: 'Thinking...'; display: block; text-align: center; font-style: italic; color: var(--text-muted); margin-top: 12px; }
-        .ai-result-link { font-weight: 500; color: var(--link-color); text-decoration: none; transition: color 0.2s ease; }
-        .ai-result-link:hover { color: var(--link-hover-color); text-decoration: underline; }
-        .ai-result-category { font-size: 0.9em; color: var(--text-muted); margin-left: 6px; }
 
-        /* No Apps/Agents Message & View Title Styles */
-        .no-apps-message, .no-agents-message {
-            text-align: center; font-size: 1.1rem; color: var(--text-muted);
-            margin-top: 50px; padding: 25px; border-radius: 14px;
-            background-color: #ffffff; border: 1px solid var(--border-color);
-        }
-        .view-title {
-            font-size: 2rem; font-weight: 600; color: var(--text-primary);
+
+        /* Page Title Styles */
+        .page-title {
+            font-size: 2.2rem; font-weight: 700; color: var(--text-primary);
             margin-bottom: 1.5rem; padding-bottom: 0.5rem;
+            text-align: center;
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* Main Content Area & View Switching Styles */
+        /* Category Filter Grid */
+        #agent-category-filter-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
+            gap: 0.75rem; /* Reduced gap */
+            margin-bottom: 2rem;
+        }
+         @media (min-width: 640px) { /* 3 columns on sm screens */
+            #agent-category-filter-grid { grid-template-columns: repeat(3, 1fr); }
+         }
+         @media (min-width: 1024px) { /* 6 columns on lg screens */
+            #agent-category-filter-grid { grid-template-columns: repeat(6, 1fr); }
+         }
+        .category-filter-btn {
+            background-color: #ffffff; /* White background */
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 0.85rem; /* Slightly smaller font */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .category-filter-btn:hover {
+            background-color: #f8f9fa;
+            color: var(--text-primary);
+        }
+        .category-filter-btn.active { /* Active category button */
+            background-color: var(--accent-color);
+            color: var(--active-text);
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+
+        /* Card Base Styles */
+        .card-base {
+            background: var(--card-bg); border-radius: 16px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
+            border: 1px solid var(--border-color);
+            position: relative; display: flex; flex-direction: column;
+            overflow: hidden;
+             opacity: 0; transform: translateY(10px);
+             animation: agentFadeInUp 0.5s ease forwards;
+        }
+         @keyframes agentFadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-base:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
+            background: var(--card-hover-bg);
+        }
+
+        /* Agent Card Styles */
+        .app-card-content {
+             display: flex; align-items: flex-start; padding: 16px; flex-grow: 1;
+        }
+        .app-card .app-icon {
+            width: 65px; height: 65px; border-radius: 12px; margin-right: 16px;
+            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
+            font-size: 22px; font-weight: 600; color: var(--text-secondary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); flex-shrink: 0; overflow: hidden;
+        }
+         .app-card .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .app-card .app-info { flex: 1; display: flex; flex-direction: column; } /* Ensure flex column for spacing */
+        .app-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .app-category-label {
+            font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;
+            display: inline-block; padding: 3px 10px; border-radius: 12px;
+            background-color: #f1f3f5; line-height: 1.3;
+        }
+        .app-description {
+            font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;
+            margin-bottom: 0.5rem; /* Space before video placeholder */
+            /* Truncate description */
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden; text-overflow: ellipsis; height: calc(1.5 * 3em);
+            flex-grow: 1; /* Allow description to take up space */
+        }
+        .video-placeholder {
+            /* margin-top: auto; Push to bottom */
+            padding-top: 0.5rem;
+            text-align: right;
+        }
+        .video-placeholder button {
+            background: none; border: none; padding: 0; cursor: pointer;
+            color: var(--text-muted); transition: color 0.2s ease;
+        }
+         .video-placeholder button:hover {
+             color: var(--link-color);
+         }
+         .video-placeholder svg {
+             width: 20px; height: 20px; display: inline-block; vertical-align: middle;
+         }
+
+        /* Main Content Area */
         main {
-            flex: 1; padding: 0; /* Remove padding from main, apply to sections */
-            max-width: 100%; /* Allow sections to control width */
-            margin: 0 auto;
+            padding: 2rem 1.5rem; max-width: 1400px;
+            margin: 1rem auto 2rem auto;
             width: 100%; box-sizing: border-box;
         }
-        .view-section { display: none; animation: fadeInView 0.5s ease forwards; padding: 1.5rem; } /* Add padding to view sections */
-        .view-section.active { display: block; }
-        @keyframes fadeInView {
-             from { opacity: 0; transform: translateY(10px); }
-             to { opacity: 1; transform: translateY(0); }
+        .grid { display: grid; gap: 25px; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .md\:grid-cols-2 {
+             @media (min-width: 768px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
-        /* Grid layout */
-        .grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;
+         .lg\:grid-cols-3 {
+             @media (min-width: 1024px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
-        /* Specific styles for #app-list when visible */
-        #app-list:not(.hidden) {
-             padding: 2rem 0; /* Add vertical padding when shown */
-             max-width: 1400px; /* Ensure max-width */
-             margin: 0 auto; /* Center grid */
+         .xl\:grid-cols-4 {
+             @media (min-width: 1280px) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
         }
-
-
-        /* Apple-Inspired Section Styles */
-        .large-section {
-            padding: 4rem 2rem; /* Generous padding */
-            text-align: center;
-        }
-        .large-section.bg-light { background-color: var(--section-bg-light); }
-        .large-section.bg-dark { background-color: var(--section-bg-dark); }
-
-        .section-title {
-            font-size: 2.5rem; /* Larger title */
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-         .section-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 700px; /* Constrain width */
-            margin: 0 auto 2.5rem auto; /* Center and add bottom margin */
-            line-height: 1.6;
-        }
-
-        /* Featured Agent Card Styles */
-        .featured-agent-card {
-            background-color: var(--card-bg);
-            border-radius: 20px; /* More rounded */
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--border-color);
-        }
-        .featured-agent-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-        }
-        .featured-agent-card .app-icon {
-            width: 80px; height: 80px; margin: 0 auto 1.5rem auto; /* Center icon */
-            border-radius: 18px; font-size: 28px;
-        }
-        .featured-agent-card .app-title {
-            font-size: 1.5rem; margin-bottom: 0.5rem;
-        }
-        .featured-agent-card .app-category {
-             font-size: 0.9rem; margin-bottom: 1rem;
-        }
-        .featured-agent-card .app-description {
-            font-size: 0.95rem; height: auto; /* Allow full description */
-             -webkit-line-clamp: unset;
-             margin-bottom: 1.5rem;
-        }
-         .featured-agent-card .learn-more-link {
-             font-weight: 500; color: var(--link-color); text-decoration: none;
-         }
-         .featured-agent-card .learn-more-link:hover {
-             color: var(--link-hover-color); text-decoration: underline;
+         .no-agents-msg {
+             text-align: center;
+             padding: 2rem;
+             color: var(--text-muted);
+             font-style: italic;
          }
 
-        /* Category Showcase Card Styles */
-        .category-showcase-card {
-            background-color: var(--card-bg);
-            border-radius: 18px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-             border: 1px solid var(--border-color);
-             display: flex;
-             flex-direction: column;
-             align-items: center;
-             justify-content: center;
-             min-height: 250px; /* Ensure cards have some height */
-        }
-         .category-showcase-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .category-showcase-card .category-icon { /* Placeholder for category icon */
-             font-size: 2.5rem;
-             margin-bottom: 1rem;
-             color: var(--accent-color);
-        }
-        .category-showcase-card .category-card-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-         .category-showcase-card .category-card-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-             flex-grow: 1; /* Allow desc to take space */
-             margin-bottom: 1rem;
-        }
-         .category-showcase-card .learn-more-link {
-             font-weight: 500; color: var(--link-color); text-decoration: none; font-size: 0.9rem;
-         }
-         .category-showcase-card .learn-more-link:hover {
-             color: var(--link-hover-color); text-decoration: underline;
-         }
-
-         /* Frame container - Used for multiple views */
-        .content-frame { /* Renamed for general use */
-            background-color: var(--frame-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 25px 30px; /* Internal padding */
-            box-shadow: 0 5px 15px var(--shadow-color);
-            margin-top: 1rem; /* Space below section title */
-            margin-bottom: 1rem; /* Space below frame */
-        }
-
-
-        /* Tooltip Styles */
-        #app-tooltip {
-            position: absolute; background-color: var(--tooltip-bg); color: var(--tooltip-text);
-            padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; line-height: 1.4;
-            z-index: 11000; opacity: 0; visibility: hidden; pointer-events: none;
-            transition: opacity 0.2s ease; max-width: 250px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-         #app-tooltip h3 { font-weight: 600; margin: 0 0 4px 0; font-size: 0.9rem; color: #ffffff; }
-         #app-tooltip p { margin: 0; }
-         #app-tooltip .tooltip-category { color: #ced4da; margin-bottom: 3px; }
-         #app-tooltip .tooltip-rating { color: var(--star-color); }
-
-        /* Responsive Design Adjustments */
+        /* Responsive Adjustments */
         @media (max-width: 1024px) {
             .header-content { justify-content: space-between; }
             header nav { order: 3; width: 100%; justify-content: center; margin-top: 0.5rem; gap: 1rem;}
             .header-actions { order: 2; }
             .header-title { order: 1; }
             #ai-search-container { max-width: 300px; }
-            .section-title { font-size: 2rem; }
-            .section-subtitle { font-size: 1.1rem; }
-            .case-study-layout { flex-direction: column; } /* Stack columns earlier */
-            #case-study-index { max-height: 300px; border-left: none; border-top: 1px solid var(--border-color); padding-left: 0; padding-top: 1.5rem; }
+             #agent-category-filter-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 768px) {
-            header { padding: 0.75rem 1rem; }
-            .header-title { font-size: 1.5rem; }
-            header nav { gap: 0.75rem; }
-            header nav a { font-size: 0.9rem; padding: 0.3rem 0; }
-            .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
+             header { padding: 0.75rem 1rem; }
+             .header-title { font-size: 1.5rem; }
+             header nav { gap: 0.75rem; }
+             header nav a { font-size: 0.9rem; padding: 0.3rem 0; }
+             .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
              #ai-search-container { width: 100%; max-width: none; order: 1; margin-right: 0; }
              #filter-dropdown { order: 2; }
              #filter-dropdown button { padding: 8px 16px; }
-             main { padding: 0; } /* Remove main padding, handled by sections */
-             .view-section { padding: 1rem; } /* Adjust view padding */
-             .large-section { padding: 3rem 1rem; }
-             .grid { grid-template-columns: 1fr; gap: 20px; } /* Stack grids on small screens */
-             #app-list:not(.hidden) { padding: 2rem 0; } /* Adjust dynamic grid padding */
-             #app-details-content { padding: 25px; }
-             #app-details-content h2 { font-size: 1.6rem; }
-             #app-tooltip { display: none; }
-             .view-title { font-size: 1.5rem; margin-bottom: 1rem; padding: 0;} /* Remove padding from view titles */
-             .case-study-story { padding: 15px 20px; }
-             .section-title { font-size: 1.8rem; }
-             .section-subtitle { font-size: 1rem; }
-             .featured-agent-card { padding: 1.5rem; }
-             .category-showcase-card { padding: 1.5rem; min-height: 200px;}
-             .content-frame { padding: 15px 20px; } /* Adjust frame padding */
-             #category-filter-grid { grid-template-columns: repeat(2, 1fr); } /* Ensure 2 columns on small */
+             main { padding: 1.5rem 1rem; margin: 1rem auto; }
+             .page-title { font-size: 1.8rem; }
+             .grid { gap: 20px; }
+             #agent-category-filter-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-    <div id="loading-screen">
-        <div class="loader"></div>
-    </div>
-
-    <header>
+<body>
+     <header>
         <div class="header-content">
-            <a href="https://synapster.analystx.uk/" class="header-title site-nav-link" data-target="marketplace-view">AI Agent Marketplace</a>
+            <a href="https://synapster.analystx.uk/" class="header-title">AI Agent Marketplace</a>
             <nav>
-                <a href="https://synapster.analystx.uk/cs.html" class="site-nav-link" >Case Studies</a>
-                <a href="https://synapster.analystx.uk/agents.html" class="site-nav-link" >Agents List</a>
-                <a href="https://synapster.analystx.uk/discussion.html" class="site-nav-link" >Forum</a> 
-                <a href="https://synapster.analystx.uk/about.html" class="site-nav-link" data-target="about-view">About Us</a>
-            </nav>
+                <a href="https://synapster.analystx.uk/cs.html" target="_blank" rel="noopener noreferrer">Case Studies</a>
+                <a href="https://synapster.analystx.uk/agents.html" target="_blank" rel="noopener noreferrer">Agents List</a>
+                <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer">Forum</a>
+                <a href="#">About Us</a> </nav>
             <div class="header-actions">
                 <div id="ai-search-container">
-                    <input type="text" id="ai-search-input" placeholder="Ask the AI Agent...">
+                    <input type="text" id="ai-search-input" placeholder="Search agents...">
                     <button id="ai-search-button" aria-label="Search">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                     </button>
                 </div>
                 <div id="filter-dropdown">
-                    <button>
+                    <button disabled>
                         <span>Filter</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>
                     </button>
-                    <ul>
-                        <li data-category="all">All Categories</li>
-                        <li data-category="diagnostics-imaging">Diagnostics & Imaging Solutions</li>
-                        <li data-category="clinical-decision">Clinical Decision Support & Triage</li>
-                        <li data-category="patient-engagement">Patient Engagement & Remote Care</li>
-                        <li data-category="operational-efficiency">Operational Efficiency & Administration</li>
-                        <li data-category="drug-discovery">Drug Discovery & Research</li>
-                    </ul>
+                    <ul></ul>
                 </div>
             </div>
         </div>
-        <div id="ai-response-area"></div>
     </header>
 
     <main>
@@ -717,8 +429,7 @@
              console.log("Searching agents by text:", lowerCaseQuery); // Debug
 
              if (!lowerCaseQuery) {
-                 // If search is cleared, show all agents (or last selected category?)
-                 // Let's default to showing all when search is empty
+                 // If search is cleared, show all agents
                  filterAgentsByCategory('all');
                  return;
              }
