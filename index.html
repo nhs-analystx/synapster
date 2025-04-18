@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent Case Studies</title>
+    <title>AI for Diagnostics & Imaging Solutions</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom CSS for the Case Studies Page - Grey Theme */
+        /* Custom CSS adapted for static page - Grey Theme */
         :root {
             /* Grey Palette */
             --bg-main: #f1f3f5; /* Main background grey */
-            --story-bg: #ffffff; /* Background for story articles */
+            --card-bg: #ffffff; /* White cards */
+            --card-hover-bg: #f8f9fa; /* Slightly off-white hover */
             --text-primary: #212529; /* Very Dark Grey */
             --text-secondary: #495057; /* Dark Grey */
             --text-muted: #6c757d;   /* Medium Grey */
             --border-color: #dee2e6; /* Light Grey Border */
+            --accent-color: #495057;  /* Dark Grey for accents */
             --shadow-color: rgba(0, 0, 0, 0.07); /* Slightly softer shadow */
             --link-color: #0d6efd;
             --link-hover-color: #0a58ca;
-            --button-bg: #e9ecef;
-            --button-hover-bg: #dee2e6;
-            --active-bg: #495057; /* Accent color for active states */
-            --active-text: #ffffff;
+            --button-bg: #e9ecef; /* Light grey button */
+            --button-hover-bg: #dee2e6; /* Darker grey hover */
         }
 
         body {
@@ -33,150 +33,104 @@
             color: var(--text-primary);
         }
 
-        /* Page Title Styles */
+        /* Header Styles Removed */
+
+        /* Page Titles */
         .page-title {
             font-size: 2.2rem; font-weight: 700; color: var(--text-primary);
-            margin-bottom: 1.5rem; padding-bottom: 0.5rem;
+            margin-bottom: 1rem; padding-bottom: 0.5rem;
             text-align: center;
+        }
+         .section-title {
+            font-size: 1.8rem; font-weight: 600; color: var(--text-primary);
+            margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem;
             border-bottom: 1px solid var(--border-color);
         }
-
-        /* Category Filter Grid */
-        #category-filter-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
-            gap: 1rem;
-            margin-bottom: 2rem;
+        .intro-text {
+            font-size: 1.1rem; color: var(--text-secondary);
+            max-width: 800px; margin: 0 auto 2.5rem auto;
+            text-align: center; line-height: 1.6;
         }
-         @media (min-width: 768px) { /* 4 columns on medium screens and up */
-            #category-filter-grid { grid-template-columns: repeat(4, 1fr); }
-         }
-        .category-filter-btn {
-            background-color: #ffffff; /* White background */
+
+        /* Card Base Styles */
+        .card-base {
+            background: var(--card-bg); border-radius: 16px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
             border: 1px solid var(--border-color);
-            padding: 10px 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 500;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-            font-size: 0.9rem;
+            position: relative; display: flex; flex-direction: column;
+            overflow: hidden;
         }
-        .category-filter-btn:hover {
-            background-color: #f8f9fa;
-            color: var(--text-primary);
-        }
-        .category-filter-btn.active { /* Active category button */
-            background-color: var(--accent-color);
-            color: var(--active-text);
-            border-color: var(--accent-color);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        .card-base:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
+            background: var(--card-hover-bg);
         }
 
-        /* Main Layout: Content + Index */
-        .case-study-layout {
-            display: flex;
-            flex-direction: column; /* Stack on small screens */
-            gap: 2rem;
-            background-color: var(--story-bg); /* White background for the content area */
-            padding: 25px 30px;
-            border-radius: 12px;
+        /* Standard Agent Card Styles */
+        .app-card-content {
+             display: flex; align-items: flex-start; padding: 16px; flex-grow: 1;
+        }
+        .app-card .app-icon {
+            width: 65px; height: 65px; border-radius: 12px; margin-right: 16px;
+        }
+        .app-card .app-info { flex: 1; }
+        .app-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .app-category-label {
+            font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;
+            display: inline-block; padding: 3px 10px; border-radius: 12px;
+            background-color: #f1f3f5; line-height: 1.3;
+        }
+        .app-description {
+            font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;
+             /* Truncate description on standard cards */
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden; text-overflow: ellipsis; height: calc(1.5 * 3em);
+        }
+
+        /* Featured Agent Card Styles */
+        .featured-agent-card {
+            background-color: var(--card-bg);
+            border-radius: 20px; padding: 2rem; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             border: 1px solid var(--border-color);
-            box-shadow: 0 3px 10px var(--shadow-color);
+             display: flex; flex-direction: column;
+             margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
         }
-         @media (min-width: 1024px) { /* Side-by-side on large screens */
-            .case-study-layout { flex-direction: row; }
-         }
+        .featured-agent-card .app-icon {
+            width: 80px; height: 80px; margin: 0 auto 1.5rem auto;
+            border-radius: 18px; font-size: 28px;
+        }
+        .featured-agent-card .app-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .featured-agent-card .app-category-label { font-size: 0.9rem; margin-bottom: 1rem; }
+        .featured-agent-card .app-description {
+            font-size: 0.95rem; height: auto; -webkit-line-clamp: unset;
+            margin-bottom: 1.5rem; text-align: left;
+            flex-grow: 1;
+        }
 
-        /* Left Column: Case Study Display Area */
-        #case-study-display-area {
-            flex: 3; /* Takes more space */
-            min-width: 0; /* Prevents flex overflow */
-            transition: opacity 0.3s ease-in-out; /* Fade transition */
+        /* Case Study Section within Featured Card */
+        .case-study-collapsible {
+            margin-top: 1.5rem; text-align: left; max-height: 0;
+            overflow: hidden; transition: max-height 0.5s ease-out;
         }
-        #case-study-display-area.loading {
-            opacity: 0.5; /* Indicate loading */
+        .case-study-collapsible.expanded {
+            max-height: 1000px; transition: max-height 0.5s ease-in;
         }
-
-        /* Right Column: Case Study Index */
-        #case-study-index {
-            flex: 1; /* Takes less space */
-            min-width: 200px; /* Ensure minimum width */
-            max-height: 75vh; /* Limit height */
-            overflow-y: auto; /* Allow scrolling */
-            padding-right: 10px; /* Space for scrollbar */
-            border-left: 1px solid var(--border-color); /* Separator */
-            padding-left: 1.5rem;
+        .case-study-collapsible h4 {
+            font-size: 1.1rem; font-weight: 600; color: var(--text-secondary);
+            margin-bottom: 0.5rem; margin-top: 1rem;
+            padding-top: 1rem; border-top: 1px solid var(--border-color);
         }
-         @media (max-width: 1023px) { /* Adjust index styles for stacked layout */
-             #case-study-index {
-                 max-height: 300px; /* Adjust height when stacked */
-                 border-left: none;
-                 border-top: 1px solid var(--border-color); /* Separator on top */
-                 padding-left: 0;
-                 padding-top: 1.5rem;
-             }
-         }
-        #case-study-index h4 {
-             font-size: 1.1rem; font-weight: 600; color: var(--text-secondary);
-             margin-bottom: 1rem;
+         .case-study-collapsible h4:first-of-type {
+            margin-top: 0; padding-top: 0; border-top: none;
         }
-        #case-study-index ul { list-style: none; padding: 0; margin: 0; }
-        #case-study-index li button { /* Style index items as buttons */
-             display: block; width: 100%; text-align: left;
-             padding: 10px 15px; margin-bottom: 8px;
-             border-radius: 8px; border: 1px solid transparent; /* Transparent border for spacing */
-             background: none; color: var(--text-secondary); font-size: 0.9rem;
-             cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        #case-study-index li button:hover {
-             background-color: #e9ecef; color: var(--text-primary);
-        }
-        #case-study-index li button.active { /* Style for selected index item */
-             background-color: var(--accent-color); color: var(--active-text); font-weight: 500;
-        }
-        #case-study-index li button span { /* Optional: category hint */
-             display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;
-        }
-         #case-study-index li button.active span {
-             color: rgba(255,255,255,0.7);
-         }
-
-        /* Case Study Story Styles (within display area) */
-        .case-study-story {
-            /* Removed background/border/shadow as it's inside the layout now */
-            padding: 0; margin-bottom: 0;
-            opacity: 1; transform: none; animation: fadeInView 0.4s ease; /* Fade in content */
-        }
-        .case-study-story h3 { /* Agent Title */
-            font-size: 1.8rem; font-weight: 600; color: var(--text-primary);
-            margin-bottom: 15px; padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color); display: flex; align-items: center;
-        }
-         .case-study-story .app-icon { /* Icon next to title */
-            width: 45px; height: 45px; border-radius: 10px; margin-right: 15px; font-size: 18px;
-            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
-            font-weight: 600; color: var(--text-secondary);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); flex-shrink: 0; overflow: hidden;
-        }
-         .case-study-story .app-icon img { width: 100%; height: 100%; object-fit: cover; }
-
-        .case-study-story h4 { /* Section Titles */
-            font-size: 1.15rem; font-weight: 600; color: var(--text-secondary);
-            margin-top: 1.75rem; margin-bottom: 0.75rem;
-        }
-        .case-study-story p { /* Paragraph text */
-            font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;
+        .case-study-collapsible p {
+            font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;
             margin-bottom: 1rem;
         }
-         .case-study-story .outcome strong {
-             color: var(--text-primary); font-weight: 600;
-         }
-        .case-study-links {
-            margin-top: 1.5rem; padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
+        .case-study-collapsible strong { color: var(--text-primary); font-weight: 600; }
         .case-study-links a {
             display: inline-block; margin-right: 15px; color: var(--link-color);
             text-decoration: none; font-weight: 500; font-size: 0.9rem;
@@ -184,10 +138,30 @@
         }
         .case-study-links a:hover { color: var(--link-hover-color); text-decoration: underline; }
 
+        /* Expand/Collapse Button */
+        .expand-case-study-btn {
+            display: inline-block; background-color: var(--button-bg);
+            color: var(--text-secondary); border: 1px solid var(--border-color);
+            padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;
+            font-weight: 500; cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-top: 1rem;
+        }
+        .expand-case-study-btn:hover {
+            background-color: var(--button-hover-bg); color: var(--text-primary);
+        }
+
+        /* Common Icon Styles */
+        .app-icon {
+            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
+            font-size: 22px; font-weight: 600; color: var(--text-secondary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); flex-shrink: 0; overflow: hidden;
+        }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+
         /* Main Content Area */
         main {
-            padding: 2rem 1.5rem; max-width: 1400px; /* Use max-width */
-            margin: 1rem auto 2rem auto;
+            padding: 2rem 1.5rem; max-width: 1400px; margin: 1rem auto 2rem auto;
             width: 100%; box-sizing: border-box;
         }
         .grid { display: grid; gap: 25px; }
@@ -206,882 +180,198 @@
              .section-title { font-size: 1.5rem; }
              .intro-text { font-size: 1rem; }
              .grid { gap: 20px; }
-             #category-filter-grid { grid-template-columns: repeat(2, 1fr); } /* 2 columns on small */
-             .case-study-story { padding: 0; } /* Remove padding for story on mobile */
-             .case-study-story h3 { font-size: 1.5rem; }
-             .case-study-story h4 { font-size: 1.1rem; margin-top: 1.25rem;}
-             .case-study-story p { font-size: 0.9rem; }
+             .featured-agent-card { padding: 1.5rem; }
         }
 
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-    <div id="loading-screen">
-        <div class="loader"></div>
-    </div>
-
-    <header>
-        <div class="header-content">
-            <a href="https://synapster.analystx.uk/" class="header-title site-nav-link" data-target="marketplace-view">AI Agent Marketplace</a>
-            <nav>
-                <a href="https://synpaster.analystx.uk/cs.html" class="site-nav-link" target="_blank" rel="noopener noreferrer">Case Studies</a>
-                <a href="https://synapster.analystx.uk/agents.html" class="site-nav-link" target="_blank" rel="noopener noreferrer">Agents List</a>
-                <a href="https://synapster.analystx.uk/about.html" class="site-nav-link" data-target="about-view">About Us</a>
-            </nav>
-            <div class="header-actions">
-                <div id="ai-search-container">
-                    <input type="text" id="ai-search-input" placeholder="Ask the AI Agent...">
-                    <button id="ai-search-button" aria-label="Search">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    </button>
-                </div>
-                <div id="filter-dropdown">
-                    <button>
-                        <span>Filter</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>
-                    </button>
-                    <ul>
-                        <li data-category="all">All Categories</li>
-                        <li data-category="diagnostics-imaging">Diagnostics & Imaging Solutions</li>
-                        <li data-category="clinical-decision">Clinical Decision Support & Triage</li>
-                        <li data-category="patient-engagement">Patient Engagement & Remote Care</li>
-                        <li data-category="operational-efficiency">Operational Efficiency & Administration</li>
-                        <li data-category="drug-discovery">Drug Discovery & Research</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div id="ai-response-area"></div>
-    </header>
-
+<body>
     <main>
-        <div id="marketplace-view" class="view-section active">
-            <section class="large-section bg-dark text-center">
-                <h2 class="section-title">Discover the Future of AI Agents</h2>
-                <p class="section-subtitle">
-                    Explore a curated marketplace of cutting-edge AI agents designed to revolutionise industries. From healthcare diagnostics to operational efficiency, find intelligent solutions tailored to your needs.
-                </p>
-            </section>
+        <h1 class="page-title">AI for Diagnostics & Imaging Solutions</h1>
+        <p class="intro-text">
+            Leverage the power of artificial intelligence to enhance the accuracy, speed, and efficiency of medical diagnostics and imaging analysis. AI agents in this category assist clinicians in interpreting complex scans, identifying subtle anomalies, and ultimately improving patient diagnosis and care pathways.
+        </p>
 
-            <section class="large-section bg-light">
-                <h2 class="section-title">Featured Agents</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                    <div class="featured-agent-card">
-                         <div class="app-icon mx-auto mb-6">ZMV</div>
-                         <h3 class="app-title">Zebra Medical Vision</h3>
-                         <p class="app-category">Diagnostics & Imaging Solutions</p>
-                         <p class="app-description">Enhances medical imaging diagnostics with AI-driven solutions, improving accuracy and accessibility.</p>
-                         <a href="#" class="learn-more-link" onclick="showAppDetails(appData.find(app => app.id === 'diag01')); return false;">Learn More &rarr;</a>
-                    </div>
-                    <div class="featured-agent-card">
-                         <div class="app-icon mx-auto mb-6">ATW</div>
-                         <h3 class="app-title">Atomwise</h3>
-                         <p class="app-category">Drug Discovery & Research</p>
-                         <p class="app-description">Leverages its AtomNet® AI platform for structure-based small molecule drug discovery, accelerating research.</p>
-                          <a href="#" class="learn-more-link" onclick="showAppDetails(appData.find(app => app.id === 'drug01')); return false;">Learn More &rarr;</a>
+        <section>
+            <h2 class="section-title">Featured Agents & Case Studies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <div class="featured-agent-card">
+                    <div class="app-icon mx-auto mb-6">ZMV</div>
+                    <h3 class="app-title">Zebra Medical Vision</h3>
+                    <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                    <p class="app-description">Develops AI solutions to enhance medical imaging diagnostics, aiming to improve accuracy and speed up decision-making for clinicians.</p>
+                    <button class="expand-case-study-btn" aria-expanded="false" data-target="zebra-case-study">
+                        Read Case Study
+                    </button>
+                    <div id="zebra-case-study" class="case-study-collapsible">
+                        <h4>Case Study: NHS Trust Workflow Enhancement</h4>
+                        <p><strong>Problem:</strong> Significant backlogs in interpreting diagnostic images (X-rays, CT scans) led to delays in patient diagnosis and treatment initiation within several UK NHS trusts. Radiologist workload was high, contributing to burnout.</p>
+                        <p><strong>Solution:</strong> The AI platform was integrated into the existing PACS system, automatically analysing incoming scans, flagging potential abnormalities and prioritising urgent cases for radiologist review. The AI acted as a "second reader", aiding in the detection of subtle findings.</p>
+                        <p><strong>Outcome:</strong> Resulted in a <strong>reduced diagnostic report turnaround time by 25%</strong>, enabling faster treatment decisions, particularly for time-sensitive conditions.</p>
+                        <div class="case-study-links">
+                            <a href="#" target="_blank" rel="noopener noreferrer">Read Full Study (Placeholder)</a>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-             <section class="large-section bg-dark">
-                 <h2 class="section-title">Explore by Category</h2>
-                 <div class="frame-container max-w-5xl mx-auto">
-                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                         <div class="category-showcase-card">
-                             <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
-                             <p class="category-card-desc">AI tools providing efficient clinical decision support and triage capabilities.</p>
-                             <a href="#" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
-                         </div>
-                         <div class="category-showcase-card">
-                             <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
-                             <p class="category-card-desc">Accelerate pharmaceutical research and development with AI-powered discovery platforms.</p>
-                              <a href="#" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
-                         </div>
-                         <div class="category-showcase-card">
-                             <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
-                             <p class="category-card-desc">Enhance medical imaging analysis and diagnostic accuracy with intelligent solutions.</p>
-                               <a href="#" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
-                         </div>
-                         <div class="category-showcase-card">
-                             <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
-                             <p class="category-card-desc">Streamline administrative tasks and optimise healthcare operations with AI automation.</p>
-                               <a href="#" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
-                         </div>
-                     </div>
-                 </div>
-             </section>
-
-             <div class="grid hidden" id="app-list" style="padding: 0 1.5rem;">
-                </div>
-             <div id="no-apps-message" class="hidden" style="margin: 50px 1.5rem;">
-                 <p>No apps found matching the selected category.</p>
-             </div>
-        </div>
-
-        <div id="casestudies-view" class="view-section">
-             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> {/* Added container for padding */}
-                <h2 class="view-title">Case Studies</h2>
-                <div id="case-studies-story-container">
+                <div class="featured-agent-card">
+                    <div class="app-icon mx-auto mb-6">GLM</div>
+                    <h3 class="app-title">Gleamer</h3>
+                    <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                    <p class="app-description">Specialises in AI for radiology, particularly for detecting fractures and abnormalities in X-rays (e.g., BoneView).</p>
+                    <button class="expand-case-study-btn" aria-expanded="false" data-target="gleamer-case-study">
+                        Read Case Study
+                    </button>
+                    <div id="gleamer-case-study" class="case-study-collapsible">
+                        <h4>Case Study: French Emergency Room Accuracy</h4>
+                        <p><strong>Problem:</strong> Emergency departments in France experienced challenges with the speed and accuracy of preliminary fracture detection on X-rays, especially during busy periods, occasionally leading to missed fractures.</p>
+                        <p><strong>Solution:</strong> BoneView was implemented alongside the standard radiologist review process. The AI analysed X-rays and highlighted suspected fracture sites directly on the image for the clinician's attention.</p>
+                        <p><strong>Outcome:</strong> Hospitals using BoneView reported an <strong>improved fracture detection accuracy by 15%</strong> in emergency settings and a reduction in the rate of missed fractures during initial reads.</p>
+                        <div class="case-study-links">
+                            <a href="#" target="_blank" rel="noopener noreferrer">Read Full Study (Placeholder)</a>
+                        </div>
                     </div>
-            </div>
-        </div>
+                </div>
 
-         <div id="agents-view" class="view-section">
-             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> {/* Added container for padding */}
-                <h2 class="view-title">Agents List</h2>
-                 <div class="grid" id="agent-list-grid">
-                     </div>
-                 <div id="no-agents-message" class="hidden"> <p>No agents found.</p>
-                 </div>
             </div>
-        </div>
+        </section>
 
-        <div id="about-view" class="view-section">
-             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> {/* Added container for padding */}
-                <h2 class="view-title">About Us</h2>
-                 <p class="text-center text-muted py-10">Information about the AI Agent Marketplace coming soon...</p>
+        <section>
+            <h2 class="section-title">Other Agents in Diagnostics & Imaging</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">RAI</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Rad AI</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Creates AI tools to automate tasks within radiology workflows, aiming to improve report speed, quality, and reduce errors.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">AID</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Aidoc</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions / Clinical Decision Support</p>
+                            <p class="app-description">AI flags acute abnormalities in scans and helps prioritise urgent cases for faster clinical decisions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">SH</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Siemens Healthineers</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Major medical technology company incorporating AI into imaging and diagnostics (e.g., Syngo Virtual Cockpit).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">ART</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Arterys Inc. (Tempus)</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Uses AI and cloud computing for medical image analysis (e.g., CardioAI, LiverAI, LungAI).</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">LNT</div>
+                        <div class="app-info">
+                            <h3 class="app-title">Lunit</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Develops AI algorithms for medical imaging, particularly focused on cancer detection.</p>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="card-base app-card">
+                    <div class="app-card-content">
+                        <div class="app-icon">PAI</div>
+                        <div class="app-info">
+                            <h3 class="app-title">PathAI</h3>
+                            <p class="app-category-label">Diagnostics & Imaging Solutions</p>
+                            <p class="app-description">Focuses on AI for pathology, analysing tissue samples to improve diagnostic accuracy and efficiency.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
+        </section>
+
     </main>
 
-    <div id="app-details-modal">
-        <div id="app-details-content">
-            <button class="close-button" id="close-modal-button" aria-label="Close modal">&times;</button>
-            <div class="flex flex-col sm:flex-row items-start sm:items-center mb-6">
-                <div class="modal-app-icon" id="modal-app-icon"></div>
-                <div class="ml-0 sm:ml-6 mt-4 sm:mt-0">
-                    <h2 id="modal-app-title">App Title</h2>
-                    <p id="modal-app-category" class="modal-app-category">Category</p>
-                </div>
-            </div>
-            <p id="modal-app-description" class="mb-6">App Description</p>
-            <div class="app-details">
-                <div class="user-rating mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="lucide lucide-star star-icon"><path d="M12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2Z"/></svg>
-                    <span id="modal-app-rating" class="rating-count ml-1">4.5 (120 ratings)</span>
-                </div>
-                <div class="comments-section">
-                    <h3 class="text-lg font-semibold mb-4">User Comments</h3>
-                    <div id="modal-app-comments"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="app-tooltip"></div>
-
     <script>
-      try { // Add error handling wrapper
-
-        // --- Category Mapping (Slug to Full Name) ---
-        const categoryMap = {
-            'all': 'All Categories',
-            'diagnostics-imaging': 'Diagnostics & Imaging Solutions',
-            'clinical-decision': 'Clinical Decision Support & Triage',
-            'patient-engagement': 'Patient Engagement & Remote Care',
-            'operational-efficiency': 'Operational Efficiency & Administration',
-            'drug-discovery': 'Drug Discovery & Research'
-        };
-
-        // --- Application Data ---
-        const appData = [
-             // Diagnostics & Imaging Solutions
-            {
-                id: 'diag01', title: 'Zebra Medical Vision', category: 'diagnostics-imaging',
-                description: 'Develops AI solutions to enhance medical imaging diagnostics, aiming to improve accuracy and speed up decision-making for clinicians.',
-                rating: 4.7, ratingsCount: 280, comments: [{ author: 'Radiologist A', text: 'Great tool for second opinions.' }, { author: 'Clinic B', text: 'Improved our workflow.' }],
-                icon: 'ZMV', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=ZMV', featured: true,
-                caseStudy: { country: 'United Kingdom', improvement: 'Reduced diagnostic report turnaround time by 25% in NHS trusts, leading to faster treatment decisions.', problem: 'Significant backlogs in interpreting diagnostic images (X-rays, CT scans) led to delays in patient diagnosis and treatment initiation. Radiologist workload was high, contributing to burnout.', solution: 'The AI platform was integrated into the existing PACS system, automatically analysing incoming scans, flagging potential abnormalities and prioritising urgent cases for radiologist review. The AI acted as a "second reader".'}
-            },
-            {
-                id: 'diag02', title: 'Rad AI', category: 'diagnostics-imaging',
-                description: 'Creates AI tools to automate tasks within radiology workflows, aiming to improve report speed, quality, and reduce errors.',
-                rating: 4.6, ratingsCount: 215, comments: [{ author: 'Tech Lead', text: 'Efficient automation.' }],
-                icon: 'RAI', iconUrl: 'https://placehold.co/80x80/CED4DA/ffffff?text=RAI', featured: false,
-                caseStudy: { country: 'USA', improvement: 'Automated report generation saved radiologists an average of 60 minutes per day at a California-based health system.', problem: 'A large California-based health system struggled with the time radiologists spent on repetitive reporting tasks and ensuring consistent report quality, detracting from complex image interpretation.', solution: 'Rad AI\'s tools integrated into the workflow, automatically generating customisable report templates populated with data and standard language, reducing manual dictation and formatting time.'}
-            },
-             {
-                id: 'diag03', title: 'Gleamer', category: 'diagnostics-imaging',
-                description: 'Specialises in AI for radiology, particularly for detecting fractures and abnormalities in X-rays (e.g., BoneView).',
-                rating: 4.8, ratingsCount: 305, comments: [{ author: 'Ortho Specialist', text: 'Very accurate for fracture detection.' }],
-                icon: 'GLM', iconUrl: 'https://placehold.co/80x80/DEE2E6/495057?text=GLM', featured: false,
-                caseStudy: { country: 'France', improvement: 'Improved fracture detection accuracy by 15% in emergency rooms, reducing misdiagnosis rates.', problem: 'Emergency departments faced challenges with the speed and accuracy of preliminary fracture detection on X-rays, especially during busy periods, leading to missed fractures.', solution: 'BoneView was implemented alongside standard review, analysing X-rays and highlighting suspected fracture sites directly on the image, serving as a crucial aid for subtle or complex fractures.'}
-            },
-            // Clinical Decision Support & Triage
-            {
-                id: 'clin01', title: 'Pieces', category: 'clinical-decision',
-                description: 'An AI-powered clinical decision support system connecting health and social care data for comprehensive patient insights.',
-                rating: 4.5, ratingsCount: 190, comments: [{ author: 'Case Manager', text: 'Helps connect the dots.' }],
-                icon: 'PCS', iconUrl: 'https://placehold.co/80x80/6C757D/ffffff?text=PCS', featured: false,
-                caseStudy: { country: 'USA', improvement: 'Helped a Dallas hospital reduce readmission rates for high-risk patients by 18% through better care coordination.', problem: 'A major Dallas hospital identified high readmission rates among patients with complex conditions, often exacerbated by fragmented communication and siloed data.', solution: 'The Pieces platform integrated clinical and social determinants data, using AI to identify high-risk patients in real-time and alert care managers to specific needs, enabling proactive interventions.'}
-            },
-            {
-                id: 'clin02', title: 'Visiba', category: 'clinical-decision',
-                description: 'Offers AI-enabled triage technology (Visiba Triage) to route patients efficiently based on submitted symptoms.',
-                rating: 4.6, ratingsCount: 220, comments: [{ author: 'Urgent Care', text: 'Streamlines patient flow.' }, { author: 'Admin', text: 'Easy to implement.' }],
-                icon: 'VIS', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=VIS', featured: true,
-                caseStudy: { country: 'Sweden', improvement: 'Directed 30% more patients to the appropriate level of care (nurse, physio, GP) on first contact, optimising resource use.', problem: 'Urgent care centres faced high volumes and difficulties efficiently directing patients to the correct care pathway based on initial contact, causing bottlenecks.', solution: 'Patients used an online portal; Visiba Triage AI analysed symptoms, suggested urgency/diagnoses, and provided a structured summary to the clinical team for faster, informed routing decisions.'}
-            },
-             {
-                id: 'clin03', title: 'Klinik Healthcare Solutions', category: 'clinical-decision',
-                description: 'Provides AI-assisted online triage solutions for primary care to assess urgency and direct patients appropriately.',
-                rating: 4.4, ratingsCount: 175, comments: [{ author: 'GP Practice', text: 'Reduces phone calls.' }],
-                icon: 'KHS', iconUrl: 'https://placehold.co/80x80/CED4DA/495057?text=KHS', featured: false,
-                 caseStudy: { country: 'Finland', improvement: 'Reduced unnecessary GP appointments by 20% in primary care centres by accurately assessing patient needs online.', problem: 'Primary care centres were overwhelmed with high call volumes and administrative workload for booking and assessment, hindering timely patient access.', solution: 'The online platform allowed patients to submit enquiries; AI assessed urgency and directed the query to the most suitable resource (GP, nurse, pharmacist), reducing phone traffic.'}
-            },
-            // Patient Engagement & Remote Care
-            {
-                id: 'pat01', title: 'Memora Health', category: 'patient-engagement',
-                description: 'Uses an AI platform to automate patient care management, tracking, and engagement post-discharge.',
-                rating: 4.7, ratingsCount: 255, comments: [{ author: 'Hospital Discharge Team', text: 'Reduces readmissions.' }],
-                icon: 'MEM', iconUrl: 'https://placehold.co/80x80/DEE2E6/ffffff?text=MEM', featured: true,
-                caseStudy: { country: 'USA', improvement: 'Increased patient adherence to post-operative instructions by 40% through automated check-ins and reminders.', problem: 'A hospital system observed low adherence to complex post-operative instructions, leading to complications. Manual follow-up was difficult to scale.', solution: 'The platform automated SMS communication, sending personalised reminders and using AI chat for common questions, flagging concerns for clinical review.'}
-            },
-            {
-                id: 'pat02', title: 'Ada Health', category: 'patient-engagement',
-                description: 'Offers AI-powered health assessment and guidance tools for patients, helping them understand symptoms.',
-                rating: 4.8, ratingsCount: 350, comments: [{ author: 'Patient User', text: 'Helpful for initial checks.' }, { author: 'Health Advocate', text: 'Empowers patients.' }],
-                icon: 'ADA', iconUrl: 'https://placehold.co/80x80/E9ECEF/495057?text=ADA', featured: false,
-                caseStudy: { country: 'Germany', improvement: 'Provided preliminary symptom assessments for over 10 million users, guiding them towards appropriate care options.', problem: 'Patients often struggled to understand symptoms or determine the appropriate level of care needed, leading to inefficient use of emergency services or delayed care.', solution: 'The Ada app allowed users to input symptoms; AI asked relevant questions and provided reports outlining possible causes and recommended next steps.'}
-            },
-            {
-                id: 'pat03', title: 'Biofourmis', category: 'patient-engagement',
-                description: 'Combines AI with wearable tech for personalized predictive health analytics and remote monitoring.',
-                rating: 4.6, ratingsCount: 290, comments: [{ author: 'Cardiologist', text: 'Great for remote monitoring.' }],
-                icon: 'BIO', iconUrl: 'https://placehold.co/80x80/F8F9FA/6C757D?text=BIO', featured: false,
-                caseStudy: { country: 'Singapore', improvement: 'Enabled early detection of heart failure decompensation in remotely monitored patients, reducing hospitalisations by 30%.', problem: 'Detecting early signs of worsening chronic heart failure in remotely managed patients was challenging, often leading to avoidable emergency hospitalisations.', solution: 'Wearable sensors collected data analysed by the Biovitals® AI platform, which detected subtle changes indicating potential issues, alerting clinicians for proactive intervention.'}
-            },
-            // Operational Efficiency & Administration
-            {
-                id: 'ops01', title: 'Avaamo', category: 'operational-efficiency',
-                description: 'Provides conversational AI virtual assistants to streamline administrative tasks like scheduling and patient check-ins.',
-                rating: 4.5, ratingsCount: 180, comments: [{ author: 'Clinic Manager', text: 'Frees up front desk staff.' }],
-                icon: 'AVA', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=AVA', featured: false,
-                caseStudy: { country: 'India', improvement: 'Automated appointment scheduling for a large hospital network, reducing call centre volume by 35%.', problem: 'A large hospital network faced operational inefficiencies due to high call volumes for appointments and basic inquiries, straining staff resources.', solution: 'AI virtual assistants deployed on the website and phone system handled routine tasks like booking, FAQs, and pre-appointment guidance, freeing up staff.'}
-            },
-            {
-                id: 'ops02', title: 'AKASA', category: 'operational-efficiency',
-                description: 'Offers AI solutions for automating healthcare revenue cycle management (billing, coding, claims).',
-                rating: 4.6, ratingsCount: 200, comments: [{ author: 'Billing Dept', text: 'Reduced errors significantly.' }, { author: 'CFO', text: 'Improved revenue cycle.' }],
-                icon: 'AKA', iconUrl: 'https://placehold.co/80x80/6C757D/ffffff?text=AKA', featured: true,
-                caseStudy: { country: 'USA', improvement: 'Reduced claim denial rates by 22% and accelerated payment cycles for multiple healthcare providers.', problem: 'Healthcare providers experienced revenue loss and administrative burden due to medical coding errors, complex billing, and high claim denial rates.', solution: 'The AI platform integrated with EHR/billing systems to automate tasks, correct coding errors pre-submission, predict denials, and manage appeals.'}
-            },
-            {
-                id: 'ops03', title: 'Augmedix', category: 'operational-efficiency',
-                description: 'Uses AI and NLP to automate clinical documentation from doctor-patient conversations, reducing physician burnout.',
-                rating: 4.7, ratingsCount: 240, comments: [{ author: 'Physician', text: 'Saves me hours of paperwork.' }],
-                icon: 'AUG', iconUrl: 'https://placehold.co/80x80/CED4DA/495057?text=AUG', featured: false,
-                caseStudy: { country: 'USA', improvement: 'Saved primary care physicians an average of 2-3 hours per day on documentation, improving job satisfaction.', problem: 'Physicians reported high burnout levels largely due to the burden of clinical documentation within EHRs, reducing time for patient interaction.', solution: 'AI-assisted remote medical documentation specialists generated draft clinical notes in real-time during patient visits, which were then finalised, significantly cutting physician documentation time.'}
-            },
-            // Drug Discovery & Research
-            {
-                id: 'drug01', title: 'Atomwise', category: 'drug-discovery',
-                description: 'Leverages its AtomNet® AI platform for structure-based small molecule drug discovery.',
-                rating: 4.8, ratingsCount: 310, comments: [{ author: 'Researcher', text: 'Powerful platform.' }, { author: 'Pharma Partner', text: 'Accelerates discovery.' }],
-                icon: 'ATW', iconUrl: 'https://placehold.co/80x80/DEE2E6/ffffff?text=ATW', featured: true,
-                caseStudy: { country: 'Global (Partnerships)', improvement: 'Identified potential drug candidates for various targets significantly faster than traditional high-throughput screening methods.', problem: 'Traditional drug discovery faced bottlenecks in the early hit-finding stage due to the time and cost of high-throughput screening (HTS).', solution: 'The AtomNet® AI platform used deep learning to predict molecule binding affinity, identifying novel hit compounds faster and more cost-effectively than HTS.'}
-            },
-            {
-                id: 'drug02', title: 'Isomorphic Labs', category: 'drug-discovery',
-                description: 'Alphabet subsidiary focusing on applying AI to drug discovery, co-developed AlphaFold3.',
-                rating: 4.9, ratingsCount: 400, comments: [{ author: 'Scientist', text: 'Cutting-edge research.' }],
-                icon: 'ISO', iconUrl: 'https://placehold.co/80x80/E9ECEF/495057?text=ISO', featured: false,
-                caseStudy: { country: 'UK/Global', improvement: 'Advanced protein structure prediction capabilities (AlphaFold), fundamentally accelerating biological research worldwide.', problem: 'Determining the 3D structure of proteins experimentally was often slow, expensive, or impossible, hindering drug design and biological understanding.', solution: 'AI systems like AlphaFold were developed to predict protein structures accurately from amino acid sequences, providing invaluable tools for global researchers.'}
-            },
-            {
-                id: 'drug03', title: 'XtalPi', category: 'drug-discovery',
-                description: 'Combines AI, quantum physics, and robotics to accelerate pharmaceutical research and development.',
-                rating: 4.7, ratingsCount: 275, comments: [{ author: 'Lab Director', text: 'Innovative approach.' }],
-                icon: 'XTP', iconUrl: 'https://placehold.co/80x80/F8F9FA/6C757D?text=XTP', featured: false,
-                 caseStudy: { country: 'USA/China', improvement: 'Utilised AI and physics-based models to predict crystal structures, shortening pre-clinical development timelines.', problem: 'Predicting and controlling the solid-state properties (like crystal structure) of drug candidates was often a slow, trial-and-error process.', solution: 'The platform combined quantum physics calculations, AI predictions, and robotics to accurately predict solid-state properties, guiding experiments and optimising candidate selection.'}
-            },
-             {
-                id: 'drug04', title: 'Healx', category: 'drug-discovery',
-                description: 'Specialises in using AI for drug discovery specifically targeting rare diseases, aiming to find treatments faster.',
-                rating: 4.8, ratingsCount: 295, comments: [{ author: 'Patient Group', text: 'Giving hope for rare diseases.' }, { author: 'Biotech Investor', text: 'Strong mission and tech.' }],
-                icon: 'HLX', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=HLX', featured: true,
-                caseStudy: { country: 'UK', improvement: 'Identified potential treatments for rare diseases by repurposing existing drugs, moving candidates towards clinical trials faster.', problem: 'Developing treatments for rare diseases faced challenges due to small patient populations and the high cost/risk of traditional drug development.', solution: 'The Healnet AI platform analysed vast biomedical data to find non-obvious links between existing drugs and rare diseases, accelerating the identification of potential repurposed treatments.'}
-            },
-        ];
-
-
-        // --- DOM Element References ---
-        const appListContainer = document.getElementById('app-list');
-        const caseStudiesStoryContainer = document.getElementById('case-studies-story-container');
-        const agentListContainer = document.getElementById('agent-list-grid');
-        const noAgentsMessage = document.getElementById('no-agents-message');
-        const appDetailsModal = document.getElementById('app-details-modal');
-        const closeModalButton = document.getElementById('close-modal-button');
-        const noAppsMessage = document.getElementById('no-apps-message');
-        const filterDropdown = document.getElementById('filter-dropdown');
-        const filterOptions = document.querySelectorAll('#filter-dropdown ul li');
-        const aiSearchInput = document.getElementById('ai-search-input');
-        const aiSearchButton = document.getElementById('ai-search-button');
-        const aiResponseArea = document.getElementById('ai-response-area');
-        const appTooltip = document.getElementById('app-tooltip');
-        const viewSections = document.querySelectorAll('.view-section');
-        const navLinks = document.querySelectorAll('.site-nav-link');
-
-        // Check if critical elements exist
-        if (!appListContainer || !caseStudiesStoryContainer || !agentListContainer || !appDetailsModal || !filterDropdown || !appTooltip) {
-            console.error("Initialization Error: One or more critical container elements not found.");
-        }
-
-        // --- State Variables ---
-        let filteredCategory = 'all';
-        let tooltipTimeout;
-
-        // --- Function to Display Apps (Marketplace View - Dynamic Grid Part) ---
-        function displayApps(apps) {
-            if (!appListContainer) return;
-            appListContainer.innerHTML = '';
-            if (apps.length === 0) {
-                noAppsMessage?.classList.remove('hidden');
-                 appListContainer.classList.add('hidden'); // Hide grid if empty
-            } else {
-                noAppsMessage?.classList.add('hidden');
-                appListContainer.classList.remove('hidden'); // Ensure grid is visible
-                apps.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
-
-                apps.forEach((app, index) => {
-                    try {
-                        const appCard = document.createElement('div');
-                        appCard.className = 'app-card card-base';
-                        appCard.style.animationDelay = `${index * 0.05}s`;
-                        appCard.dataset.appData = JSON.stringify(app);
-
-                        const featuredBadge = app.featured ? `<div class="featured-app-badge">Featured App</div>` : '';
-                        const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='22px'; this.parentElement.style.fontWeight='600';`;
-
-                        appCard.innerHTML = `
-                            ${featuredBadge}
-                            <div class="app-card-content">
-                                <div class="app-icon">
-                                    <img src="${app.iconUrl || '#'}" alt="${app.title || 'App'} icon" loading="lazy" onerror="${fallbackImage}">
-                                </div>
-                                <div class="app-info">
-                                    <h3 class="app-title">${app.title || 'Unknown Agent'}</h3>
-                                    <p class="app-category">${categoryMap[app.category] || app.category || 'Uncategorized'}</p>
-                                    <p class="app-description">${app.description || ''}</p>
-                                </div>
-                            </div>
-                        `;
-                        appCard.addEventListener('mouseenter', handleMouseEnter);
-                        appCard.addEventListener('mouseleave', handleMouseLeave);
-                        appCard.addEventListener('mousemove', handleMouseMove);
-                        appCard.addEventListener('click', () => showAppDetails(app));
-                        appListContainer.appendChild(appCard);
-                    } catch (e) {
-                        console.error("Error creating app card:", e, app);
-                    }
-                });
-            }
-        }
-
-        // --- Function to Display Agent List ---
-        function displayAgents() {
-            if (!agentListContainer) return;
-            agentListContainer.innerHTML = '';
-            if (appData.length === 0) {
-                noAgentsMessage?.classList.remove('hidden');
-            } else {
-                noAgentsMessage?.classList.add('hidden');
-                const sortedAgents = [...appData].sort((a, b) => a.title.localeCompare(b.title));
-
-                sortedAgents.forEach((agent, index) => {
-                     try {
-                        const agentCard = document.createElement('div');
-                        agentCard.className = 'app-card card-base';
-                        agentCard.style.animationDelay = `${index * 0.05}s`;
-                        agentCard.dataset.appData = JSON.stringify(agent);
-
-                        const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${agent.icon || '?'}'; this.parentElement.style.fontSize='22px'; this.parentElement.style.fontWeight='600';`;
-
-                        agentCard.innerHTML = `
-                            <div class="app-card-content">
-                                <div class="app-icon">
-                                    <img src="${agent.iconUrl || '#'}" alt="${agent.title || 'Agent'} icon" loading="lazy" onerror="${fallbackImage}">
-                                </div>
-                                <div class="app-info">
-                                    <h3 class="app-title">${agent.title || 'Unknown Agent'}</h3>
-                                    <p class="app-category">${categoryMap[agent.category] || agent.category || 'Uncategorized'}</p>
-                                    <p class="app-description">${agent.description || ''}</p>
-                                </div>
-                            </div>
-                        `;
-                        agentCard.addEventListener('click', () => showAppDetails(agent));
-                        agentCard.addEventListener('mouseenter', handleMouseEnter);
-                        agentCard.addEventListener('mouseleave', handleMouseLeave);
-                        agentCard.addEventListener('mousemove', handleMouseMove);
-                        agentListContainer.appendChild(agentCard);
-                     } catch (e) {
-                         console.error("Error creating agent card:", e, agent);
-                     }
-                });
-            }
-        }
-
-
-         // --- Function to Display Case Studies (Story Format) ---
-         function displayCaseStudies() {
-            if (!caseStudiesStoryContainer) return;
-            caseStudiesStoryContainer.innerHTML = '';
-            const appsWithStudies = appData.filter(app => app.caseStudy);
-
-            if (appsWithStudies.length === 0) {
-                 caseStudiesStoryContainer.innerHTML = '<p class="text-center text-muted p-10">No case studies available yet.</p>';
-                return;
-            }
-
-            const generateFictionalContent = (app) => {
-                const methodology = app.caseStudy.solution || `The ${app.title || 'AI'} platform was implemented within the client's existing infrastructure. It leveraged its core AI capabilities, processing relevant data streams (e.g., ${app.category === 'diagnostics-imaging' ? 'medical images, reports' : app.category === 'patient-engagement' ? 'wearable data, patient communications' : 'operational metrics, EHR data'}) to provide actionable insights. Integration with systems like PACS or EHR was established where necessary to ensure seamless workflow. Staff were trained on utilising the platform's outputs for enhanced decision-making.`;
-                const conclusion = `The deployment successfully addressed the core problem statement. Key outcomes included: ${app.caseStudy.improvement}. This demonstrates the effectiveness of ${app.title || 'the AI agent'} in enhancing healthcare efficiency and outcomes in ${app.caseStudy.country || 'this region'}.`;
-                const recommendation = `Based on the positive results observed in ${app.caseStudy.country || 'this study'}, wider adoption of ${app.title || 'this AI solution'} is recommended for similar healthcare settings facing challenges in ${categoryMap[app.category] || 'related fields'}. Further investigation into long-term cost-benefit analysis and patient satisfaction metrics would provide additional valuable insights.`;
-                const nextStep = `The next phase involves ongoing monitoring of key performance indicators to ensure sustained improvements. Potential expansions include integrating additional data sources or applying the AI agent to related clinical or operational areas. Continuous user feedback collection is planned to guide future refinements and updates to the platform.`;
-                const intro = `A leading healthcare provider in ${app.caseStudy.country || 'the region'} sought to innovate within the area of ${categoryMap[app.category] || 'healthcare services'}. Facing increasing demands and complexity, they partnered with ${app.title || 'an AI solutions provider'} to explore how artificial intelligence could address specific operational or clinical challenges and improve overall service delivery.`;
-
-                return { methodology, conclusion, recommendation, nextStep, intro };
-            };
-
-
-            appsWithStudies.forEach((app, index) => {
-                 try {
-                    const storyElement = document.createElement('div');
-                    storyElement.className = 'case-study-story';
-                    storyElement.style.animationDelay = `${index * 0.05}s`;
-
-                    const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='18px'; this.parentElement.style.fontWeight='600';`;
-                    const fictional = generateFictionalContent(app);
-
-                    // Use template literals to build HTML structure
-                    storyElement.innerHTML = `
-                        <h3>
-                            <div class="app-icon">
-                                 <img src="${app.iconUrl || '#'}" alt="${app.title || 'Agent'} icon" loading="lazy" onerror="${fallbackImage}">
-                            </div>
-                            ${app.title || 'Unknown Agent'} Case Study
-                        </h3>
-
-                        <h4>Introduction</h4>
-                        <p>${fictional.intro}</p>
-
-                        <h4>Problem Statement</h4>
-                        <p>${app.caseStudy.problem || 'A significant challenge was identified, requiring innovative solutions to improve service delivery and patient outcomes.'}</p>
-
-                        <h4>Methodology</h4>
-                        <p>${fictional.methodology}</p>
-
-                        <h4>Conclusion & Outcome</h4>
-                        <p class="outcome">${fictional.conclusion}</p>
-
-                        <h4>Recommendation</h4>
-                        <p>${fictional.recommendation}</p>
-
-                        <h4>Next Steps</h4>
-                        <p>${fictional.nextStep}</p>
-
-                        <div class="case-study-links">
-                            <a href="https://synapster.analystx.uk/casestudy/${app.id}.html" target="_blank" rel="noopener noreferrer">Read Full Study</a>
-                            <a href="https://synapster.analystx.uk/product/${app.id}.html" target="_blank" rel="noopener noreferrer">Visit Product Page</a>
-                        </div>
-                    `;
-                    caseStudiesStoryContainer.appendChild(storyElement);
-                 } catch(e) {
-                     console.error("Error creating case study story:", e, app);
-                 }
-            });
-        }
-
-
-        // --- Tooltip Handlers ---
-        function handleMouseEnter(event) {
-            clearTimeout(tooltipTimeout);
-            const card = event.currentTarget;
-            if (!card.classList.contains('app-card') || !card.dataset.appData) return;
-            try {
-                const app = JSON.parse(card.dataset.appData);
-                const tooltipContent = `
-                    <h3>${app.title || ''}</h3>
-                    <p class="tooltip-category">${categoryMap[app.category] || app.category || ''}</p>
-                    <p class="tooltip-rating">Rating: ${app.rating || 'N/A'} ★</p>
-                `;
-                if (appTooltip) {
-                    appTooltip.innerHTML = tooltipContent;
-                    updateTooltipPosition(event);
-                    appTooltip.style.opacity = '1';
-                    appTooltip.style.visibility = 'visible';
-                }
-            } catch (e) {
-                console.error("Error parsing app data for tooltip:", e, card.dataset.appData);
-                if (appTooltip) {
-                     appTooltip.style.opacity = '0';
-                     appTooltip.style.visibility = 'hidden';
-                }
-            }
-        }
-        function handleMouseLeave() {
-            tooltipTimeout = setTimeout(() => {
-                if (appTooltip) {
-                    appTooltip.style.opacity = '0';
-                    appTooltip.style.visibility = 'hidden';
-                }
-            }, 100);
-        }
-        function handleMouseMove(event) {
-            if (appTooltip && appTooltip.style.visibility === 'visible' && event.currentTarget.classList.contains('app-card')) {
-                 updateTooltipPosition(event);
-            }
-        }
-        function updateTooltipPosition(event) {
-            if (!appTooltip) return;
-            const tooltipRect = appTooltip.getBoundingClientRect();
-            const offsetX = 15; const offsetY = 15;
-            let x = event.pageX + offsetX;
-            let y = event.pageY + offsetY;
-
-            if (x + tooltipRect.width > window.innerWidth) x = event.pageX - tooltipRect.width - offsetX;
-            if (y + tooltipRect.height > window.innerHeight + window.scrollY) y = event.pageY - tooltipRect.height - offsetY;
-            if (x < 0) x = event.pageX + offsetX;
-            if (y < window.scrollY) y = event.pageY + offsetY;
-
-            appTooltip.style.left = `${x}px`;
-            appTooltip.style.top = `${y}px`;
-        }
-
-
-        // --- Function to Show App Details Modal ---
-        function showAppDetails(app) {
-             if (!appDetailsModal) return;
-             if (appTooltip) {
-                appTooltip.style.opacity = '0'; appTooltip.style.visibility = 'hidden'; clearTimeout(tooltipTimeout);
-             }
-            const modalAppIcon = document.getElementById('modal-app-icon');
-            const modalAppTitle = document.getElementById('modal-app-title');
-            const modalAppCategory = document.getElementById('modal-app-category');
-            const modalAppDescription = document.getElementById('modal-app-description');
-            const modalAppRating = document.getElementById('modal-app-rating');
-            const modalAppComments = document.getElementById('modal-app-comments');
-
-            if (!modalAppIcon || !modalAppTitle || !modalAppCategory || !modalAppDescription || !modalAppRating || !modalAppComments) {
-                console.error("Modal elements not found!"); return;
-            }
-
-            const fallbackModalImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='32px'; this.parentElement.style.fontWeight='600';`;
-            const largeIconUrl = (app.iconUrl && app.iconUrl.includes('placehold.co')) ? app.iconUrl.replace('/80x80/', '/120x120/') : (app.iconUrl || '#');
-            modalAppIcon.innerHTML = `<img src="${largeIconUrl}" alt="${app.title || 'Agent'} icon" loading="lazy" onerror="${fallbackModalImage}">`;
-
-            modalAppTitle.textContent = app.title || 'Unknown Agent';
-            modalAppCategory.textContent = categoryMap[app.category] || app.category || 'Uncategorized';
-            modalAppDescription.textContent = app.description || 'No description available.';
-            modalAppRating.textContent = `${app.rating || 'N/A'} (${app.ratingsCount || 0} ratings)`;
-
-            modalAppComments.innerHTML = '';
-            if (app.comments && app.comments.length > 0) {
-                 modalAppComments.innerHTML = app.comments.map(comment => `
-                    <div class="comment">
-                        <p class="comment-author">${comment.author || 'Anonymous'}</p>
-                        <p class="comment-text">${comment.text || ''}</p>
-                    </div>
-                `).join('');
-            } else {
-                modalAppComments.innerHTML = '<p class="text-sm text-gray-500 italic">No comments yet.</p>';
-            }
-
-            appDetailsModal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-
-        // --- Event Listeners for Modal ---
-         if (closeModalButton && appDetailsModal) {
-             closeModalButton.addEventListener('click', () => {
-                appDetailsModal.classList.remove('show');
-                document.body.style.overflow = '';
-            });
-            appDetailsModal.addEventListener('click', (event) => {
-                if (event.target === appDetailsModal) {
-                    appDetailsModal.classList.remove('show');
-                    document.body.style.overflow = '';
-                }
-            });
-         }
-
-
-        // --- Function to Filter Apps by Category ---
-        function filterApps(category) {
-             const marketplaceView = document.getElementById('marketplace-view');
-             if (!marketplaceView || !marketplaceView.classList.contains('active')) {
-                 // If not on marketplace view, switch to it first
-                 switchView('marketplace-view');
-                 // We need a slight delay to allow the view switch and then apply filter
-                 setTimeout(() => filterApps(category), 50); // Re-call after short delay
-                 return;
-             }
-
-            filteredCategory = category;
-            if (filterOptions) {
-                filterOptions.forEach(option => {
-                    option.classList.toggle('active', option.dataset.category === category);
-                });
-            }
-            const appsToDisplay = (category === 'all')
-                ? appData
-                : appData.filter(app => app.category === category);
-
-            // When filtering, hide static sections and show the dynamic grid
-            const staticSections = marketplaceView.querySelectorAll(':scope > section'); // Select direct children sections
-            staticSections.forEach(sec => sec.style.display = 'none');
-            appListContainer?.classList.remove('hidden'); // Show the dynamic grid
-            displayApps(appsToDisplay); // Populate the dynamic grid with filtered apps
-
-            if (aiResponseArea) {
-                aiResponseArea.style.display = 'none';
-                aiResponseArea.innerHTML = '';
-            }
-        }
-
-
-        // --- Add Event Listeners to Filter Options ---
-        if (filterOptions && filterDropdown) {
-             filterOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    // Filtering now implies showing the dynamic grid, not the static sections
-                    filterApps(option.dataset.category);
-                    filterDropdown.classList.remove('show');
-                });
-            });
-        }
-
-
-        // --- Function to Handle AI Search Query ---
-         function handleAiSearch(query) {
-            if (!aiResponseArea) return;
-            aiResponseArea.innerHTML = '';
-            aiResponseArea.classList.add('loading');
-            aiResponseArea.style.display = 'block';
-
-            setTimeout(() => {
-                aiResponseArea.classList.remove('loading');
-                const lowerCaseQuery = query.toLowerCase().trim();
-                let response = "";
-
-                if (!lowerCaseQuery) {
-                    response = "Please ask a question or tell me what you're looking for (e.g., 'imaging solutions', 'drug discovery tools').";
-                } else {
-                    // UPDATED: Search includes case study fields now
-                    const foundApps = appData.filter(app => {
-                         const fullCategoryName = (categoryMap[app.category] || app.category).toLowerCase();
-                         const titleMatch = app.title?.toLowerCase().includes(lowerCaseQuery);
-                         const descMatch = app.description?.toLowerCase().includes(lowerCaseQuery);
-                         const catMatch = app.category?.toLowerCase().includes(lowerCaseQuery);
-                         const catNameMatch = fullCategoryName.includes(lowerCaseQuery);
-                         // Case Study Search
-                         const csProblemMatch = app.caseStudy?.problem?.toLowerCase().includes(lowerCaseQuery);
-                         const csSolutionMatch = app.caseStudy?.solution?.toLowerCase().includes(lowerCaseQuery);
-                         const csImprovementMatch = app.caseStudy?.improvement?.toLowerCase().includes(lowerCaseQuery);
-                         const csCountryMatch = app.caseStudy?.country?.toLowerCase().includes(lowerCaseQuery);
-
-                         return titleMatch || descMatch || catMatch || catNameMatch || csProblemMatch || csSolutionMatch || csImprovementMatch || csCountryMatch;
-                    });
-
-                    if (foundApps.length > 0) {
-                        // Don't switch view, just show results. User can click to see details.
-                        response = `I found ${foundApps.length} app(s) related to "${query}":<br><ul>`;
-                        foundApps.forEach(app => {
-                            response += `<li class="mt-2"><a href="#" data-appid="${app.id}" class="ai-result-link">${app.title}</a> <span class="ai-result-category">(${categoryMap[app.category] || app.category})</span></li>`;
-                        });
-                        response += "</ul><p class='mt-3 text-sm text-gray-600'>Click on an app name to see details.</p>";
-                    } else {
-                        response = `Sorry, I couldn't find any apps matching "${query}". Try searching for categories like 'Diagnostics', 'Clinical Decision', 'Patient Engagement', 'Operational Efficiency', or 'Drug Discovery'.`;
-                    }
-                }
-                aiResponseArea.innerHTML = response;
-            }, 800);
-        }
-
-
-        // --- Event Listeners for AI Search ---
-        if (aiSearchButton && aiSearchInput && aiResponseArea) {
-            aiSearchButton.addEventListener('click', () => handleAiSearch(aiSearchInput.value));
-            aiSearchInput.addEventListener('keypress', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    handleAiSearch(aiSearchInput.value);
-                }
-            });
-            aiResponseArea.addEventListener('click', (event) => {
-                if (event.target.classList.contains('ai-result-link')) {
-                    event.preventDefault();
-                    const app = appData.find(a => a.id === event.target.dataset.appid);
-                    if (app) showAppDetails(app);
-                }
-            });
-        }
-
-
-         // --- Navigation / View Switching Logic ---
-          function switchView(targetViewId) {
-             if (appTooltip) {
-                appTooltip.style.opacity = '0'; appTooltip.style.visibility = 'hidden'; clearTimeout(tooltipTimeout);
-             }
-
-             if (viewSections) {
-                viewSections.forEach(section => section.classList.remove('active'));
-             }
-             const targetView = document.getElementById(targetViewId);
-             if (targetView) targetView.classList.add('active');
-
-             if (navLinks) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    // Check data-target for internal links, href for external (though active state won't apply to external)
-                    if (link.dataset.target === targetViewId || (targetViewId === 'marketplace-view' && link.classList.contains('header-title'))) {
-                        link.classList.add('active');
-                    }
-                });
-             }
-
-             if (filterDropdown) {
-                const filterContainer = filterDropdown.parentElement;
-                if (filterContainer) {
-                    // Show filter/search always now, filter button only shown via CSS below
-                     filterContainer.style.display = 'flex';
-                }
-                 // Hide filter specifically if not on marketplace view
-                if (targetViewId !== 'marketplace-view') {
-                    filterDropdown.style.display = 'none';
-                     filterDropdown.classList.remove('show'); // Close dropdown if open
-                } else {
-                     filterDropdown.style.display = 'inline-block'; // Show filter only on marketplace
-                }
-             }
-
-
-             // Populate content only when switching to view and if empty
-             if (targetViewId === 'casestudies-view' && caseStudiesStoryContainer && !caseStudiesStoryContainer.hasChildNodes()) {
-                 displayCaseStudies();
-             } else if (targetViewId === 'agents-view' && agentListContainer && !agentListContainer.hasChildNodes()) {
-                 displayAgents();
-             } else if (targetViewId === 'marketplace-view') {
-                 // If switching back to marketplace, ensure static sections are visible
-                 // and dynamic grid is hidden (unless filtering was applied previously)
-                 const marketplaceView = document.getElementById('marketplace-view');
-                 if(marketplaceView){
-                     const staticSections = marketplaceView.querySelectorAll(':scope > section');
-                     staticSections.forEach(sec => sec.style.display = 'block'); // Or 'grid'/'flex' as appropriate
-                     appListContainer?.classList.add('hidden'); // Hide dynamic grid
-                     noAppsMessage?.classList.add('hidden');
-                     // Reset filter dropdown to 'All Categories' visually
-                      if (filterOptions) {
-                        filterOptions.forEach(option => option.classList.remove('active'));
-                        document.querySelector('#filter-dropdown ul li[data-category="all"]')?.classList.add('active');
-                      }
-                      filteredCategory = 'all';
-                 }
-             }
-
-
-             if (aiResponseArea) {
-                aiResponseArea.style.display = 'none';
-                aiResponseArea.innerHTML = '';
-             }
-         }
-
-
-         // --- Add Event Listeners to Navigation Links ---
-         if (navLinks) {
-             navLinks.forEach(link => {
-                 // Only add JS listener for internal links (those with data-target)
-                 if (link.dataset.target) {
-                     link.addEventListener('click', (event) => {
-                         event.preventDefault();
-                         const targetViewId = link.dataset.target || 'marketplace-view';
-                         // Update hash only for internal navigation
-                         window.location.hash = targetViewId === 'marketplace-view' ? '' : `#${link.getAttribute('href').substring(1)}`;
-                         switchView(targetViewId);
-                     });
-                 }
-                 // For external links, ensure they open in new tab if desired
-                 else if (link.getAttribute('href').startsWith('http')) {
-                     link.setAttribute('target', '_blank');
-                     link.setAttribute('rel', 'noopener noreferrer');
-                 }
-             });
-         }
-
-
-        // --- Initialisation on Page Load ---
+        // JavaScript for Expand/Collapse functionality
         document.addEventListener('DOMContentLoaded', () => {
-            try { // Wrap initialization in try-catch
-                const hash = window.location.hash.substring(1);
-                let initialViewId = 'marketplace-view';
-                // Find the nav link corresponding to the hash *that has a data-target*
-                const activeNavLink = navLinks ? Array.from(navLinks).find(link => link.getAttribute('href') === `#${hash}` && link.dataset.target) : null;
-                if(activeNavLink && activeNavLink.dataset.target) {
-                    initialViewId = activeNavLink.dataset.target;
+            try { // Add error handling
+                const expandButtons = document.querySelectorAll('.expand-case-study-btn');
+                if (!expandButtons || expandButtons.length === 0) { // Check if buttons exist
+                    console.warn("No expand buttons found on this page.");
+                    return;
                 }
 
-                switchView(initialViewId); // Activate the initial view
+                expandButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const targetId = button.dataset.target;
+                        if (!targetId) {
+                            console.error("Button missing data-target attribute:", button);
+                            return;
+                        }
+                        const targetElement = document.getElementById(targetId);
 
-                // Populate the initial view IF it's not the static marketplace view
-                if (initialViewId === 'casestudies-view') {
-                    displayCaseStudies();
-                } else if (initialViewId === 'agents-view') {
-                    displayAgents();
-                } else if (initialViewId === 'marketplace-view') {
-                     // Marketplace view is now static, no initial JS population needed for it
-                     // Ensure filter is set correctly
-                     if (filterOptions) {
-                        filterOptions.forEach(option => option.classList.toggle('active', option.dataset.category === 'all'));
-                    }
-                }
+                        if (targetElement) {
+                            const isExpanded = targetElement.classList.contains('expanded');
 
-                // Fade out loading screen
-                const loadingScreen = document.getElementById('loading-screen');
-                if (loadingScreen) {
-                    setTimeout(() => {
-                        loadingScreen.classList.add('fade-out');
-                        setTimeout(() => loadingScreen.remove(), 700);
-                    }, 100);
-                }
-             } catch (error) {
-                 console.error("Error during initial page load:", error);
+                            if (isExpanded) {
+                                // Collapse
+                                targetElement.classList.remove('expanded');
+                                targetElement.style.maxHeight = '0';
+                                button.textContent = 'Read Case Study';
+                                button.setAttribute('aria-expanded', 'false');
+                            } else {
+                                // Expand
+                                targetElement.classList.add('expanded');
+                                // Set max-height to scrollHeight to fit content dynamically
+                                targetElement.style.maxHeight = targetElement.scrollHeight + 'px';
+                                button.textContent = 'Hide Case Study';
+                                button.setAttribute('aria-expanded', 'true');
+
+                                // Optional: Reset max-height after transition for flexibility
+                                targetElement.addEventListener('transitionend', () => {
+                                    // Check if still expanded before setting maxHeight to null
+                                    if (targetElement.classList.contains('expanded')) {
+                                        // Setting to null allows height to adjust if content changes later
+                                        targetElement.style.maxHeight = null;
+                                    }
+                                }, { once: true });
+                            }
+                        } else {
+                            console.error(`Target element with ID ${targetId} not found.`);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error("Error setting up expand/collapse functionality:", error);
                  const body = document.querySelector('body');
                  if (body) {
-                     body.innerHTML = '<p style="padding: 20px; text-align: center; color: red;">Sorry, the application could not be loaded. Please check the console for errors.</p>';
+                     // Avoid wiping the whole body if just the script fails
+                     console.error("Expand/collapse feature failed to initialize.");
                  }
-                 const loadingScreen = document.getElementById('loading-screen');
-                 if (loadingScreen) loadingScreen.remove();
-             }
+            }
         });
-
-
-        // --- Filter Dropdown Toggle & Close Logic ---
-        if (filterDropdown) {
-            const filterButton = filterDropdown.querySelector('button');
-            if (filterButton) {
-                filterButton.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    filterDropdown.classList.toggle('show');
-                });
-            }
-            document.addEventListener('click', (event) => {
-                if (filterDropdown && !filterDropdown.contains(event.target)) {
-                    filterDropdown.classList.remove('show');
-                }
-            });
-        }
-
-      } catch (e) { // Catch errors during script setup phase
-            console.error("Critical error during script setup:", e);
-            const body = document.querySelector('body');
-            if (body) {
-                 body.innerHTML = '<p style="padding: 20px; text-align: center; color: red;">A critical error occurred while setting up the page. Please check the console.</p>';
-            }
-            const loadingScreen = document.getElementById('loading-screen');
-            if (loadingScreen) loadingScreen.remove();
-      }
-
     </script>
+
 </body>
 </html>
