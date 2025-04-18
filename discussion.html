@@ -162,6 +162,11 @@
             padding: 1.5rem;
             margin-bottom: 1rem;
             box-shadow: var(--shadow-color);
+            opacity: 0; /* Start hidden for animation */
+            animation: fadeInPost 0.5s ease forwards;
+        }
+        @keyframes fadeInPost {
+            to { opacity: 1; }
         }
         .forum-post-title {
             font-size: 1.2rem;
@@ -185,6 +190,8 @@
             color: var(--text-secondary);
             line-height: 1.6;
             margin-bottom: 1rem;
+            white-space: pre-wrap; /* Preserve line breaks from textarea */
+            word-wrap: break-word; /* Break long words */
         }
         .forum-post-footer {
             font-size: 0.85rem;
@@ -312,8 +319,7 @@
 
             <div class="ask-question-form">
                 <h3 class="text-lg font-semibold mb-4">Ask a Question</h3>
-                <p class="text-sm text-muted mb-4">Note: This form is a visual representation. Posting is not functional.</p>
-                <form onsubmit="return false;"> <div>
+                <form id="ask-question-form"> <div>
                         <label for="question-title">Title / Subject:</label>
                         <input type="text" id="question-title" name="question-title" placeholder="Enter a clear title for your question" required>
                     </div>
@@ -326,26 +332,8 @@
             </div>
 
             <h3 class="text-lg font-semibold mb-4 mt-6">Recent Discussions</h3>
-            <div class="forum-posts-list">
-                <div class="forum-post">
-                    <a href="#" class="forum-post-title">How to integrate Agent X with our existing EHR?</a>
-                    <p class="forum-post-meta">Asked by User123 on April 17, 2025</p>
-                    <p class="forum-post-snippet">We are considering using the Agent X for operational efficiency but need details on the integration process with Cerner...</p>
-                    <p class="forum-post-footer">2 Replies</p>
+            <div id="forum-posts-list-container" class="forum-posts-list">
                 </div>
-                <div class="forum-post">
-                    <a href="#" class="forum-post-title">Best practices for evaluating diagnostic AI accuracy?</a>
-                    <p class="forum-post-meta">Asked by ClinicianPro on April 16, 2025</p>
-                    <p class="forum-post-snippet">What metrics and methodologies are recommended for validating the real-world accuracy of diagnostic imaging agents before deployment?</p>
-                    <p class="forum-post-footer">5 Replies</p>
-                </div>
-                 <div class="forum-post">
-                    <a href="#" class="forum-post-title">Data privacy concerns with patient engagement bots?</a>
-                    <p class="forum-post-meta">Asked by PrivacyAdvocate on April 15, 2025</p>
-                    <p class="forum-post-snippet">How do the patient engagement agents handle HIPAA compliance and ensure patient data security during automated interactions?</p>
-                    <p class="forum-post-footer">1 Reply</p>
-                </div>
-            </div>
         </section>
 
         <section id="faq-section">
@@ -402,56 +390,102 @@
     </main>
 
     <script>
-        // JavaScript for FAQ Expand/Collapse functionality
         document.addEventListener('DOMContentLoaded', () => {
-            try { // Add error handling
+            // --- FAQ Functionality ---
+            try {
                 const faqQuestions = document.querySelectorAll('.faq-question');
-                if (!faqQuestions || faqQuestions.length === 0) {
-                    console.warn("No FAQ questions found on this page.");
-                    return;
-                }
+                if (faqQuestions && faqQuestions.length > 0) {
+                     faqQuestions.forEach(button => {
+                        button.addEventListener('click', () => {
+                            const answer = button.nextElementSibling;
+                            const icon = button.querySelector('.faq-toggle-icon');
+                            const isExpanded = answer.classList.contains('expanded');
 
-                faqQuestions.forEach(button => {
-                    button.addEventListener('click', () => {
-                        const answer = button.nextElementSibling; // Get the answer div
-                        const icon = button.querySelector('.faq-toggle-icon');
-                        const isExpanded = answer.classList.contains('expanded');
+                            if (answer) {
+                                if (isExpanded) {
+                                    answer.classList.remove('expanded');
+                                    answer.style.maxHeight = '0';
+                                    button.setAttribute('aria-expanded', 'false');
+                                    button.classList.remove('active');
+                                    if(icon) icon.textContent = '+';
+                                } else {
+                                    answer.classList.add('expanded');
+                                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                                    button.setAttribute('aria-expanded', 'true');
+                                    button.classList.add('active');
+                                    if(icon) icon.textContent = '−';
 
-                        if (answer) {
-                            if (isExpanded) {
-                                // Collapse
-                                answer.classList.remove('expanded');
-                                answer.style.maxHeight = '0';
-                                button.setAttribute('aria-expanded', 'false');
-                                button.classList.remove('active'); // Remove active class from button
-                                if(icon) icon.textContent = '+';
+                                    answer.addEventListener('transitionend', () => {
+                                        if (answer.classList.contains('expanded')) {
+                                            answer.style.maxHeight = null;
+                                        }
+                                    }, { once: true });
+                                }
                             } else {
-                                // Expand
-                                answer.classList.add('expanded');
-                                // Set max-height to scrollHeight to fit content dynamically
-                                answer.style.maxHeight = answer.scrollHeight + 'px';
-                                button.setAttribute('aria-expanded', 'true');
-                                button.classList.add('active'); // Add active class to button
-                                if(icon) icon.textContent = '−'; // Use minus sign for expanded state
-
-                                // Optional: Reset max-height after transition for flexibility
-                                answer.addEventListener('transitionend', () => {
-                                    if (answer.classList.contains('expanded')) {
-                                        answer.style.maxHeight = null;
-                                    }
-                                }, { once: true });
+                                console.error("Could not find answer element for question:", button);
                             }
-                        } else {
-                            console.error("Could not find answer element for question:", button);
-                        }
+                        });
                     });
-                });
+                } else {
+                     console.warn("No FAQ questions found on this page.");
+                }
             } catch (error) {
                 console.error("Error setting up FAQ functionality:", error);
-                 const body = document.querySelector('body');
-                 if (body) {
-                     console.error("FAQ feature failed to initialize.");
-                 }
+            }
+
+            // --- Forum Post Functionality ---
+            try {
+                const forumForm = document.getElementById('ask-question-form');
+                const titleInput = document.getElementById('question-title');
+                const bodyInput = document.getElementById('question-body');
+                const postsListContainer = document.getElementById('forum-posts-list-container');
+
+                if (forumForm && titleInput && bodyInput && postsListContainer) {
+                    forumForm.addEventListener('submit', (event) => {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const title = titleInput.value.trim();
+                        const body = bodyInput.value.trim();
+
+                        // Basic validation
+                        if (!title || !body) {
+                            alert('Please enter both a title and your question.'); // Simple alert for now
+                            return;
+                        }
+
+                        // Create new post element
+                        const newPostElement = document.createElement('div');
+                        newPostElement.className = 'forum-post'; // Add animation class later if desired
+
+                        // Sanitize user input slightly (replace < > to prevent basic HTML injection)
+                        const sanitizedTitle = title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        const sanitizedBody = body.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                        // Use placeholders for dynamic data
+                        const postDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                        newPostElement.innerHTML = `
+                            <a href="#" class="forum-post-title">${sanitizedTitle}</a>
+                            <p class="forum-post-meta">Asked by You on ${postDate}</p>
+                            <p class="forum-post-snippet">${sanitizedBody}</p>
+                            <p class="forum-post-footer">0 Replies</p>
+                        `;
+
+                        // Add the new post to the top of the list
+                        postsListContainer.prepend(newPostElement);
+
+                        // Clear the form
+                        forumForm.reset();
+
+                        // Optional: scroll to the new post or provide other feedback
+                        newPostElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                    });
+                } else {
+                    console.error("Could not find all required forum elements (form, inputs, list container).");
+                }
+            } catch(error) {
+                 console.error("Error setting up forum posting functionality:", error);
             }
         });
     </script>
