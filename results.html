@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for the grey theme and enhanced dynamic feel */
+        :root {
+            /* Grey Palette */
+            --bg-main: #f1f3f5; /* Main background grey */
+            --header-bg: rgba(255, 255, 255, 0.9); /* White semi-transparent header */
+            --card-bg: #ffffff; /* White cards */
+            --card-hover-bg: #ffffff;
+            --story-bg: #ffffff; /* Background for story articles */
+            --frame-bg: #ffffff; /* Background for frame containers */
+            --tooltip-bg: rgba(33, 37, 41, 0.9); /* Dark tooltip */
+            --tooltip-text: #f8f9fa; /* Light tooltip text */
+            --text-primary: #212529; /* Very Dark Grey */
+            --text-secondary: #495057; /* Dark Grey */
+            --text-muted: #6c757d;   /* Medium Grey */
+            --border-color: #dee2e6; /* Light Grey Border */
+            --accent-color: #495057;  /* Dark Grey for accents */
+            --accent-hover-color: #212529; /* Very Dark Grey for hover */
+            --shadow-color: rgba(0, 0, 0, 0.07); /* Slightly softer shadow */
+            --star-color: #fbbc05;
+            --featured-color: #ffeb3b;
+            --link-color: #0d6efd; /* Standard blue link color */
+            --link-hover-color: #0a58ca;
+            --section-bg-light: #ffffff;
+            --section-bg-dark: #f8f9fa; /* Slightly off-white */
+        }
+
+        html {
+             scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            animation: fadeInBackground 1s ease forwards;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            color: var(--text-primary);
+        }
+
+        @keyframes fadeInBackground {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Loading Screen Styles */
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10000;
+            transition: opacity 0.7s ease-out;
+        }
+        #loading-screen.fade-out { opacity: 0; visibility: hidden; }
+        .loader {
+            border: 6px solid #e9ecef; border-top: 6px solid var(--accent-color);
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1.5s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            padding: 1rem 1.5rem;
+        }
+        .header-content {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            gap: 1rem; max-width: 1400px; margin: 0 auto;
+        }
+        .header-title {
+            font-size: 1.75rem; font-weight: 700; color: var(--text-primary);
+            margin: 0; flex-shrink: 0; text-decoration: none;
+        }
+        header nav { display: flex; gap: 1.5rem; margin: 0 auto; }
+        header nav a {
+            color: var(--text-secondary);
+            text-decoration: none; font-weight: 500; padding: 0.5rem 0; position: relative;
+            transition: color 0.3s ease; cursor: pointer;
+        }
+        header nav a::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+            background-color: var(--accent-color); transition: width 0.3s ease;
+        }
+        header nav a:hover,
+        header nav a.active { color: var(--text-primary); }
+        header nav a.active::after { width: 100%; }
+        .header-actions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+
+        /* Card Base Styles (Shared by App/Agent cards) */
+        .card-base {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
+            border: 1px solid var(--border-color);
+            position: relative;
+            opacity: 0; transform: translateY(10px);
+            animation: fadeInUp 0.5s ease forwards;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .card-base:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Entrance Animation */
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* App Card Specific Styles (Marketplace Grid & Agent List View) */
+        .app-card {
+            cursor: pointer; overflow: visible; /* Allow tooltip */
+        }
+        .app-card-content {
+             display: flex; align-items: flex-start; padding: 16px; flex-grow: 1;
+        }
+        .app-card .app-icon {
+            width: 65px; height: 65px; border-radius: 12px; margin-right: 16px;
+        }
+        .app-card .app-info { flex: 1; }
+        .app-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .app-category {
+            font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;
+            display: inline-block; padding: 3px 10px; border-radius: 12px;
+            background-color: #f1f3f5; line-height: 1.3;
+        }
+        .app-description {
+            font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;
+            /* Truncate description on cards */
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden; text-overflow: ellipsis; height: calc(1.5 * 3em);
+        }
+        .featured-app-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: linear-gradient(45deg, #fff176, #ffee58);
+            color: #5f4300; padding: 4px 10px; border-radius: 12px;
+            font-size: 0.7rem; font-weight: 700;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); z-index: 2;
+        }
+
+
+        /* Case Study View Styles */
+        #case-studies-frame { /* The outer frame for the case study view */
+            background-color: var(--frame-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px 30px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            margin-top: 1rem;
+        }
+        #category-filter-grid { /* 1xN grid for category filters */
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+         @media (min-width: 640px) { /* 3 columns on sm screens */
+            #category-filter-grid { grid-template-columns: repeat(3, 1fr); }
+         }
+         @media (min-width: 1024px) { /* 6 columns on lg screens */
+            #category-filter-grid { grid-template-columns: repeat(6, 1fr); }
+         }
+        .category-filter-btn {
+            background-color: #ffffff; border: 1px solid var(--border-color);
+            padding: 10px 15px; border-radius: 10px; text-align: center;
+            font-weight: 500; color: var(--text-secondary); cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .category-filter-btn:hover { background-color: #f8f9fa; color: var(--text-primary); }
+        .category-filter-btn.active { background-color: var(--accent-color); color: white; border-color: var(--accent-color); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        .case-study-layout { /* 2-column layout for content and index */
+            display: flex; flex-direction: column; gap: 2rem;
+        }
+         @media (min-width: 1024px) { .case-study-layout { flex-direction: row; } }
+
+        #case-study-display-area { flex: 3; min-width: 0; transition: opacity 0.3s ease-in-out; }
+        #case-study-display-area.loading { opacity: 0.5; }
+
+        #case-study-index { flex: 1; min-width: 220px; max-height: 75vh; overflow-y: auto; padding-right: 10px; border-left: 1px solid var(--border-color); padding-left: 1.5rem; }
+         @media (max-width: 1023px) { #case-study-index { max-height: 300px; border-left: none; border-top: 1px solid var(--border-color); padding-left: 0; padding-top: 1.5rem; } }
+        #case-study-index h4 { font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1rem; }
+        #case-study-index ul { list-style: none; padding: 0; margin: 0; }
+        #case-study-index li button { display: block; width: 100%; text-align: left; padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--text-secondary); font-size: 0.9rem; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
+        #case-study-index li button:hover { background-color: #e9ecef; color: var(--text-primary); }
+        #case-study-index li button.active { background-color: var(--accent-color); color: white; font-weight: 500; }
+        #case-study-index li button span { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        #case-study-index li button.active span { color: rgba(255,255,255,0.7); }
+
+        /* Case Study Story Styles (within display area) */
+        .case-study-story { padding: 0; margin-bottom: 0; opacity: 1; transform: none; animation: fadeInView 0.4s ease; }
+        .case-study-story h3 { font-size: 1.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; }
+        .case-study-story .app-icon { width: 45px; height: 45px; border-radius: 10px; margin-right: 15px; font-size: 18px; }
+        .case-study-story h4 { font-size: 1.15rem; font-weight: 600; color: var(--text-secondary); margin-top: 1.75rem; margin-bottom: 0.75rem; }
+        .case-study-story p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem; }
+        .case-study-story .outcome strong { color: var(--text-primary); font-weight: 600; }
+        .case-study-links { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+        .case-study-links a { display: inline-block; margin-right: 15px; color: var(--link-color); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s ease; }
+        .case-study-links a:hover { color: var(--link-hover-color); text-decoration: underline; }
+
+
+        /* Common Icon Styles */
+        .app-icon {
+            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
+            font-size: 22px; font-weight: 600; color: var(--text-secondary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); flex-shrink: 0; overflow: hidden;
+        }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+
+        /* Modal Styles */
+        #app-details-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(33, 37, 41, 0.75); backdrop-filter: blur(8px);
+            z-index: 10000; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        #app-details-modal.show { display: flex; opacity: 1; }
+        #app-details-content {
+            background: #ffffff; border-radius: 18px; padding: 40px; width: 90%; max-width: 850px;
+            max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            position: relative; transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #app-details-modal.show #app-details-content { transform: scale(1); }
+        #app-details-content h2 { font-size: 2rem; color: var(--text-primary); margin-bottom: 12px; font-weight: 700; }
+        #app-details-content .modal-app-category {
+            font-size: 0.95rem; margin-bottom: 24px; display: inline-block;
+            padding: 6px 12px; border-radius: 14px; background-color: #f1f3f5; color: var(--text-muted);
+        }
+        #app-details-content p#modal-app-description { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 28px; }
+        #app-details-content .close-button {
+            position: absolute; top: 20px; right: 20px; font-size: 2rem; font-weight: 300; color: #adb5bd;
+            cursor: pointer; transition: color 0.3s ease, transform 0.3s ease; border: none; background: none; padding: 0; line-height: 1;
+        }
+        #app-details-content .close-button:hover { color: #dc3545; transform: rotate(90deg) scale(1.1); }
+        .modal-app-icon {
+            width: 110px; height: 110px; border-radius: 20px; margin-right: 24px;
+            background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;
+            font-size: 32px; font-weight: 600; color: var(--text-secondary);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08); flex-shrink: 0; overflow: hidden;
+        }
+        .modal-app-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .user-rating { display: flex; align-items: center; margin-bottom: 12px; }
+        .star-icon { width: 22px; height: 22px; margin-right: 5px; color: var(--star-color); }
+        .rating-count { font-size: 0.95rem; color: var(--text-secondary); }
+        .comments-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+        .comment { padding: 14px; margin-bottom: 14px; border-radius: 10px; background-color: #f8f9fa; border: 1px solid var(--border-color); }
+        .comment-author { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .comment-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
+
+        /* Filter Dropdown Styles */
+        #filter-dropdown { position: relative; display: inline-block; }
+        #filter-dropdown button {
+            background-color: #ffffff;
+            color: var(--text-secondary); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border-color);
+            cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+            display: flex; align-items: center;
+        }
+        #filter-dropdown button:hover {
+            background-color: #f8f9fa; color: var(--text-primary); box-shadow: 0 2px 5px var(--shadow-color);
+        }
+        #filter-dropdown button span { margin-right: 6px; }
+        #filter-dropdown ul {
+            position: absolute; top: calc(100% + 8px); right: 0;
+            background-color: #ffffff; border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); padding: 10px 0; list-style: none;
+            min-width: 260px; opacity: 0; visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 1001; border: 1px solid var(--border-color);
+        }
+        #filter-dropdown.show ul { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        #filter-dropdown ul li {
+            padding: 10px 18px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease; white-space: normal; line-height: 1.4;
+        }
+        #filter-dropdown ul li:hover { background-color: #f1f3f5; color: var(--text-primary); }
+        #filter-dropdown ul li.active { font-weight: 600; color: var(--text-primary); background-color: #e9ecef; }
+
+        /* AI Search Styles */
+        #ai-search-container {
+            display: flex; align-items: center; background-color: #ffffff;
+            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color);
+            flex-grow: 1; max-width: 400px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+         #ai-search-container:focus-within {
+            background-color: #ffffff; box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+        #ai-search-input {
+            flex-grow: 1; border: none; background: transparent; outline: none;
+            padding: 8px; font-size: 0.9rem; color: var(--text-primary);
+        }
+        #ai-search-input::placeholder { color: var(--text-muted); }
+        #ai-search-button {
+            background: none; border: none; cursor: pointer; padding: 6px; color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+        #ai-search-button:hover { color: var(--text-primary); }
+        #ai-response-area {
+            margin: 20px auto 0 auto; max-width: 1400px;
+            padding: 18px 24px; background: #ffffff;
+            border-radius: 14px; box-shadow: 0 5px 15px var(--shadow-color);
+            font-size: 1rem; color: var(--text-primary); line-height: 1.6; display: none;
+            border: 1px solid var(--border-color);
+        }
+        #ai-response-area.loading::after { content: 'Thinking...'; display: block; text-align: center; font-style: italic; color: var(--text-muted); margin-top: 12px; }
+        .ai-result-link { font-weight: 500; color: var(--link-color); text-decoration: none; transition: color 0.2s ease; }
+        .ai-result-link:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .ai-result-category { font-size: 0.9em; color: var(--text-muted); margin-left: 6px; }
+
+        /* No Apps/Agents Message & View Title Styles */
+        .no-apps-message, .no-agents-message, #no-search-results-msg {
+            text-align: center; font-size: 1.1rem; color: var(--text-muted);
+            margin-top: 50px; padding: 25px; border-radius: 14px;
+            background-color: #ffffff; border: 1px solid var(--border-color);
+        }
+        .view-title {
+            font-size: 2rem; font-weight: 600; color: var(--text-primary);
+            margin-bottom: 1.5rem; padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Main Content Area & View Switching Styles */
+        main {
+            flex: 1; padding: 0; /* Remove padding from main, apply to sections */
+            max-width: 100%; /* Allow sections to control width */
+            margin: 0 auto;
+            width: 100%; box-sizing: border-box;
+        }
+        .view-section { display: none; animation: fadeInView 0.5s ease forwards; padding: 1.5rem; } /* Add padding to view sections */
+        .view-section.active { display: block; }
+        @keyframes fadeInView {
+             from { opacity: 0; transform: translateY(10px); }
+             to { opacity: 1; transform: translateY(0); }
+        }
+        /* Grid layout */
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;
+        }
+        /* Specific styles for #app-list when visible */
+        #app-list:not(.hidden) {
+             padding: 2rem 0; /* Add vertical padding when shown */
+             max-width: 1400px; /* Ensure max-width */
+             margin: 0 auto; /* Center grid */
+        }
+
+
+        /* Apple-Inspired Section Styles */
+        .large-section {
+            padding: 4rem 2rem; /* Generous padding */
+            text-align: center;
+        }
+        .large-section.bg-light { background-color: var(--section-bg-light); }
+        .large-section.bg-dark { background-color: var(--section-bg-dark); }
+
+        .section-title {
+            font-size: 2.5rem; /* Larger title */
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+         .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px; /* Constrain width */
+            margin: 0 auto 2.5rem auto; /* Center and add bottom margin */
+            line-height: 1.6;
+        }
+
+        /* Featured Agent Card Styles */
+        .featured-agent-card {
+            background-color: var(--card-bg);
+            border-radius: 20px; /* More rounded */
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        .featured-agent-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+        .featured-agent-card .app-icon {
+            width: 80px; height: 80px; margin: 0 auto 1.5rem auto; /* Center icon */
+            border-radius: 18px; font-size: 28px;
+        }
+        .featured-agent-card .app-title {
+            font-size: 1.5rem; margin-bottom: 0.5rem;
+        }
+        .featured-agent-card .app-category {
+             font-size: 0.9rem; margin-bottom: 1rem;
+        }
+        .featured-agent-card .app-description {
+            font-size: 0.95rem; height: auto; /* Allow full description */
+             -webkit-line-clamp: unset;
+             margin-bottom: 1.5rem;
+        }
+         .featured-agent-card .learn-more-link {
+             font-weight: 500; color: var(--link-color); text-decoration: none;
+         }
+         .featured-agent-card .learn-more-link:hover {
+             color: var(--link-hover-color); text-decoration: underline;
+         }
+
+        /* Category Showcase Card Styles */
+        .category-showcase-card {
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+             border: 1px solid var(--border-color);
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             justify-content: center;
+             min-height: 250px; /* Ensure cards have some height */
+        }
+         .category-showcase-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .category-showcase-card .category-icon { /* Placeholder for category icon */
+             font-size: 2.5rem;
+             margin-bottom: 1rem;
+             color: var(--accent-color);
+        }
+        .category-showcase-card .category-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+         .category-showcase-card .category-card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+             flex-grow: 1; /* Allow desc to take space */
+             margin-bottom: 1rem;
+        }
+         .category-showcase-card .learn-more-link {
+             font-weight: 500; color: var(--link-color); text-decoration: none; font-size: 0.9rem;
+         }
+         .category-showcase-card .learn-more-link:hover {
+             color: var(--link-hover-color); text-decoration: underline;
+         }
+
+         /* Frame container - Used for multiple views */
+        .content-frame { /* Renamed for general use */
+            background-color: var(--frame-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px 30px; /* Internal padding */
+            box-shadow: 0 5px 15px var(--shadow-color);
+            margin-top: 1rem; /* Space below section title */
+            margin-bottom: 1rem; /* Space below frame */
+        }
+
+
+        /* Tooltip Styles */
+        #app-tooltip {
+            position: absolute; background-color: var(--tooltip-bg); color: var(--tooltip-text);
+            padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; line-height: 1.4;
+            z-index: 11000; opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.2s ease; max-width: 250px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+         #app-tooltip h3 { font-weight: 600; margin: 0 0 4px 0; font-size: 0.9rem; color: #ffffff; }
+         #app-tooltip p { margin: 0; }
+         #app-tooltip .tooltip-category { color: #ced4da; margin-bottom: 3px; }
+         #app-tooltip .tooltip-rating { color: var(--star-color); }
+
+        /* Responsive Design Adjustments */
+        @media (max-width: 1024px) {
+            .header-content { justify-content: space-between; }
+            header nav { order: 3; width: 100%; justify-content: center; margin-top: 0.5rem; gap: 1rem;}
+            .header-actions { order: 2; }
+            .header-title { order: 1; }
+            #ai-search-container { max-width: 300px; }
+            .section-title { font-size: 2rem; }
+            .section-subtitle { font-size: 1.1rem; }
+            .case-study-layout { flex-direction: column; } /* Stack columns earlier */
+            #case-study-index { max-height: 300px; border-left: none; border-top: 1px solid var(--border-color); padding-left: 0; padding-top: 1.5rem; }
+        }
+        @media (max-width: 768px) {
+            header { padding: 0.75rem 1rem; }
+            .header-title { font-size: 1.5rem; }
+            header nav { gap: 0.75rem; }
+            header nav a { font-size: 0.9rem; padding: 0.3rem 0; }
+            .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
+             #ai-search-container { width: 100%; max-width: none; order: 1; margin-right: 0; }
+             #filter-dropdown { order: 2; }
+             #filter-dropdown button { padding: 8px 16px; }
+             main { padding: 0; } /* Remove main padding, handled by sections */
+             .view-section { padding: 1rem; } /* Adjust view padding */
+             .large-section { padding: 3rem 1rem; }
+             .grid { grid-template-columns: 1fr; gap: 20px; } /* Stack grids on small screens */
+             #app-list:not(.hidden) { padding: 2rem 0; } /* Adjust dynamic grid padding */
+             #app-details-content { padding: 25px; }
+             #app-details-content h2 { font-size: 1.6rem; }
+             #app-tooltip { display: none; }
+             .view-title { font-size: 1.5rem; margin-bottom: 1rem; padding: 0;} /* Remove padding from view titles */
+             .case-study-story { padding: 15px 20px; }
+             .section-title { font-size: 1.8rem; }
+             .section-subtitle { font-size: 1rem; }
+             .featured-agent-card { padding: 1.5rem; }
+             .category-showcase-card { padding: 1.5rem; min-height: 200px;}
+             .content-frame { padding: 15px 20px; } /* Adjust frame padding */
+             #category-filter-grid { grid-template-columns: repeat(2, 1fr); } /* Ensure 2 columns on small */
+        }
+
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <a href="https://synapster.analystx.uk/" class="header-title site-nav-link" data-target="marketplace-view">AI Agent Marketplace</a>
+            <nav>
+                <a href="https://synapster.analystx.uk/cs.html" class="site-nav-link" >Case Studies</a>
+                <a href="https://synapster.analystx.uk/agents.html" class="site-nav-link" >Agents List</a>
+                <a href="https://synapster.analystx.uk/discussion.html" class="site-nav-link" >Forum</a> <a href="https://synapster.analystx.uk/about.html" class="site-nav-link" data-target="about-view">About Us</a>
+            </nav>
+            <div class="header-actions">
+                <div id="ai-search-container">
+                    <input type="text" id="ai-search-input" placeholder="Ask the AI Agent...">
+                    <button id="ai-search-button" aria-label="Search">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                </div>
+                <div id="filter-dropdown">
+                    <button>
+                        <span>Filter</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>
+                    </button>
+                    <ul>
+                        <li data-category="all">All Categories</li>
+                        <li data-category="diagnostics-imaging">Diagnostics & Imaging Solutions</li>
+                        <li data-category="clinical-decision">Clinical Decision Support & Triage</li>
+                        <li data-category="patient-engagement">Patient Engagement & Remote Care</li>
+                        <li data-category="operational-efficiency">Operational Efficiency & Administration</li>
+                        <li data-category="drug-discovery">Drug Discovery & Research</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ai-response-area"></div>
+    </header>
+
+    <main>
+        <div id="marketplace-view" class="view-section active">
+             <div class="content-frame">
+                <section class="large-section bg-dark text-center !p-0"> <h2 class="section-title">Discover the Future of AI Agents</h2>
+                    <p class="section-subtitle">
+                        Explore a curated marketplace of cutting-edge AI agents designed to revolutionise industries. From healthcare diagnostics to operational efficiency, find intelligent solutions tailored to your needs.
+                    </p>
+                </section>
+
+                <section class="large-section bg-light !p-0 mt-8"> <h2 class="section-title">Featured Agents</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                        <div class="featured-agent-card">
+                             <div class="app-icon mx-auto mb-6">ZMV</div>
+                             <h3 class="app-title">Zebra Medical Vision</h3>
+                             <p class="app-category">Diagnostics & Imaging Solutions</p>
+                             <p class="app-description">Enhances medical imaging diagnostics with AI-driven solutions, improving accuracy and accessibility.</p>
+                             <a href="#" class="learn-more-link" onclick="showAppDetails(appData.find(app => app.id === 'diag01')); return false;">Learn More &rarr;</a>
+                        </div>
+                        <div class="featured-agent-card">
+                             <div class="app-icon mx-auto mb-6">ATW</div>
+                             <h3 class="app-title">Atomwise</h3>
+                             <p class="app-category">Drug Discovery & Research</p>
+                             <p class="app-description">Leverages its AtomNet® AI platform for structure-based small molecule drug discovery, accelerating research.</p>
+                              <a href="#" class="learn-more-link" onclick="showAppDetails(appData.find(app => app.id === 'drug01')); return false;">Learn More &rarr;</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="large-section bg-light !p-0 mt-8"> <h2 class="section-title">Live Feed</h2>
+                    <p class="section-subtitle">See the latest updates, discussions, and agent additions.</p>
+                    <div id="rss-feed-content" class="max-w-4xl mx-auto text-left space-y-4">
+                        <p class="text-center text-gray-500 italic">Loading RSS feed...</p>
+                    </div>
+                </section>
+
+                 <section class="large-section bg-dark !p-0 mt-8"> <h2 class="section-title">Explore by Category</h2>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
+                             <a href="https://synapster.analystx.uk/clinical.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
+                              <a href="https://synapster.analystx.uk/drug.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
+                               <a href="https://synapster.analystx.uk/diagnostics.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
+                               <a href="https://synapster.analystx.uk/oe.html" target="_blank" rel="noopener noreferrer" class="learn-more-link">Explore &rarr;</a>
+                         </div>
+                     </div>
+                 </section>
+
+                 <div id="app-list" class="grid hidden">
+                     </div>
+                 <div id="no-apps-message" class="no-apps-message hidden" style="margin: 50px 1.5rem;">
+                     <p>No apps found matching the selected category.</p>
+                 </div>
+            </div> </div>
+
+        <div id="casestudies-view" class="view-section">
+             <div class="view-container max-w-7xl mx-auto py-8"> 
+                <div class="content-frame"> <h2 class="view-title">Case Studies</h2>
+                    <div id="category-filter-grid" class="mb-8">
+                        <button class="category-filter-btn active" data-category="all">All Case Studies</button>
+                         <button class="category-filter-btn" data-category="diagnostics-imaging">Diagnostics</button>
+                         <button class="category-filter-btn" data-category="clinical-decision">Clinical Decision</button>
+                         <button class="category-filter-btn" data-category="patient-engagement">Patient Engagement</button>
+                         <button class="category-filter-btn" data-category="operational-efficiency">Operations</button>
+                         <button class="category-filter-btn" data-category="drug-discovery">Research</button>
+                    </div>
+
+                    <div class="case-study-layout">
+                        <div id="case-study-display-area">
+                            <p class="text-center text-muted py-10">Select a case study from the index to view details.</p>
+                        </div>
+                        <div id="case-study-index">
+                            <h4>Case Study Index</h4>
+                            <ul id="case-study-index-list">
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <div id="agents-view" class="view-section">
+             <div class="view-container max-w-5xl mx-auto py-8"> {/* Container with padding */}
+                 <div class="content-frame"> <h2 class="view-title">Agents List</h2>
+                     <div class="grid" id="agent-list-grid">
+                         </div>
+                     <div id="no-agents-message" class="hidden"> <p>No agents found.</p>
+                     </div>
+                 </div>
+            </div>
+        </div>
+
+        <div id="about-view" class="view-section">
+             <div class="view-container max-w-5xl mx-auto py-8"> {/* Container with padding */}
+                 <div class="content-frame"> <h2 class="view-title">About Us</h2>
+                     <p class="text-center text-muted py-10">Information about the AI Agent Marketplace coming soon...</p>
+                 </div>
+            </div>
+        </div>
+
+        <div id="search-results-view" class="view-section">
+             <div class="view-container max-w-7xl mx-auto py-8"> {/* Container with padding */}
+                 <div class="content-frame"> <h2 class="view-title">Search Results</h2>
+                     <p id="search-query-display" class="mb-4 text-lg">Results for: <span class="font-semibold"></span></p>
+                     <div id="search-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                         </div>
+                     <div id="no-search-results-msg" class="no-apps-message hidden">
+                         <p>No agents found matching your search.</p>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="app-details-modal">
+        <div id="app-details-content">
+            <button class="close-button" id="close-modal-button" aria-label="Close modal">&times;</button>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center mb-6">
+                <div class="modal-app-icon" id="modal-app-icon"></div>
+                <div class="ml-0 sm:ml-6 mt-4 sm:mt-0">
+                    <h2 id="modal-app-title">App Title</h2>
+                    <p id="modal-app-category" class="modal-app-category">Category</p>
+                </div>
+            </div>
+            <p id="modal-app-description" class="mb-6">App Description</p>
+            <div class="app-details">
+                <div class="user-rating mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="lucide lucide-star star-icon"><path d="M12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2Z"/></svg>
+                    <span id="modal-app-rating" class="rating-count ml-1">4.5 (120 ratings)</span>
+                </div>
+                <div class="comments-section">
+                    <h3 class="text-lg font-semibold mb-4">User Comments</h3>
+                    <div id="modal-app-comments"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-tooltip"></div>
+
+    <script>
+      try { // Add error handling wrapper
+        console.log("Script execution started."); // Debug log
+
+        // --- Category Mapping (Slug to Full Name) ---
+        const categoryMap = {
+            'all': 'All Categories',
+            'diagnostics-imaging': 'Diagnostics & Imaging Solutions',
+            'clinical-decision': 'Clinical Decision Support & Triage',
+            'patient-engagement': 'Patient Engagement & Remote Care',
+            'operational-efficiency': 'Operational Efficiency & Administration',
+            'drug-discovery': 'Drug Discovery & Research'
+        };
+
+        // --- Application Data ---
+        const appData = [
+             // Diagnostics & Imaging Solutions
+            {
+                id: 'diag01', title: 'Zebra Medical Vision', category: 'diagnostics-imaging',
+                description: 'Develops AI solutions to enhance medical imaging diagnostics, aiming to improve accuracy and speed up decision-making for clinicians.',
+                rating: 4.7, ratingsCount: 280, comments: [{ author: 'Radiologist A', text: 'Great tool for second opinions.' }, { author: 'Clinic B', text: 'Improved our workflow.' }],
+                icon: 'ZMV', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=ZMV', featured: true,
+                caseStudy: { country: 'United Kingdom', improvement: 'Reduced diagnostic report turnaround time by 25% in NHS trusts, leading to faster treatment decisions.', problem: 'Significant backlogs in interpreting diagnostic images (X-rays, CT scans) led to delays in patient diagnosis and treatment initiation. Radiologist workload was high, contributing to burnout.', solution: 'The AI platform was integrated into the existing PACS system, automatically analysing incoming scans, flagging potential abnormalities and prioritising urgent cases for radiologist review. The AI acted as a "second reader".'}
+            },
+            {
+                id: 'diag02', title: 'Rad AI', category: 'diagnostics-imaging',
+                description: 'Creates AI tools to automate tasks within radiology workflows, aiming to improve report speed, quality, and reduce errors.',
+                rating: 4.6, ratingsCount: 215, comments: [{ author: 'Tech Lead', text: 'Efficient automation.' }],
+                icon: 'RAI', iconUrl: 'https://placehold.co/80x80/CED4DA/ffffff?text=RAI', featured: false,
+                caseStudy: { country: 'USA', improvement: 'Automated report generation saved radiologists an average of 60 minutes per day at a California-based health system.', problem: 'A large California-based health system struggled with the time radiologists spent on repetitive reporting tasks and ensuring consistent report quality, detracting from complex image interpretation.', solution: 'Rad AI\'s tools integrated into the workflow, automatically generating customisable report templates populated with data and standard language, reducing manual dictation and formatting time.'}
+            },
+             {
+                id: 'diag03', title: 'Gleamer', category: 'diagnostics-imaging',
+                description: 'Specialises in AI for radiology, particularly for detecting fractures and abnormalities in X-rays (e.g., BoneView).',
+                rating: 4.8, ratingsCount: 305, comments: [{ author: 'Ortho Specialist', text: 'Very accurate for fracture detection.' }],
+                icon: 'GLM', iconUrl: 'https://placehold.co/80x80/DEE2E6/495057?text=GLM', featured: false,
+                caseStudy: { country: 'France', improvement: 'Improved fracture detection accuracy by 15% in emergency rooms, reducing misdiagnosis rates.', problem: 'Emergency departments faced challenges with the speed and accuracy of preliminary fracture detection on X-rays, especially during busy periods, leading to missed fractures.', solution: 'BoneView was implemented alongside standard review, analysing X-rays and highlighting suspected fracture sites directly on the image, serving as a crucial aid for subtle or complex fractures.'}
+            },
+            // Clinical Decision Support & Triage
+            {
+                id: 'clin01', title: 'Pieces', category: 'clinical-decision',
+                description: 'An AI-powered clinical decision support system connecting health and social care data for comprehensive patient insights.',
+                rating: 4.5, ratingsCount: 190, comments: [{ author: 'Case Manager', text: 'Helps connect the dots.' }],
+                icon: 'PCS', iconUrl: 'https://placehold.co/80x80/6C757D/ffffff?text=PCS', featured: false,
+                caseStudy: { country: 'USA', improvement: 'Helped a Dallas hospital reduce readmission rates for high-risk patients by 18% through better care coordination.', problem: 'A major Dallas hospital identified high readmission rates among patients with complex conditions, often exacerbated by fragmented communication and siloed data.', solution: 'The Pieces platform integrated clinical and social determinants data, using AI to identify high-risk patients in real-time and alert care managers to specific needs, enabling proactive interventions.'}
+            },
+            {
+                id: 'clin02', title: 'Visiba', category: 'clinical-decision',
+                description: 'Offers AI-enabled triage technology (Visiba Triage) to route patients efficiently based on submitted symptoms.',
+                rating: 4.6, ratingsCount: 220, comments: [{ author: 'Urgent Care', text: 'Streamlines patient flow.' }, { author: 'Admin', text: 'Easy to implement.' }],
+                icon: 'VIS', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=VIS', featured: true,
+                caseStudy: { country: 'Sweden', improvement: 'Directed 30% more patients to the appropriate level of care (nurse, physio, GP) on first contact, optimising resource use.', problem: 'Urgent care centres faced high volumes and difficulties efficiently directing patients to the correct care pathway based on initial contact, causing bottlenecks.', solution: 'Patients used an online portal; Visiba Triage AI analysed symptoms, suggested urgency/diagnoses, and provided a structured summary to the clinical team for faster, informed routing decisions.'}
+            },
+             {
+                id: 'clin03', title: 'Klinik Healthcare Solutions', category: 'clinical-decision',
+                description: 'Provides AI-assisted online triage solutions for primary care to assess urgency and direct patients appropriately.',
+                rating: 4.4, ratingsCount: 175, comments: [{ author: 'GP Practice', text: 'Reduces phone calls.' }],
+                icon: 'KHS', iconUrl: 'https://placehold.co/80x80/CED4DA/495057?text=KHS', featured: false,
+                 caseStudy: { country: 'Finland', improvement: 'Reduced unnecessary GP appointments by 20% in primary care centres by accurately assessing patient needs online.', problem: 'Primary care centres were overwhelmed with high call volumes and administrative workload for booking and assessment, hindering timely patient access.', solution: 'The online platform allowed patients to submit enquiries; AI assessed urgency and directed the query to the most suitable resource (GP, nurse, pharmacist), reducing phone traffic.'}
+            },
+            // Patient Engagement & Remote Care
+            {
+                id: 'pat01', title: 'Memora Health', category: 'patient-engagement',
+                description: 'Uses an AI platform to automate patient care management, tracking, and engagement post-discharge.',
+                rating: 4.7, ratingsCount: 255, comments: [{ author: 'Hospital Discharge Team', text: 'Reduces readmissions.' }],
+                icon: 'MEM', iconUrl: 'https://placehold.co/80x80/DEE2E6/ffffff?text=MEM', featured: true,
+                caseStudy: { country: 'USA', improvement: 'Increased patient adherence to post-operative instructions by 40% through automated check-ins and reminders.', problem: 'A hospital system observed low adherence to complex post-operative instructions, leading to complications. Manual follow-up was difficult to scale.', solution: 'The platform automated SMS communication, sending personalised reminders and using AI chat for common questions, flagging concerns for clinical review.'}
+            },
+            {
+                id: 'pat02', title: 'Ada Health', category: 'patient-engagement',
+                description: 'Offers AI-powered health assessment and guidance tools for patients, helping them understand symptoms.',
+                rating: 4.8, ratingsCount: 350, comments: [{ author: 'Patient User', text: 'Helpful for initial checks.' }, { author: 'Health Advocate', text: 'Empowers patients.' }],
+                icon: 'ADA', iconUrl: 'https://placehold.co/80x80/E9ECEF/495057?text=ADA', featured: false,
+                caseStudy: { country: 'Germany', improvement: 'Provided preliminary symptom assessments for over 10 million users, guiding them towards appropriate care options.', problem: 'Patients often struggled to understand symptoms or determine the appropriate level of care needed, leading to inefficient use of emergency services or delayed care.', solution: 'The Ada app allowed users to input symptoms; AI asked relevant questions and provided reports outlining possible causes and recommended next steps.'}
+            },
+            {
+                id: 'pat03', title: 'Biofourmis', category: 'patient-engagement',
+                description: 'Combines AI with wearable tech for personalized predictive health analytics and remote monitoring.',
+                rating: 4.6, ratingsCount: 290, comments: [{ author: 'Cardiologist', text: 'Great for remote monitoring.' }],
+                icon: 'BIO', iconUrl: 'https://placehold.co/80x80/F8F9FA/6C757D?text=BIO', featured: false,
+                caseStudy: { country: 'Singapore', improvement: 'Enabled early detection of heart failure decompensation in remotely monitored patients, reducing hospitalisations by 30%.', problem: 'Detecting early signs of worsening chronic heart failure in remotely managed patients was challenging, often leading to avoidable emergency hospitalisations.', solution: 'Wearable sensors collected data analysed by the Biovitals® AI platform, which detected subtle changes indicating potential issues, alerting clinicians for proactive intervention.'}
+            },
+            // Operational Efficiency & Administration
+            {
+                id: 'ops01', title: 'Avaamo', category: 'operational-efficiency',
+                description: 'Provides conversational AI virtual assistants to streamline administrative tasks like scheduling and patient check-ins.',
+                rating: 4.5, ratingsCount: 180, comments: [{ author: 'Clinic Manager', text: 'Frees up front desk staff.' }],
+                icon: 'AVA', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=AVA', featured: false,
+                caseStudy: { country: 'India', improvement: 'Automated appointment scheduling for a large hospital network, reducing call centre volume by 35%.', problem: 'A large hospital network faced operational inefficiencies due to high call volumes for appointments and basic inquiries, straining staff resources.', solution: 'AI virtual assistants deployed on the website and phone system handled routine tasks like booking, FAQs, and pre-appointment guidance, freeing up staff.'}
+            },
+            {
+                id: 'ops02', title: 'AKASA', category: 'operational-efficiency',
+                description: 'Offers AI solutions for automating healthcare revenue cycle management (billing, coding, claims).',
+                rating: 4.6, ratingsCount: 200, comments: [{ author: 'Billing Dept', text: 'Reduced errors significantly.' }, { author: 'CFO', text: 'Improved revenue cycle.' }],
+                icon: 'AKA', iconUrl: 'https://placehold.co/80x80/6C757D/ffffff?text=AKA', featured: true,
+                caseStudy: { country: 'USA', improvement: 'Reduced claim denial rates by 22% and accelerated payment cycles for multiple healthcare providers.', problem: 'Healthcare providers experienced revenue loss and administrative burden due to medical coding errors, complex billing, and high claim denial rates.', solution: 'The AI platform integrated with EHR/billing systems to automate tasks, correct coding errors pre-submission, predict denials, and manage appeals.'}
+            },
+            {
+                id: 'ops03', title: 'Augmedix', category: 'operational-efficiency',
+                description: 'Uses AI and NLP to automate clinical documentation from doctor-patient conversations, reducing physician burnout.',
+                rating: 4.7, ratingsCount: 240, comments: [{ author: 'Physician', text: 'Saves me hours of paperwork.' }],
+                icon: 'AUG', iconUrl: 'https://placehold.co/80x80/CED4DA/495057?text=AUG', featured: false,
+                caseStudy: { country: 'USA', improvement: 'Saved primary care physicians an average of 2-3 hours per day on documentation, improving job satisfaction.', problem: 'Physicians reported high burnout levels largely due to the burden of clinical documentation within EHRs, reducing time for patient interaction.', solution: 'AI-assisted remote medical documentation specialists generated draft clinical notes in real-time during patient visits, which were then finalised, significantly cutting physician documentation time.'}
+            },
+            // Drug Discovery & Research
+            {
+                id: 'drug01', title: 'Atomwise', category: 'drug-discovery',
+                description: 'Leverages its AtomNet® AI platform for structure-based small molecule drug discovery.',
+                rating: 4.8, ratingsCount: 310, comments: [{ author: 'Researcher', text: 'Powerful platform.' }, { author: 'Pharma Partner', text: 'Accelerates discovery.' }],
+                icon: 'ATW', iconUrl: 'https://placehold.co/80x80/DEE2E6/ffffff?text=ATW', featured: true,
+                caseStudy: { country: 'Global (Partnerships)', improvement: 'Identified potential drug candidates for various targets significantly faster than traditional high-throughput screening methods.', problem: 'Traditional drug discovery faced bottlenecks in the early hit-finding stage due to the time and cost of high-throughput screening (HTS).', solution: 'The AtomNet® AI platform used deep learning to predict molecule binding affinity, identifying novel hit compounds faster and more cost-effectively than HTS.'}
+            },
+            {
+                id: 'drug02', title: 'Isomorphic Labs', category: 'drug-discovery',
+                description: 'Alphabet subsidiary focusing on applying AI to drug discovery, co-developed AlphaFold3.',
+                rating: 4.9, ratingsCount: 400, comments: [{ author: 'Scientist', text: 'Cutting-edge research.' }],
+                icon: 'ISO', iconUrl: 'https://placehold.co/80x80/E9ECEF/495057?text=ISO', featured: false,
+                caseStudy: { country: 'UK/Global', improvement: 'Advanced protein structure prediction capabilities (AlphaFold), fundamentally accelerating biological research worldwide.', problem: 'Determining the 3D structure of proteins experimentally was often slow, expensive, or impossible, hindering drug design and biological understanding.', solution: 'AI systems like AlphaFold were developed to predict protein structures accurately from amino acid sequences, providing invaluable tools for global researchers.'}
+            },
+            {
+                id: 'drug03', title: 'XtalPi', category: 'drug-discovery',
+                description: 'Combines AI, quantum physics, and robotics to accelerate pharmaceutical research and development.',
+                rating: 4.7, ratingsCount: 275, comments: [{ author: 'Lab Director', text: 'Innovative approach.' }],
+                icon: 'XTP', iconUrl: 'https://placehold.co/80x80/F8F9FA/6C757D?text=XTP', featured: false,
+                 caseStudy: { country: 'USA/China', improvement: 'Utilised AI and physics-based models to predict crystal structures, shortening pre-clinical development timelines.', problem: 'Predicting and controlling the solid-state properties (like crystal structure) of drug candidates was often a slow, trial-and-error process.', solution: 'The platform combined quantum physics calculations, AI predictions, and robotics to accurately predict solid-state properties, guiding experiments and optimising candidate selection.'}
+            },
+             {
+                id: 'drug04', title: 'Healx', category: 'drug-discovery',
+                description: 'Specialises in using AI for drug discovery specifically targeting rare diseases, aiming to find treatments faster.',
+                rating: 4.8, ratingsCount: 295, comments: [{ author: 'Patient Group', text: 'Giving hope for rare diseases.' }, { author: 'Biotech Investor', text: 'Strong mission and tech.' }],
+                icon: 'HLX', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=HLX', featured: true,
+                caseStudy: { country: 'UK', improvement: 'Identified potential treatments for rare diseases by repurposing existing drugs, moving candidates towards clinical trials faster.', problem: 'Developing treatments for rare diseases faced challenges due to small patient populations and the high cost/risk of traditional drug development.', solution: 'The Healnet AI platform analysed vast biomedical data to find non-obvious links between existing drugs and rare diseases, accelerating the identification of potential repurposed treatments.'}
+            },
+        ];
+
+
+        // --- DOM Element References ---
+        const appListContainer = document.getElementById('app-list');
+        const caseStudiesStoryContainer = document.getElementById('case-studies-story-container');
+        const agentListContainer = document.getElementById('agent-list-grid');
+        const noAgentsMessage = document.getElementById('no-agents-message');
+        const appDetailsModal = document.getElementById('app-details-modal');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const noAppsMessage = document.getElementById('no-apps-message');
+        const filterDropdown = document.getElementById('filter-dropdown');
+        const filterOptions = document.querySelectorAll('#filter-dropdown ul li');
+        const aiSearchInput = document.getElementById('ai-search-input');
+        const aiSearchButton = document.getElementById('ai-search-button');
+        const aiResponseArea = document.getElementById('ai-response-area');
+        const appTooltip = document.getElementById('app-tooltip');
+        const viewSections = document.querySelectorAll('.view-section');
+        const navLinks = document.querySelectorAll('.site-nav-link');
+        const caseStudyDisplayArea = document.getElementById('case-study-display-area'); // Ref for Case Study view
+        const caseStudyIndexList = document.getElementById('case-study-index-list'); // Ref for Case Study view
+        const categoryFilterGrid = document.getElementById('category-filter-grid'); // Ref for Case Study view
+        const searchResultsGrid = document.getElementById('search-results-grid'); // Ref for Search Results view
+        const noSearchResultsMsg = document.getElementById('no-search-results-msg'); // Ref for Search Results view
+        const searchQueryDisplaySpan = document.querySelector('#search-query-display span'); // Ref for Search Results view
+
+
+        // Check if critical elements exist
+        if (!appListContainer || !agentListContainer || !appDetailsModal || !filterDropdown || !appTooltip || !caseStudyDisplayArea || !caseStudyIndexList || !categoryFilterGrid || !searchResultsGrid || !noSearchResultsMsg || !searchQueryDisplaySpan) {
+            console.warn("Initialization Warning: One or more container elements might be missing (expected if not on relevant view).");
+        }
+
+        // --- State Variables ---
+        let filteredCategory = 'all';
+        let tooltipTimeout;
+        let currentCaseStudyCategory = 'all'; // State for case study filter
+
+        // --- Function to Display Apps (Marketplace View - Dynamic Grid Part) ---
+        function displayApps(apps) {
+            if (!appListContainer) { console.error("App list container not found"); return; }
+            appListContainer.innerHTML = '';
+            if (apps.length === 0) {
+                noAppsMessage?.classList.remove('hidden');
+                 appListContainer.classList.add('hidden');
+            } else {
+                noAppsMessage?.classList.add('hidden');
+                appListContainer.classList.remove('hidden');
+                apps.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+
+                apps.forEach((app, index) => {
+                    try {
+                        const appCard = document.createElement('div');
+                        appCard.className = 'app-card card-base';
+                        // Add animation delay with stagger effect
+                        appCard.style.animationDelay = `${index * 0.05}s`;
+                        appCard.dataset.appData = JSON.stringify(app);
+
+                        const featuredBadge = app.featured ? `<div class="featured-app-badge">Featured App</div>` : '';
+                        const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='22px'; this.parentElement.style.fontWeight='600';`;
+
+                        appCard.innerHTML = `
+                            ${featuredBadge}
+                            <div class="app-card-content">
+                                <div class="app-icon">
+                                    <img src="${app.iconUrl || '#'}" alt="${app.title || 'App'} icon" loading="lazy" onerror="${fallbackImage}">
+                                </div>
+                                <div class="app-info">
+                                    <h3 class="app-title">${app.title || 'Unknown Agent'}</h3>
+                                    <p class="app-category">${categoryMap[app.category] || app.category || 'Uncategorized'}</p>
+                                    <p class="app-description">${app.description || ''}</p>
+                                </div>
+                            </div>
+                        `;
+                        appCard.addEventListener('mouseenter', handleMouseEnter);
+                        appCard.addEventListener('mouseleave', handleMouseLeave);
+                        appCard.addEventListener('mousemove', handleMouseMove);
+                        appCard.addEventListener('click', () => showAppDetails(app));
+                        appListContainer.appendChild(appCard);
+                    } catch (e) {
+                        console.error("Error creating app card:", e, app);
+                    }
+                });
+            }
+        }
+
+        // --- Function to Display Agent List ---
+        function displayAgents() {
+            if (!agentListContainer) { console.error("Agent list container not found"); return; }
+            agentListContainer.innerHTML = '';
+            if (appData.length === 0) {
+                noAgentsMessage?.classList.remove('hidden');
+            } else {
+                noAgentsMessage?.classList.add('hidden');
+                const sortedAgents = [...appData].sort((a, b) => a.title.localeCompare(b.title));
+
+                sortedAgents.forEach((agent, index) => {
+                     try {
+                        const agentCard = document.createElement('div');
+                        agentCard.className = 'app-card card-base';
+                        agentCard.style.animationDelay = `${index * 0.05}s`;
+                        agentCard.dataset.appData = JSON.stringify(agent);
+
+                        const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${agent.icon || '?'}'; this.parentElement.style.fontSize='22px'; this.parentElement.style.fontWeight='600';`;
+
+                        agentCard.innerHTML = `
+                            <div class="app-card-content">
+                                <div class="app-icon">
+                                    <img src="${agent.iconUrl || '#'}" alt="${agent.title || 'Agent'} icon" loading="lazy" onerror="${fallbackImage}">
+                                </div>
+                                <div class="app-info">
+                                    <h3 class="app-title">${agent.title || 'Unknown Agent'}</h3>
+                                    <p class="app-category">${categoryMap[agent.category] || agent.category || 'Uncategorized'}</p>
+                                    <p class="app-description">${agent.description || ''}</p>
+                                </div>
+                            </div>
+                        `;
+                        agentCard.addEventListener('click', () => showAppDetails(agent));
+                        agentCard.addEventListener('mouseenter', handleMouseEnter);
+                        agentCard.addEventListener('mouseleave', handleMouseLeave);
+                        agentCard.addEventListener('mousemove', handleMouseMove);
+                        agentListContainer.appendChild(agentCard);
+                     } catch (e) {
+                         console.error("Error creating agent card:", e, agent);
+                     }
+                });
+            }
+        }
+
+
+         // --- Function to Display Case Studies (New Layout) ---
+         function displayCaseStudies(filterCategory = 'all') {
+            console.log("displayCaseStudies called with filter:", filterCategory);
+            if (!caseStudyIndexList || !caseStudyDisplayArea || !categoryFilterGrid) {
+                 console.error("Case study containers or filter grid not found!");
+                 return;
+            }
+
+            currentCaseStudyCategory = filterCategory; // Update state
+
+            // Filter apps that have case studies AND match the category filter
+            const appsWithStudies = appData.filter(app =>
+                app.caseStudy && (filterCategory === 'all' || app.category === filterCategory)
+            );
+
+            // --- Populate Index ---
+            populateIndex(appsWithStudies); // Pass filtered data to populateIndex
+
+             // --- Update Category Filter Buttons ---
+             const categoryButtons = categoryFilterGrid.querySelectorAll('.category-filter-btn');
+             categoryButtons.forEach(btn => {
+                 btn.classList.toggle('active', btn.dataset.category === filterCategory);
+             });
+
+        }
+
+        // --- Helper function to populate the index list ---
+        function populateIndex(studiesToIndex) {
+             if (!caseStudyIndexList || !caseStudyDisplayArea) return;
+             caseStudyIndexList.innerHTML = ''; // Clear previous index
+
+            if (studiesToIndex.length === 0) {
+                caseStudyIndexList.innerHTML = '<li class="text-muted text-sm p-3">No studies found for this category.</li>';
+                caseStudyDisplayArea.innerHTML = '<p class="text-center text-muted py-10">Select a category above or choose "All Case Studies".</p>'; // Clear display area
+            } else {
+                studiesToIndex.forEach((app, index) => {
+                    const listItem = document.createElement('li');
+                    const button = document.createElement('button');
+                    button.dataset.appid = app.id; // Store app ID
+                    button.innerHTML = `${app.title} <span>${categoryMap[app.category]}</span>`;
+                    button.addEventListener('click', handleIndexClick); // Add listener
+                    listItem.appendChild(button);
+                    caseStudyIndexList.appendChild(listItem);
+
+                    // Display the first study of the list by default
+                    if (index === 0) {
+                        displaySingleCaseStudy(app); // Display first item
+                         // Add timeout to ensure button exists before adding class
+                         setTimeout(() => button.classList.add('active'), 0);
+                    }
+                });
+            }
+        }
+
+
+        // --- Helper to display a single case study story ---
+        function displaySingleCaseStudy(app) {
+             if (!caseStudyDisplayArea || !app || !app.caseStudy) {
+                 if(caseStudyDisplayArea) caseStudyDisplayArea.innerHTML = '<p class="text-center text-muted py-10">Case study details not available.</p>';
+                 return;
+             };
+
+             console.log("Displaying case study for:", app.title); // Debug
+             caseStudyDisplayArea.classList.add('loading'); // Indicate loading start
+
+              const generateFictionalContent = (app) => {
+                const methodology = app.caseStudy.solution || `The ${app.title || 'AI'} platform was implemented within the client's existing infrastructure. It leveraged its core AI capabilities, processing relevant data streams (e.g., ${app.category === 'diagnostics-imaging' ? 'medical images, reports' : app.category === 'patient-engagement' ? 'wearable data, patient communications' : 'operational metrics, EHR data'}) to provide actionable insights. Integration with systems like PACS or EHR was established where necessary to ensure seamless workflow. Staff were trained on utilising the platform's outputs for enhanced decision-making.`;
+                const conclusion = `The deployment successfully addressed the core problem statement. Key outcomes included: ${app.caseStudy.improvement}. This demonstrates the effectiveness of ${app.title || 'the AI agent'} in enhancing healthcare efficiency and outcomes in ${app.caseStudy.country || 'this region'}.`;
+                const recommendation = `Based on the positive results observed in ${app.caseStudy.country || 'this study'}, wider adoption of ${app.title || 'this AI solution'} is recommended for similar healthcare settings facing challenges in ${categoryMap[app.category] || 'related fields'}. Further investigation into long-term cost-benefit analysis and patient satisfaction metrics would provide additional valuable insights.`;
+                const nextStep = `The next phase involves ongoing monitoring of key performance indicators to ensure sustained improvements. Potential expansions include integrating additional data sources or applying the AI agent to related clinical or operational areas. Continuous user feedback collection is planned to guide future refinements and updates to the platform.`;
+                const intro = `A leading healthcare provider in ${app.caseStudy.country || 'the region'} sought to innovate within the area of ${categoryMap[app.category] || 'healthcare services'}. Facing increasing demands and complexity, they partnered with ${app.title || 'an AI solutions provider'} to explore how artificial intelligence could address specific operational or clinical challenges and improve overall service delivery.`;
+
+                return { methodology, conclusion, recommendation, nextStep, intro };
+            };
+
+            const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='18px'; this.parentElement.style.fontWeight='600';`;
+            const fictional = generateFictionalContent(app);
+
+            // Build the story HTML
+            const storyHTML = `
+                <div class="case-study-story">
+                    <h3>
+                        <div class="app-icon">
+                             <img src="${app.iconUrl || '#'}" alt="${app.title || 'Agent'} icon" loading="lazy" onerror="${fallbackImage}">
+                        </div>
+                        ${app.title || 'Unknown Agent'} Case Study
+                    </h3>
+
+                    <h4>Introduction</h4>
+                    <p>${fictional.intro}</p>
+
+                    <h4>Problem Statement</h4>
+                    <p>${app.caseStudy.problem || 'Details not available.'}</p>
+
+                    <h4>Methodology</h4>
+                    <p>${fictional.methodology}</p>
+
+                    <h4>Conclusion & Outcome</h4>
+                    <p class="outcome">${fictional.conclusion}</p>
+
+                    <h4>Recommendation</h4>
+                    <p>${fictional.recommendation}</p>
+
+                    <h4>Next Steps</h4>
+                    <p>${fictional.nextStep}</p>
+
+                    <div class="case-study-links">
+                        <a href="https://synapster.analystx.uk/casestudy/${app.id}.html" target="_blank" rel="noopener noreferrer">Read Full Study</a>
+                        <a href="https://synapster.analystx.uk/product/${app.id}.html" target="_blank" rel="noopener noreferrer">Visit Product Page</a>
+                    </div>
+                </div>
+            `;
+             // Use a small timeout to allow the 'loading' class effect to be visible
+             setTimeout(() => {
+                caseStudyDisplayArea.innerHTML = storyHTML;
+                caseStudyDisplayArea.classList.remove('loading');
+             }, 100); // 100ms delay
+         }
+
+        // --- Event handler for case study index clicks ---
+        function handleIndexClick(event) {
+            const button = event.currentTarget;
+            const appId = button.dataset.appid;
+            const app = appData.find(a => a.id === appId); // Find in original appData
+
+            if (app) {
+                // Remove active class from all index buttons
+                caseStudyIndexList?.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                // Add active class to the clicked button
+                button.classList.add('active');
+                // Display the selected case study
+                displaySingleCaseStudy(app); // Pass the full app object
+            } else {
+                console.error("App data not found for ID:", appId);
+            }
+        }
+
+         // --- Event handler for category filter clicks ---
+         function handleCategoryFilterClick(event) {
+             const button = event.currentTarget;
+             const category = button.dataset.category;
+             if (category) {
+                 displayCaseStudies(category); // Re-render index and display area with filter
+             }
+         }
+
+
+        // --- Tooltip Handlers ---
+        function handleMouseEnter(event) {
+            clearTimeout(tooltipTimeout);
+            const card = event.currentTarget;
+            // Ensure it's an app card (not a case study story element)
+            if (!card.classList.contains('app-card') || !card.dataset.appData) return;
+            try {
+                const app = JSON.parse(card.dataset.appData);
+                const tooltipContent = `
+                    <h3>${app.title || ''}</h3>
+                    <p class="tooltip-category">${categoryMap[app.category] || app.category || ''}</p>
+                    <p class="tooltip-rating">Rating: ${app.rating || 'N/A'} ★</p>
+                `;
+                if (appTooltip) {
+                    appTooltip.innerHTML = tooltipContent;
+                    updateTooltipPosition(event);
+                    appTooltip.style.opacity = '1';
+                    appTooltip.style.visibility = 'visible';
+                }
+            } catch (e) {
+                console.error("Error parsing app data for tooltip:", e, card.dataset.appData);
+                if (appTooltip) {
+                     appTooltip.style.opacity = '0';
+                     appTooltip.style.visibility = 'hidden';
+                }
+            }
+        }
+        function handleMouseLeave() {
+            tooltipTimeout = setTimeout(() => {
+                if (appTooltip) {
+                    appTooltip.style.opacity = '0';
+                    appTooltip.style.visibility = 'hidden';
+                }
+            }, 100);
+        }
+        function handleMouseMove(event) {
+            if (appTooltip && appTooltip.style.visibility === 'visible' && event.currentTarget.classList.contains('app-card')) {
+                 updateTooltipPosition(event);
+            }
+        }
+        function updateTooltipPosition(event) {
+            if (!appTooltip) return;
+            const tooltipRect = appTooltip.getBoundingClientRect();
+            const offsetX = 15; const offsetY = 15;
+            let x = event.pageX + offsetX;
+            let y = event.pageY + offsetY;
+
+            if (x + tooltipRect.width > window.innerWidth) x = event.pageX - tooltipRect.width - offsetX;
+            if (y + tooltipRect.height > window.innerHeight + window.scrollY) y = event.pageY - tooltipRect.height - offsetY;
+            if (x < 0) x = event.pageX + offsetX;
+            if (y < window.scrollY) y = event.pageY + offsetY;
+
+            appTooltip.style.left = `${x}px`;
+            appTooltip.style.top = `${y}px`;
+        }
+
+
+        // --- Function to Show App Details Modal ---
+        function showAppDetails(app) {
+             if (!appDetailsModal) return;
+             if (appTooltip) {
+                appTooltip.style.opacity = '0'; appTooltip.style.visibility = 'hidden'; clearTimeout(tooltipTimeout);
+             }
+            const modalAppIcon = document.getElementById('modal-app-icon');
+            const modalAppTitle = document.getElementById('modal-app-title');
+            const modalAppCategory = document.getElementById('modal-app-category');
+            const modalAppDescription = document.getElementById('modal-app-description');
+            const modalAppRating = document.getElementById('modal-app-rating');
+            const modalAppComments = document.getElementById('modal-app-comments');
+
+            if (!modalAppIcon || !modalAppTitle || !modalAppCategory || !modalAppDescription || !modalAppRating || !modalAppComments) {
+                console.error("Modal elements not found!"); return;
+            }
+
+            const fallbackModalImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='32px'; this.parentElement.style.fontWeight='600';`;
+            const largeIconUrl = (app.iconUrl && app.iconUrl.includes('placehold.co')) ? app.iconUrl.replace('/80x80/', '/120x120/') : (app.iconUrl || '#');
+            modalAppIcon.innerHTML = `<img src="${largeIconUrl}" alt="${app.title || 'Agent'} icon" loading="lazy" onerror="${fallbackModalImage}">`;
+
+            modalAppTitle.textContent = app.title || 'Unknown Agent';
+            modalAppCategory.textContent = categoryMap[app.category] || app.category || 'Uncategorized';
+            modalAppDescription.textContent = app.description || 'No description available.';
+            modalAppRating.textContent = `${app.rating || 'N/A'} (${app.ratingsCount || 0} ratings)`;
+
+            modalAppComments.innerHTML = '';
+            if (app.comments && app.comments.length > 0) {
+                 modalAppComments.innerHTML = app.comments.map(comment => `
+                    <div class="comment">
+                        <p class="comment-author">${comment.author || 'Anonymous'}</p>
+                        <p class="comment-text">${comment.text || ''}</p>
+                    </div>
+                `).join('');
+            } else {
+                modalAppComments.innerHTML = '<p class="text-sm text-gray-500 italic">No comments yet.</p>';
+            }
+
+            appDetailsModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+
+        // --- Event Listeners for Modal ---
+         if (closeModalButton && appDetailsModal) {
+             closeModalButton.addEventListener('click', () => {
+                appDetailsModal.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+            appDetailsModal.addEventListener('click', (event) => {
+                if (event.target === appDetailsModal) {
+                    appDetailsModal.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+         }
+
+
+        // --- Function to Filter Apps by Category ---
+        function filterApps(category) {
+             const marketplaceView = document.getElementById('marketplace-view');
+             if (!marketplaceView || !marketplaceView.classList.contains('active')) {
+                 switchView('marketplace-view');
+                 // Use a very short delay to ensure view switch completes before filtering
+                 setTimeout(() => filterApps(category), 10);
+                 return;
+             }
+
+            console.log("Filtering apps by category:", category); // Debug
+            filteredCategory = category;
+            if (filterOptions) {
+                filterOptions.forEach(option => {
+                    option.classList.toggle('active', option.dataset.category === category);
+                });
+            }
+            const appsToDisplay = (category === 'all')
+                ? appData
+                : appData.filter(app => app.category === category);
+
+            // Hide static sections and show the dynamic grid
+            const staticSections = marketplaceView.querySelectorAll(':scope > section');
+            staticSections.forEach(sec => sec.style.display = 'none');
+            appListContainer?.classList.remove('hidden');
+            displayApps(appsToDisplay); // Populate the dynamic grid
+
+            if (aiResponseArea) {
+                aiResponseArea.style.display = 'none';
+                aiResponseArea.innerHTML = '';
+            }
+        }
+
+
+        // --- Add Event Listeners to Filter Options (Dropdown) ---
+        if (filterOptions && filterDropdown) {
+             filterOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    filterApps(option.dataset.category);
+                    filterDropdown.classList.remove('show');
+                });
+            });
+        }
+
+        // --- Function to Display Search Results ---
+        function displaySearchResults(apps) {
+            if (!searchResultsGrid || !noSearchResultsMsg) {
+                console.error("[Search] Search results grid or message element not found!");
+                return;
+            }
+            searchResultsGrid.innerHTML = ''; // Clear previous results
+
+            if (!apps || apps.length === 0) {
+                noSearchResultsMsg.classList.remove('hidden');
+                searchResultsGrid.classList.add('hidden');
+            } else {
+                noSearchResultsMsg.classList.add('hidden');
+                searchResultsGrid.classList.remove('hidden');
+
+                apps.forEach((app, index) => {
+                    try {
+                        const appCard = document.createElement('div');
+                        appCard.className = 'app-card card-base';
+                        appCard.style.animationDelay = `${index * 0.05}s`; // Apply animation delay
+                        appCard.dataset.appData = JSON.stringify(app);
+
+                        const fallbackImage = `this.onerror=null; this.parentElement.textContent = '${app.icon || '?'}'; this.parentElement.style.fontSize='22px'; this.parentElement.style.fontWeight='600';`;
+
+                        appCard.innerHTML = `
+                            <div class="app-card-content">
+                                <div class="app-icon">
+                                    <img src="${app.iconUrl || '#'}" alt="${app.title || 'App'} icon" loading="lazy" onerror="${fallbackImage}">
+                                </div>
+                                <div class="app-info">
+                                    <h3 class="app-title">${app.title || 'Unknown Agent'}</h3>
+                                    <p class="app-category">${categoryMap[app.category] || app.category || 'Uncategorized'}</p>
+                                    <p class="app-description">${app.description || ''}</p>
+                                </div>
+                            </div>
+                        `;
+                        // Add event listeners for tooltip and modal
+                        appCard.addEventListener('mouseenter', handleMouseEnter);
+                        appCard.addEventListener('mouseleave', handleMouseLeave);
+                        appCard.addEventListener('mousemove', handleMouseMove);
+                        appCard.addEventListener('click', () => showAppDetails(app));
+                        searchResultsGrid.appendChild(appCard);
+                    } catch (e) {
+                        console.error("Error creating search result card:", e, app);
+                    }
+                });
+            }
+        }
+
+
+        // --- Function to Handle AI Search Query (Now Switches to Search View) ---
+         function handleAiSearch(query) {
+            if (!searchQueryDisplaySpan) {
+                 console.error("[Search] Search query display element not found!");
+                 return;
+            }
+
+            const lowerCaseQuery = query.toLowerCase().trim();
+            console.log("[Search] Handling search for:", lowerCaseQuery);
+
+            if (!lowerCaseQuery) {
+                 console.log("[Search] Empty query, reverting to default view.");
+                 switchView('marketplace-view'); // Revert to marketplace if search is cleared
+                 return;
+            }
+
+            // Filter data based on title and description
+            console.log("[Search] Filtering appData...");
+            const foundApps = appData.filter(app =>
+                 (app.title?.toLowerCase().includes(lowerCaseQuery)) ||
+                 (app.description?.toLowerCase().includes(lowerCaseQuery))
+            );
+            console.log(`[Search] Found ${foundApps.length} apps.`);
+
+            // Switch to the search results view
+            switchView('search-results-view');
+
+            // Update the displayed query
+            searchQueryDisplaySpan.textContent = query; // Show original query
+
+            // Display the results in the search results grid
+            displaySearchResults(foundApps);
+
+            // Deactivate category filter dropdown (if applicable)
+            if (filterOptions) {
+                filterOptions.forEach(option => option.classList.remove('active'));
+            }
+            filteredCategory = 'search'; // Indicate search is active
+            console.log("[Search] Search results view updated.");
+        }
+
+
+        // --- Event Listeners for AI Search ---
+        if (aiSearchButton && aiSearchInput) {
+            aiSearchButton.addEventListener('click', () => handleAiSearch(aiSearchInput.value));
+            aiSearchInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleAiSearch(aiSearchInput.value);
+                }
+            });
+        } else {
+            console.error("Search input or button element not found!");
+        }
+
+
+         // --- Navigation / View Switching Logic ---
+          function switchView(targetViewId) {
+             console.log("Switching view to:", targetViewId); // Debug log
+             if (appTooltip) {
+                appTooltip.style.opacity = '0'; appTooltip.style.visibility = 'hidden'; clearTimeout(tooltipTimeout);
+             }
+
+             if (viewSections) {
+                viewSections.forEach(section => section.classList.remove('active'));
+             }
+             const targetView = document.getElementById(targetViewId);
+             if (targetView) {
+                 targetView.classList.add('active');
+             } else {
+                 console.error(`Target view section not found: ${targetViewId}`);
+                 document.getElementById('marketplace-view')?.classList.add('active');
+                 targetViewId = 'marketplace-view'; // Fallback
+             }
+
+             // Clear previous search results if navigating away
+             if (targetViewId !== 'search-results-view') {
+                 if (searchResultsGrid) searchResultsGrid.innerHTML = '';
+                 if (noSearchResultsMsg) noSearchResultsMsg.classList.add('hidden');
+                 if (searchQueryDisplaySpan) searchQueryDisplaySpan.textContent = '';
+             }
+
+
+             if (navLinks) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    // Check data-target for internal links, href for external (though active state won't apply to external)
+                    if (link.dataset.target === targetViewId || (targetViewId === 'marketplace-view' && link.classList.contains('header-title'))) {
+                        link.classList.add('active');
+                    }
+                });
+             }
+
+             if (filterDropdown) {
+                const filterContainer = filterDropdown.parentElement;
+                if (filterContainer) {
+                     filterContainer.style.display = 'flex';
+                }
+                // Show filter dropdown only on marketplace view
+                if (targetViewId !== 'marketplace-view') {
+                    filterDropdown.style.display = 'none';
+                     filterDropdown.classList.remove('show');
+                } else {
+                     filterDropdown.style.display = 'inline-block';
+                }
+             }
+
+
+             // Populate content only when switching to view and if empty
+             if (targetViewId === 'casestudies-view' && caseStudyIndexList && !caseStudyIndexList.hasChildNodes()) { // Check index list instead of container
+                 console.log("Populating case studies view...");
+                 displayCaseStudies(); // Initial population with 'all'
+             } else if (targetViewId === 'agents-view' && agentListContainer && !agentListContainer.hasChildNodes()) {
+                 console.log("Populating agents list view...");
+                 displayAgents();
+             } else if (targetViewId === 'marketplace-view') {
+                 console.log("Activating marketplace view...");
+                 const marketplaceView = document.getElementById('marketplace-view');
+                 if(marketplaceView){
+                     // Ensure static sections are visible and dynamic list is hidden
+                     const staticSections = marketplaceView.querySelectorAll(':scope > section');
+                     staticSections.forEach(sec => sec.style.display = 'block'); // Use block or appropriate display type
+                     appListContainer?.classList.add('hidden');
+                     noAppsMessage?.classList.add('hidden');
+                      if (filterOptions) { // Reset filter dropdown
+                        filterOptions.forEach(option => option.classList.remove('active'));
+                        document.querySelector('#filter-dropdown ul li[data-category="all"]')?.classList.add('active');
+                      }
+                      filteredCategory = 'all';
+                       if(aiSearchInput) aiSearchInput.value = ''; // Clear search input when switching back
+                 }
+             }
+
+
+             if (aiResponseArea) {
+                aiResponseArea.style.display = 'none';
+                aiResponseArea.innerHTML = '';
+             }
+         }
+
+
+         // --- Add Event Listeners to Navigation Links ---
+         if (navLinks) {
+             navLinks.forEach(link => {
+                 if (link.dataset.target) {
+                     link.addEventListener('click', (event) => {
+                         event.preventDefault();
+                         const targetViewId = link.dataset.target || 'marketplace-view';
+                         // Update hash only for internal navigation
+                         // window.location.hash = targetViewId === 'marketplace-view' ? '' : `#${link.getAttribute('href').substring(1)}`;
+                         switchView(targetViewId);
+                     });
+                 }
+                 // External links are handled by default browser behavior (no target="_blank")
+             });
+         }
+
+         // --- Add Event Listeners to Category Filter Buttons (Case Study View) ---
+         // Moved this logic inside DOMContentLoaded to ensure elements exist
+
+        // --- Initialisation on Page Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM Loaded"); // Debug log
+            try { // Wrap initialization in try-catch
+                const hash = window.location.hash.substring(1);
+                let initialViewId = 'marketplace-view';
+                // Find the nav link corresponding to the hash *that has a data-target*
+                const activeNavLink = navLinks ? Array.from(navLinks).find(link => link.dataset.target === hash) : null; // Match data-target with hash
+                if(activeNavLink && activeNavLink.dataset.target) {
+                    initialViewId = activeNavLink.dataset.target;
+                }
+                console.log("Initial View ID:", initialViewId); // Debug log
+
+                switchView(initialViewId); // Activate the initial view
+
+                // Add listeners to Case Study category buttons AFTER initial view switch
+                const csCategoryGrid = document.getElementById('casestudies-view')?.querySelector('#category-filter-grid');
+                if (csCategoryGrid) {
+                     const csCategoryButtons = csCategoryGrid.querySelectorAll('.category-filter-btn');
+                     csCategoryButtons.forEach(button => {
+                         button.addEventListener('click', handleCategoryFilterClick);
+                     });
+                 } else {
+                      console.warn("Case study category filter grid not found on initial load setup.");
+                 }
+
+
+                // Fade out loading screen
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    setTimeout(() => {
+                        loadingScreen.classList.add('fade-out');
+                        setTimeout(() => loadingScreen.remove(), 700);
+                    }, 100);
+                }
+             } catch (error) {
+                 console.error("Error during initial page load:", error);
+                 const body = document.querySelector('body');
+                 if (body) {
+                     body.innerHTML = '<p style="padding: 20px; text-align: center; color: red;">Sorry, the application could not be loaded. Please check the console for errors.</p>';
+                 }
+                 const loadingScreen = document.getElementById('loading-screen');
+                 if (loadingScreen) loadingScreen.remove();
+             }
+        });
+
+
+        // --- Filter Dropdown Toggle & Close Logic ---
+        if (filterDropdown) {
+            const filterButton = filterDropdown.querySelector('button');
+            if (filterButton) {
+                filterButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    filterDropdown.classList.toggle('show');
+                });
+            }
+            document.addEventListener('click', (event) => {
+                if (filterDropdown && !filterDropdown.contains(event.target)) {
+                    filterDropdown.classList.remove('show');
+                }
+            });
+        }
+
+      } catch (e) { // Catch errors during script setup phase
+            console.error("Critical error during script setup:", e);
+            const body = document.querySelector('body');
+            if (body) {
+                 body.innerHTML = '<p style="padding: 20px; text-align: center; color: red;">A critical error occurred while setting up the page. Please check the console.</p>';
+            }
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) loadingScreen.remove();
+      }
+
+    </script>
+</body>
+</html>
