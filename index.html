@@ -110,7 +110,7 @@
             margin-bottom: 0; /* Remove margin-bottom as gap is handled by grid */
             border: 1px solid var(--border-color);
             position: relative;
-            opacity: 0; transform: translateY(20px);
+            opacity: 0; transform: translateY(10px);
             animation: fadeInUp 0.5s ease forwards;
             display: flex;
             flex-direction: column;
@@ -473,14 +473,15 @@
              color: var(--link-hover-color); text-decoration: underline;
          }
 
-         /* Frame container - Used for Case Study view */
-        .frame-container {
+         /* Frame container - Used for Case Study view and other views */
+        .content-frame { /* Renamed for general use */
             background-color: var(--frame-bg);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 25px 30px; /* Internal padding */
             box-shadow: 0 5px 15px var(--shadow-color);
             margin-top: 1rem; /* Space below section title */
+            margin-bottom: 1rem; /* Space below frame */
         }
 
 
@@ -531,7 +532,7 @@
              .section-subtitle { font-size: 1rem; }
              .featured-agent-card { padding: 1.5rem; }
              .category-showcase-card { padding: 1.5rem; min-height: 200px;}
-             .frame-container { padding: 15px 20px; } /* Adjust frame padding */
+             .content-frame { padding: 15px 20px; } /* Adjust frame padding */
              #category-filter-grid { grid-template-columns: repeat(2, 1fr); } /* Ensure 2 columns on small */
         }
 
@@ -578,127 +579,124 @@
 
     <main>
         <div id="marketplace-view" class="view-section active">
-            <section class="large-section bg-dark text-center">
-                <h2 class="section-title">Discover the Future of AI Agents</h2>
-                <p class="section-subtitle">
-                    Explore a curated marketplace of cutting-edge AI agents designed to revolutionise industries. From healthcare diagnostics to operational efficiency, find intelligent solutions tailored to your needs.
-                </p>
-            </section>
+             <div class="content-frame">
+                <section class="large-section bg-dark text-center !p-0"> <h2 class="section-title">Discover the Future of AI Agents</h2>
+                    <p class="section-subtitle">
+                        Explore a curated marketplace of cutting-edge AI agents designed to revolutionise industries. From healthcare diagnostics to operational efficiency, find intelligent solutions tailored to your needs.
+                    </p>
+                </section>
 
-            <section class="large-section bg-light">
-                <h2 class="section-title">Featured Agents</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                    <div class="featured-agent-card">
-                         <div class="app-icon mx-auto mb-6">ZMV</div>
-                         <h3 class="app-title">Zebra Medical Vision</h3>
-                         <p class="app-category">Diagnostics & Imaging Solutions</p>
-                         <p class="app-description">Enhances medical imaging diagnostics with AI-driven solutions, improving accuracy and accessibility.</p>
-                         <a href="#" class="learn-more-link" onclick="showAppDetails(appData.find(app => app.id === 'diag01')); return false;">Learn More &rarr;</a>
+                <section class="large-section bg-light !p-0 mt-8"> <h2 class="section-title">Featured Agents</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                        <div class="featured-agent-card">
+                             <div class="app-icon mx-auto mb-6">ZMV</div>
+                             <h3 class="app-title">Zebra Medical Vision</h3>
+                             <p class="app-category">Diagnostics & Imaging Solutions</p>
+                             <p class="app-description">Enhances medical imaging diagnostics with AI-driven solutions, improving accuracy and accessibility.</p>
+                             <a href="#" class="learn-more-link" onclick="showAppDetails(appData.find(app => app.id === 'diag01')); return false;">Learn More &rarr;</a>
+                        </div>
+                        <div class="featured-agent-card">
+                             <div class="app-icon mx-auto mb-6">ATW</div>
+                             <h3 class="app-title">Atomwise</h3>
+                             <p class="app-category">Drug Discovery & Research</p>
+                             <p class="app-description">Leverages its AtomNet® AI platform for structure-based small molecule drug discovery, accelerating research.</p>
+                              <a href="#" class="learn-more-link" onclick="showAppDetails(appData.find(app => app.id === 'drug01')); return false;">Learn More &rarr;</a>
+                        </div>
                     </div>
-                    <div class="featured-agent-card">
-                         <div class="app-icon mx-auto mb-6">ATW</div>
-                         <h3 class="app-title">Atomwise</h3>
-                         <p class="app-category">Drug Discovery & Research</p>
-                         <p class="app-description">Leverages its AtomNet® AI platform for structure-based small molecule drug discovery, accelerating research.</p>
-                          <a href="#" class="learn-more-link" onclick="showAppDetails(appData.find(app => app.id === 'drug01')); return false;">Learn More &rarr;</a>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <section class="large-section bg-light"> <h2 class="section-title">Live Feed</h2>
-                <p class="section-subtitle">See the latest updates, discussions, and agent additions.</p>
-                <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto text-left">
-                    <div class="lg:w-2/3 space-y-4">
-                         <h3 class="text-xl font-semibold mb-4 text-center lg:text-left">Twitter Feed (Agentic AI)</h3>
-                         <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                             <div class="flex items-start space-x-3">
-                                 <span class="text-2xl">🐦</span> <div>
-                                     <p class="font-semibold">AI News Hub <span class="text-gray-500 font-normal">@AINewsHub · 1h</span></p>
-                                     <p>Breakthrough in agentic AI allows autonomous task planning with 30% higher efficiency in complex simulations. #AI #AgenticAI #Research</p>
-                                     <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
-                                         <span>💬 15</span> <span>🔁 55</span> <span>❤️ 120</span>
+                <section class="large-section bg-light !p-0 mt-8"> <h2 class="section-title">Live Feed</h2>
+                    <p class="section-subtitle">See the latest updates, discussions, and agent additions.</p>
+                    <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto text-left">
+                        <div class="lg:w-2/3 space-y-4">
+                             <h3 class="text-xl font-semibold mb-4 text-center lg:text-left">Twitter Feed (Agentic AI)</h3>
+                             <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                 <div class="flex items-start space-x-3">
+                                     <span class="text-2xl">🐦</span> <div>
+                                         <p class="font-semibold">AI News Hub <span class="text-gray-500 font-normal">@AINewsHub · 1h</span></p>
+                                         <p>Breakthrough in agentic AI allows autonomous task planning with 30% higher efficiency in complex simulations. #AI #AgenticAI #Research</p>
+                                         <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
+                                             <span>💬 15</span> <span>🔁 55</span> <span>❤️ 120</span>
+                                         </div>
                                      </div>
                                  </div>
                              </div>
-                         </div>
-                         <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                             <div class="flex items-start space-x-3">
-                                  <span class="text-2xl">🔬</span> <div>
-                                     <p class="font-semibold">Healthcare AI Today <span class="text-gray-500 font-normal">@HealthAIToday · 3h</span></p>
-                                     <p>New study shows agentic systems improving diagnostic accuracy for rare conditions by assisting clinicians. Read more: [link placeholder] #HealthTech #AIinHealthcare</p>
-                                      <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
-                                         <span>💬 8</span> <span>🔁 30</span> <span>❤️ 95</span>
+                             <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                 <div class="flex items-start space-x-3">
+                                      <span class="text-2xl">🔬</span> <div>
+                                         <p class="font-semibold">Healthcare AI Today <span class="text-gray-500 font-normal">@HealthAIToday · 3h</span></p>
+                                         <p>New study shows agentic systems improving diagnostic accuracy for rare conditions by assisting clinicians. Read more: [link placeholder] #HealthTech #AIinHealthcare</p>
+                                          <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
+                                             <span>💬 8</span> <span>🔁 30</span> <span>❤️ 95</span>
+                                         </div>
                                      </div>
                                  </div>
                              </div>
-                         </div>
-                          <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                             <div class="flex items-start space-x-3">
-                                  <span class="text-2xl">🤖</span> <div>
-                                     <p class="font-semibold">FutureTech Insights <span class="text-gray-500 font-normal">@FutureTech · 5h</span></p>
-                                     <p>Exploring the ethical considerations of fully autonomous AI agents in critical decision-making roles. What are your thoughts? #AIEthics #AutonomousSystems</p>
-                                      <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
-                                         <span>💬 42</span> <span>🔁 88</span> <span>❤️ 210</span>
+                              <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                 <div class="flex items-start space-x-3">
+                                      <span class="text-2xl">🤖</span> <div>
+                                         <p class="font-semibold">FutureTech Insights <span class="text-gray-500 font-normal">@FutureTech · 5h</span></p>
+                                         <p>Exploring the ethical considerations of fully autonomous AI agents in critical decision-making roles. What are your thoughts? #AIEthics #AutonomousSystems</p>
+                                          <div class="flex space-x-4 text-gray-500 mt-2 text-sm">
+                                             <span>💬 42</span> <span>🔁 88</span> <span>❤️ 210</span>
+                                         </div>
                                      </div>
                                  </div>
                              </div>
-                         </div>
+                        </div>
+                        <div class="lg:w-1/3 space-y-4">
+                            <h3 class="text-xl font-semibold mb-4 text-center lg:text-left">Forum Feed</h3>
+                            <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                 <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Integration challenges with EHR X?</a>
+                                 <p class="text-sm text-gray-500">User345 - 2h ago · 3 replies</p>
+                            </div>
+                             <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                 <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Accuracy validation methods for Agent Y</a>
+                                 <p class="text-sm text-gray-500">ClinicianAI - 6h ago · 7 replies</p>
+                            </div>
+                             <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                                 <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Feature Request: Custom Reporting</a>
+                                 <p class="text-sm text-gray-500">PowerUser99 - 1d ago · 1 reply</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="lg:w-1/3 space-y-4">
-                        <h3 class="text-xl font-semibold mb-4 text-center lg:text-left">Forum Feed</h3>
-                        <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                             <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Integration challenges with EHR X?</a>
-                             <p class="text-sm text-gray-500">User345 - 2h ago · 3 replies</p>
-                        </div>
-                         <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                             <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Accuracy validation methods for Agent Y</a>
-                             <p class="text-sm text-gray-500">ClinicianAI - 6h ago · 7 replies</p>
-                        </div>
-                         <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                             <a href="https://synapster.analystx.uk/discussion.html" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-medium block mb-1">Feature Request: Custom Reporting</a>
-                             <p class="text-sm text-gray-500">PowerUser99 - 1d ago · 1 reply</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-             <section class="large-section bg-dark">
-                 <h2 class="section-title">Explore by Category</h2>
-                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
-                     <div class="category-showcase-card">
-                         <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
-                         <p class="category-card-desc">AI tools providing efficient clinical decision support and triage capabilities.</p>
-                         <a href="#" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
+                 <section class="large-section bg-dark !p-0 mt-8"> <h2 class="section-title">Explore by Category</h2>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🩺</div> <h3 class="category-card-title">Clinical Decision</h3>
+                             <p class="category-card-desc">AI tools providing efficient clinical decision support and triage capabilities.</p>
+                             <a href="#" class="learn-more-link" onclick="filterApps('clinical-decision'); return false;">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
+                             <p class="category-card-desc">Accelerate pharmaceutical research and development with AI-powered discovery platforms.</p>
+                              <a href="#" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
+                             <p class="category-card-desc">Enhance medical imaging analysis and diagnostic accuracy with intelligent solutions.</p>
+                               <a href="#" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
+                         </div>
+                         <div class="category-showcase-card">
+                             <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
+                             <p class="category-card-desc">Streamline administrative tasks and optimise healthcare operations with AI automation.</p>
+                               <a href="#" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
+                         </div>
                      </div>
-                     <div class="category-showcase-card">
-                         <div class="category-icon">🔬</div> <h3 class="category-card-title">Drug Discovery</h3>
-                         <p class="category-card-desc">Accelerate pharmaceutical research and development with AI-powered discovery platforms.</p>
-                          <a href="#" class="learn-more-link" onclick="filterApps('drug-discovery'); return false;">Explore &rarr;</a>
+                 </section>
+
+                 <div id="app-list" class="grid hidden">
                      </div>
-                     <div class="category-showcase-card">
-                         <div class="category-icon">🖥️</div> <h3 class="category-card-title">Diagnostics & Imaging</h3>
-                         <p class="category-card-desc">Enhance medical imaging analysis and diagnostic accuracy with intelligent solutions.</p>
-                           <a href="#" class="learn-more-link" onclick="filterApps('diagnostics-imaging'); return false;">Explore &rarr;</a>
-                     </div>
-                     <div class="category-showcase-card">
-                         <div class="category-icon">⚙️</div> <h3 class="category-card-title">Operational Efficiency</h3>
-                         <p class="category-card-desc">Streamline administrative tasks and optimise healthcare operations with AI automation.</p>
-                           <a href="#" class="learn-more-link" onclick="filterApps('operational-efficiency'); return false;">Explore &rarr;</a>
-                     </div>
+                 <div id="no-apps-message" class="no-apps-message hidden" style="margin: 50px 1.5rem;">
+                     <p>No apps found matching the selected category.</p>
                  </div>
-             </section>
-
-             <div id="app-list" class="grid hidden">
-                 </div>
-             <div id="no-apps-message" class="no-apps-message hidden" style="margin: 50px 1.5rem;">
-                 <p>No apps found matching the selected category.</p>
-             </div>
-        </div>
+            </div> </div>
 
         <div id="casestudies-view" class="view-section">
-             <div class="view-container max-w-7xl mx-auto py-8"> {/* Added container for padding */}
-                <h2 class="view-title">Case Studies</h2>
-                <div class="frame-container">
+             <div class="view-container max-w-7xl mx-auto py-8"> {/* Container with padding */}
+                <div class="content-frame"> <h2 class="view-title">Case Studies</h2>
                     <div id="category-filter-grid" class="mb-8">
                         <button class="category-filter-btn active" data-category="all">All Case Studies</button>
                          <button class="category-filter-btn" data-category="diagnostics-imaging">Diagnostics</button>
@@ -723,19 +721,21 @@
         </div>
 
          <div id="agents-view" class="view-section">
-             <div class="view-container max-w-5xl mx-auto py-8"> {/* Added container for padding */}
-                <h2 class="view-title">Agents List</h2>
-                 <div class="grid" id="agent-list-grid">
+             <div class="view-container max-w-5xl mx-auto py-8"> {/* Container with padding */}
+                 <div class="content-frame"> <h2 class="view-title">Agents List</h2>
+                     <div class="grid" id="agent-list-grid">
+                         </div>
+                     <div id="no-agents-message" class="hidden"> <p>No agents found.</p>
                      </div>
-                 <div id="no-agents-message" class="hidden"> <p>No agents found.</p>
                  </div>
             </div>
         </div>
 
         <div id="about-view" class="view-section">
-             <div class="view-container max-w-5xl mx-auto py-8"> {/* Added container for padding */}
-                <h2 class="view-title">About Us</h2>
-                 <p class="text-center text-muted py-10">Information about the AI Agent Marketplace coming soon...</p>
+             <div class="view-container max-w-5xl mx-auto py-8"> {/* Container with padding */}
+                 <div class="content-frame"> <h2 class="view-title">About Us</h2>
+                     <p class="text-center text-muted py-10">Information about the AI Agent Marketplace coming soon...</p>
+                 </div>
             </div>
         </div>
     </main>
@@ -949,6 +949,7 @@
                     try {
                         const appCard = document.createElement('div');
                         appCard.className = 'app-card card-base';
+                        // Add animation delay with stagger effect
                         appCard.style.animationDelay = `${index * 0.05}s`;
                         appCard.dataset.appData = JSON.stringify(app);
 
@@ -1291,10 +1292,12 @@
              const marketplaceView = document.getElementById('marketplace-view');
              if (!marketplaceView || !marketplaceView.classList.contains('active')) {
                  switchView('marketplace-view');
-                 setTimeout(() => filterApps(category), 50);
+                 // Use a very short delay to ensure view switch completes before filtering
+                 setTimeout(() => filterApps(category), 10);
                  return;
              }
 
+            console.log("Filtering apps by category:", category); // Debug
             filteredCategory = category;
             if (filterOptions) {
                 filterOptions.forEach(option => {
@@ -1305,10 +1308,11 @@
                 ? appData
                 : appData.filter(app => app.category === category);
 
+            // Hide static sections and show the dynamic grid
             const staticSections = marketplaceView.querySelectorAll(':scope > section');
             staticSections.forEach(sec => sec.style.display = 'none');
             appListContainer?.classList.remove('hidden');
-            displayApps(appsToDisplay);
+            displayApps(appsToDisplay); // Populate the dynamic grid
 
             if (aiResponseArea) {
                 aiResponseArea.style.display = 'none';
@@ -1317,7 +1321,7 @@
         }
 
 
-        // --- Add Event Listeners to Filter Options ---
+        // --- Add Event Listeners to Filter Options (Dropdown) ---
         if (filterOptions && filterDropdown) {
              filterOptions.forEach(option => {
                 option.addEventListener('click', () => {
@@ -1328,52 +1332,61 @@
         }
 
 
-        // --- Function to Handle AI Search Query ---
+        // --- Function to Handle AI Search Query (Now Filters Grid) ---
          function handleAiSearch(query) {
-            if (!aiResponseArea) return;
+            if (!aiResponseArea || !appListContainer) return;
+            aiResponseArea.style.display = 'none'; // Hide AI response area
             aiResponseArea.innerHTML = '';
-            aiResponseArea.classList.add('loading');
-            aiResponseArea.style.display = 'block';
 
-            setTimeout(() => {
-                aiResponseArea.classList.remove('loading');
-                const lowerCaseQuery = query.toLowerCase().trim();
-                let response = "";
+            const lowerCaseQuery = query.toLowerCase().trim();
+            console.log("Handling search for:", lowerCaseQuery);
 
-                if (!lowerCaseQuery) {
-                    response = "Please ask a question or tell me what you're looking for (e.g., 'imaging solutions', 'drug discovery tools').";
-                } else {
-                    const foundApps = appData.filter(app => {
-                         const fullCategoryName = (categoryMap[app.category] || app.category).toLowerCase();
-                         const titleMatch = app.title?.toLowerCase().includes(lowerCaseQuery);
-                         const descMatch = app.description?.toLowerCase().includes(lowerCaseQuery);
-                         const catMatch = app.category?.toLowerCase().includes(lowerCaseQuery);
-                         const catNameMatch = fullCategoryName.includes(lowerCaseQuery);
-                         const csProblemMatch = app.caseStudy?.problem?.toLowerCase().includes(lowerCaseQuery);
-                         const csSolutionMatch = app.caseStudy?.solution?.toLowerCase().includes(lowerCaseQuery);
-                         const csImprovementMatch = app.caseStudy?.improvement?.toLowerCase().includes(lowerCaseQuery);
-                         const csCountryMatch = app.caseStudy?.country?.toLowerCase().includes(lowerCaseQuery);
+            if (!lowerCaseQuery) {
+                 // If search is empty, revert to showing static sections or 'all' category
+                 switchView('marketplace-view'); // This resets to static view
+                 if(filterOptions) { // Reset dropdown filter
+                     filterOptions.forEach(option => option.classList.remove('active'));
+                     document.querySelector('#filter-dropdown ul li[data-category="all"]')?.classList.add('active');
+                 }
+                 filteredCategory = 'all';
+                 return;
+            }
 
-                         return titleMatch || descMatch || catMatch || catNameMatch || csProblemMatch || csSolutionMatch || csImprovementMatch || csCountryMatch;
-                    });
+            // Filter data based on title and description
+            const foundApps = appData.filter(app =>
+                 (app.title?.toLowerCase().includes(lowerCaseQuery)) ||
+                 (app.description?.toLowerCase().includes(lowerCaseQuery))
+            );
 
-                    if (foundApps.length > 0) {
-                        response = `I found ${foundApps.length} app(s) related to "${query}":<br><ul>`;
-                        foundApps.forEach(app => {
-                            response += `<li class="mt-2"><a href="#" data-appid="${app.id}" class="ai-result-link">${app.title}</a> <span class="ai-result-category">(${categoryMap[app.category] || app.category})</span></li>`;
-                        });
-                        response += "</ul><p class='mt-3 text-sm text-gray-600'>Click on an app name to see details.</p>";
-                    } else {
-                        response = `Sorry, I couldn't find any apps matching "${query}". Try searching for categories like 'Diagnostics', 'Clinical Decision', 'Patient Engagement', 'Operational Efficiency', or 'Drug Discovery'.`;
-                    }
-                }
-                aiResponseArea.innerHTML = response;
-            }, 800);
+            // Switch to marketplace view if not already there
+             const marketplaceView = document.getElementById('marketplace-view');
+             if (!marketplaceView || !marketplaceView.classList.contains('active')) {
+                 switchView('marketplace-view');
+                 // Need delay to ensure view switch happens before hiding/showing elements
+                 setTimeout(() => {
+                     const staticSections = marketplaceView?.querySelectorAll(':scope > section');
+                     staticSections?.forEach(sec => sec.style.display = 'none');
+                     appListContainer?.classList.remove('hidden');
+                     displayApps(foundApps);
+                 }, 50);
+             } else {
+                 // Already on marketplace view, just update content
+                  const staticSections = marketplaceView.querySelectorAll(':scope > section');
+                  staticSections.forEach(sec => sec.style.display = 'none');
+                  appListContainer?.classList.remove('hidden');
+                  displayApps(foundApps);
+             }
+
+            // Deactivate category filter dropdown
+            if (filterOptions) {
+                filterOptions.forEach(option => option.classList.remove('active'));
+            }
+            filteredCategory = 'search'; // Indicate search is active
         }
 
 
         // --- Event Listeners for AI Search ---
-        if (aiSearchButton && aiSearchInput && aiResponseArea) {
+        if (aiSearchButton && aiSearchInput) {
             aiSearchButton.addEventListener('click', () => handleAiSearch(aiSearchInput.value));
             aiSearchInput.addEventListener('keypress', (event) => {
                 if (event.key === 'Enter') {
@@ -1381,13 +1394,7 @@
                     handleAiSearch(aiSearchInput.value);
                 }
             });
-            aiResponseArea.addEventListener('click', (event) => {
-                if (event.target.classList.contains('ai-result-link')) {
-                    event.preventDefault();
-                    const app = appData.find(a => a.id === event.target.dataset.appid);
-                    if (app) showAppDetails(app);
-                }
-            });
+            // Removed listener for clicking links within aiResponseArea as it's no longer used
         }
 
 
@@ -1502,13 +1509,14 @@
                 switchView(initialViewId); // Activate the initial view
 
                 // Add listeners to Case Study category buttons AFTER initial view switch
-                if (categoryFilterGrid) {
-                     const categoryButtons = categoryFilterGrid.querySelectorAll('.category-filter-btn');
-                     categoryButtons.forEach(button => {
+                const csCategoryGrid = document.getElementById('casestudies-view')?.querySelector('#category-filter-grid');
+                if (csCategoryGrid) {
+                     const csCategoryButtons = csCategoryGrid.querySelectorAll('.category-filter-btn');
+                     csCategoryButtons.forEach(button => {
                          button.addEventListener('click', handleCategoryFilterClick);
                      });
                  } else {
-                      console.warn("Category filter grid not found on initial load setup.");
+                      console.warn("Case study category filter grid not found on initial load setup.");
                  }
 
 
