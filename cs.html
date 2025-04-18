@@ -11,6 +11,7 @@
         :root {
             /* Grey Palette */
             --bg-main: #f1f3f5; /* Main background grey */
+            --header-bg: rgba(255, 255, 255, 0.9); /* White semi-transparent header */
             --story-bg: #ffffff; /* Background for story articles */
             --text-primary: #212529; /* Very Dark Grey */
             --text-secondary: #495057; /* Dark Grey */
@@ -33,6 +34,63 @@
             color: var(--text-primary);
         }
 
+        /* Header Styles (Copied from main app) */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            padding: 1rem 1.5rem;
+        }
+        .header-content {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            gap: 1rem; max-width: 1400px; margin: 0 auto;
+        }
+        .header-title {
+            font-size: 1.75rem; font-weight: 700; color: var(--text-primary);
+            margin: 0; flex-shrink: 0; text-decoration: none;
+        }
+        header nav { display: flex; gap: 1.5rem; margin: 0 auto; }
+        header nav a {
+            color: var(--text-secondary);
+            text-decoration: none; font-weight: 500; padding: 0.5rem 0; position: relative;
+            transition: color 0.3s ease; cursor: pointer;
+        }
+        header nav a::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+            background-color: var(--accent-color); transition: width 0.3s ease;
+        }
+        header nav a:hover { color: var(--text-primary); }
+        header nav a:hover::after { width: 100%; }
+        .header-actions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+
+        /* Filter Dropdown Styles (Visual Only) */
+        #filter-dropdown { position: relative; display: inline-block; }
+        #filter-dropdown button {
+            background-color: #ffffff;
+            color: var(--text-secondary); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--border-color);
+            cursor: default; font-size: 0.9rem; font-weight: 500;
+            display: flex; align-items: center; opacity: 0.6;
+        }
+        #filter-dropdown button span { margin-right: 6px; }
+        #filter-dropdown ul { display: none; }
+
+        /* AI Search Styles (Visual Only) */
+        #ai-search-container {
+            display: flex; align-items: center; background-color: #ffffff;
+            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color);
+            flex-grow: 1; max-width: 400px; opacity: 0.6;
+        }
+        #ai-search-input {
+            flex-grow: 1; border: none; background: transparent; outline: none;
+            padding: 8px; font-size: 0.9rem; color: var(--text-primary);
+        }
+        #ai-search-input::placeholder { color: var(--text-muted); }
+        #ai-search-button {
+            background: none; border: none; cursor: default; padding: 6px; color: var(--text-muted);
+        }
+
+
         /* Page Title Styles */
         .page-title {
             font-size: 2.2rem; font-weight: 700; color: var(--text-primary);
@@ -45,11 +103,14 @@
         #category-filter-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
-            gap: 1rem;
+            gap: 0.75rem; /* Reduced gap */
             margin-bottom: 2rem;
         }
-         @media (min-width: 768px) { /* 4 columns on medium screens and up */
-            #category-filter-grid { grid-template-columns: repeat(4, 1fr); }
+         @media (min-width: 640px) { /* 3 columns on sm screens */
+            #category-filter-grid { grid-template-columns: repeat(3, 1fr); }
+         }
+         @media (min-width: 1024px) { /* 6 columns on lg screens */
+            #category-filter-grid { grid-template-columns: repeat(6, 1fr); }
          }
         .category-filter-btn {
             background-color: #ffffff; /* White background */
@@ -61,7 +122,10 @@
             color: var(--text-secondary);
             cursor: pointer;
             transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* Slightly smaller font */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .category-filter-btn:hover {
             background-color: #f8f9fa;
@@ -102,7 +166,7 @@
         /* Right Column: Case Study Index */
         #case-study-index {
             flex: 1; /* Takes less space */
-            min-width: 200px; /* Ensure minimum width */
+            min-width: 220px; /* Ensure minimum width */
             max-height: 75vh; /* Limit height */
             overflow-y: auto; /* Allow scrolling */
             padding-right: 10px; /* Space for scrollbar */
@@ -149,6 +213,10 @@
             padding: 0; margin-bottom: 0;
             opacity: 1; transform: none; animation: fadeInView 0.4s ease; /* Fade in content */
         }
+        @keyframes fadeInView { /* Simple fade-in for content swap */
+             from { opacity: 0; }
+             to { opacity: 1; }
+        }
         .case-study-story h3 { /* Agent Title */
             font-size: 1.8rem; font-weight: 600; color: var(--text-primary);
             margin-bottom: 15px; padding-bottom: 10px;
@@ -190,32 +258,67 @@
             margin: 1rem auto 2rem auto;
             width: 100%; box-sizing: border-box;
         }
-        .grid { display: grid; gap: 25px; }
-        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-        .md\:grid-cols-2 {
-             @media (min-width: 768px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        }
-         .lg\:grid-cols-3 {
-             @media (min-width: 1024px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        }
 
         /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .header-content { justify-content: space-between; }
+            header nav { order: 3; width: 100%; justify-content: center; margin-top: 0.5rem; gap: 1rem;}
+            .header-actions { order: 2; }
+            .header-title { order: 1; }
+            #ai-search-container { max-width: 300px; }
+             .case-study-layout { flex-direction: column; } /* Stack columns earlier */
+             #case-study-index { max-height: 300px; border-left: none; border-top: 1px solid var(--border-color); padding-left: 0; padding-top: 1.5rem; }
+        }
         @media (max-width: 768px) {
+             header { padding: 0.75rem 1rem; }
+             .header-title { font-size: 1.5rem; }
+             header nav { gap: 0.75rem; }
+             header nav a { font-size: 0.9rem; padding: 0.3rem 0; }
+             .header-actions { flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem; }
+             #ai-search-container { width: 100%; max-width: none; order: 1; margin-right: 0; }
+             #filter-dropdown { order: 2; }
+             #filter-dropdown button { padding: 8px 16px; }
              main { padding: 1.5rem 1rem; margin: 1rem auto; }
              .page-title { font-size: 1.8rem; }
              .section-title { font-size: 1.5rem; }
              .intro-text { font-size: 1rem; }
-             .grid { gap: 20px; }
              #category-filter-grid { grid-template-columns: repeat(2, 1fr); } /* 2 columns on small */
              .case-study-story { padding: 0; } /* Remove padding for story on mobile */
              .case-study-story h3 { font-size: 1.5rem; }
              .case-study-story h4 { font-size: 1.1rem; margin-top: 1.25rem;}
              .case-study-story p { font-size: 0.9rem; }
+             .case-study-layout { padding: 15px 20px; } /* Adjust frame padding */
         }
 
     </style>
 </head>
 <body>
+     <header>
+        <div class="header-content">
+            <a href="https://synapster.analystx.uk/" class="header-title">AI Agent Marketplace</a>
+            <nav>
+                <a href="https://synapster.analystx.uk/cs.html" target="_blank" rel="noopener noreferrer">Case Studies</a>
+                <a href="https://synapster.analystx.uk/agents.html" target="_blank" rel="noopener noreferrer">Agents List</a>
+                <a href="https://synapster.analystx.uk/about.html" target="_blank" rel="noopener noreferrer">About Us</a>
+            </nav>
+             <div class="header-actions">
+                <div id="ai-search-container">
+                    <input type="text" id="ai-search-input" placeholder="Search..." disabled>
+                    <button id="ai-search-button" aria-label="Search" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                </div>
+                <div id="filter-dropdown">
+                    <button disabled>
+                        <span>Filter</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>
+                    </button>
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <main>
         <h1 class="page-title">AI Agent Case Studies</h1>
 
@@ -226,7 +329,9 @@
                  <button class="category-filter-btn" data-category="diagnostics-imaging">Diagnostics</button>
                  <button class="category-filter-btn" data-category="clinical-decision">Clinical Decision</button>
                  <button class="category-filter-btn" data-category="patient-engagement">Patient Engagement</button>
-                 </div>
+                 <button class="category-filter-btn" data-category="operational-efficiency">Operations</button>
+                 <button class="category-filter-btn" data-category="drug-discovery">Research</button>
+            </div>
 
             <div class="case-study-layout">
                 <div id="case-study-display-area">
@@ -242,6 +347,8 @@
         </div> </main>
 
     <script>
+      try { // Add error handling wrapper
+
         // --- Category Mapping (Slug to Full Name) ---
         const categoryMap = {
             'all': 'All Categories',
@@ -253,7 +360,7 @@
         };
 
         // --- Case Study Data (Extracted from appData) ---
-        // In a real scenario, this might be fetched or already available
+        // This data would typically come from a database or API in a real application
         const caseStudiesData = [
             { appId: 'diag01', title: 'Zebra Medical Vision', category: 'diagnostics-imaging', icon: 'ZMV', iconUrl: 'https://placehold.co/80x80/ADB5BD/ffffff?text=ZMV', caseStudy: { country: 'United Kingdom', improvement: 'Reduced diagnostic report turnaround time by 25% in NHS trusts, leading to faster treatment decisions.', problem: 'Significant backlogs in interpreting diagnostic images (X-rays, CT scans) led to delays in patient diagnosis and treatment initiation. Radiologist workload was high, contributing to burnout.', solution: 'The AI platform was integrated into the existing PACS system, automatically analysing incoming scans, flagging potential abnormalities and prioritising urgent cases for radiologist review. The AI acted as a "second reader".'} },
             { appId: 'diag02', title: 'Rad AI', category: 'diagnostics-imaging', icon: 'RAI', iconUrl: 'https://placehold.co/80x80/CED4DA/ffffff?text=RAI', caseStudy: { country: 'USA', improvement: 'Automated report generation saved radiologists an average of 60 minutes per day at a California-based health system.', problem: 'A large California-based health system struggled with the time radiologists spent on repetitive reporting tasks and ensuring consistent report quality, detracting from complex image interpretation.', solution: 'Rad AI\'s tools integrated into the workflow, automatically generating customisable report templates populated with data and standard language, reducing manual dictation and formatting time.'} },
@@ -368,7 +475,8 @@
                     const listItem = document.createElement('li');
                     const button = document.createElement('button');
                     button.dataset.appid = study.appId;
-                    button.innerHTML = `${study.title} <span>${categoryMap[study.category]}</span>`;
+                    // Use study.title and study.category directly from the filtered data
+                    button.innerHTML = `${study.title || 'Unknown'} <span>${categoryMap[study.category] || study.category || 'N/A'}</span>`;
                     // Add click listener to load this study
                     button.addEventListener('click', () => displaySingleCaseStudyById(study.appId));
                     listItem.appendChild(button);
@@ -386,7 +494,7 @@
             console.log("Filtering by category:", category); // Debug
 
             const filteredData = (category === 'all')
-                ? caseStudiesData
+                ? caseStudiesData // Use the dedicated case study data
                 : caseStudiesData.filter(study => study.category === category);
 
             populateIndex(filteredData); // Repopulate index and display first item
@@ -402,9 +510,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 console.log("DOM Loaded for Case Studies Page"); // Debug
-
-                // Populate category buttons (if they weren't static)
-                // For now, assuming static buttons in HTML
 
                 // Add listeners to category buttons
                 const categoryButtons = categoryFilterGrid?.querySelectorAll('.category-filter-btn');
@@ -428,6 +533,13 @@
             }
         });
 
+      } catch (e) { // Catch errors during script setup phase
+            console.error("Critical error during script setup:", e);
+            const body = document.querySelector('body');
+            if (body) {
+                 body.innerHTML = '<p style="padding: 20px; text-align: center; color: red;">A critical error occurred while setting up the page. Please check the console.</p>';
+            }
+      }
     </script>
 
 </body>
