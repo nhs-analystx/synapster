@@ -9,8 +9,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
-        <!-- Same header as above -->
+        <div class="container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00C851;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="40" height="40" rx="8" fill="none" stroke="url(#grad1)" stroke-width="2"/>
+                    <path d="M12 8 L12 32 M12 8 L28 20 L12 32" stroke="url(#grad1)" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <circle cx="20" cy="20" r="2" fill="url(#grad1)"/>
+                    <circle cx="15" cy="15" r="1" fill="url(#grad1)" opacity="0.7"/>
+                    <circle cx="25" cy="25" r="1" fill="url(#grad1)" opacity="0.7"/>
+                </svg>
+                <span>HealthNavi</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="marketplace.html">Marketplace</a>
+                <a href="casestudies.html">Case Studies</a>
+                <a href="forum.html">Forum</a>
+                <a href="about.html">About Us</a>
+                <a href="learning.html">L&D</a>
+            </nav>
+        </div>
     </header>
 
     <main class="casestudies">
@@ -23,27 +49,271 @@
                 <h2>Index by Category/Function</h2>
                 <ul>
                     <li><a href="#diagnostics-cs">Diagnostics</a></li>
-                    <!-- Add links to sections -->
+                    <li><a href="#clinical-decision-cs">Clinical Decision</a></li>
+                    <li><a href="#patient-engagement-cs">Patient Engagement</a></li>
+                    <li><a href="#operations-cs">Operations</a></li>
+                    <li><a href="#research-cs">Research</a></li>
                 </ul>
             </div>
 
-            <div id="diagnostics-cs" class="case-study">
-                <h2>AI Diagnostics in Rural Clinics</h2>
-                <section class="intro">Introduction: Deploying AI for faster diagnostics.</section>
-                <section class="problem">Problem: Limited access to specialists.</section>
-                <section class="methodology">Methodology: Integrated agentic AI models.</section>
-                <section class="agent">Agent Used: DiagBot Pro</section>
-                <section class="outcome">Outcome: 40% reduction in diagnosis time.</section>
-                <a href="marketplace.html#DiagBot-Pro">View Agent</a>
+            <!-- Diagnostics Case Studies -->
+            <div id="diagnostics-cs">
+                <h2>Diagnostics</h2>
+                <div class="case-study">
+                    <h3>University of Rochester Medical Center - Ultrasound Charge Capture</h3>
+                    <section class="intro">Introduction: Implementing AI for ultrasound diagnostics.</section>
+                    <section class="problem">Problem: Missed billing opportunities in imaging.</section>
+                    <section class="methodology">Methodology: AI-powered Butterfly iQ probes.</section>
+                    <section class="agent">Agent Used: Butterfly iQ</section>
+                    <section class="outcome">Outcome: 116% increase in charge capture.</section>
+                    <a href="marketplace.html#Butterfly-iQ">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Valley Medical Center - Radiology Efficiency</h3>
+                    <section class="intro">Introduction: AI for faster radiology reads.</section>
+                    <section class="problem">Problem: Backlogs in diagnostic imaging.</section>
+                    <section class="methodology">Methodology: Aidoc integration for triage.</section>
+                    <section class="agent">Agent Used: Aidoc</section>
+                    <section class="outcome">Outcome: 30% reduction in turnaround time.</section>
+                    <a href="marketplace.html#Aidoc">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>OSF HealthCare - Pathology Diagnostics</h3>
+                    <section class="intro">Introduction: AI-assisted pathology.</section>
+                    <section class="problem">Problem: Pathologist shortages.</section>
+                    <section class="methodology">Methodology: PathAI for slide analysis.</section>
+                    <section class="agent">Agent Used: PathAI</section>
+                    <section class="outcome">Outcome: 40% faster case reviews.</section>
+                    <a href="marketplace.html#PathAI">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Healthfirst - Stroke Detection</h3>
+                    <section class="intro">Introduction: AI for neurovascular diagnostics.</section>
+                    <section class="problem">Problem: Delayed stroke identification.</section>
+                    <section class="methodology">Methodology: Viz.ai for CT alerts.</section>
+                    <section class="agent">Agent Used: Viz.ai</section>
+                    <section class="outcome">Outcome: 25% faster treatment initiation.</section>
+                    <a href="marketplace.html#Viz-ai">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Mayo Clinic - Precision Diagnostics</h3>
+                    <section class="intro">Introduction: Genomic AI diagnostics.</section>
+                    <section class="problem">Problem: Complex cancer profiling.</section>
+                    <section class="methodology">Methodology: Tempus platform integration.</section>
+                    <section class="agent">Agent Used: Tempus</section>
+                    <section class="outcome">Outcome: 50% reduction in profiling time.</section>
+                    <a href="marketplace.html#Tempus">View Agent</a>
+                </div>
             </div>
-            <!-- More placeholders -->
+
+            <!-- Clinical Decision Case Studies -->
+            <div id="clinical-decision-cs">
+                <h2>Clinical Decision</h2>
+                <div class="case-study">
+                    <h3>Geisinger - Care Coordination</h3>
+                    <section class="intro">Introduction: AI for decision support in coordination.</section>
+                    <section class="problem">Problem: Fragmented patient data.</section>
+                    <section class="methodology">Methodology: Predictive analytics with DAX.</section>
+                    <section class="agent">Agent Used: DAX Copilot</section>
+                    <section class="outcome">Outcome: 20% improvement in coordination efficiency.</section>
+                    <a href="marketplace.html#DAX-Copilot">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Cleveland Clinic - Evidence-Based Decisions</h3>
+                    <section class="intro">Introduction: AI search for clinical queries.</section>
+                    <section class="problem">Problem: Time-consuming literature reviews.</section>
+                    <section class="methodology">Methodology: Google MedLM integration.</section>
+                    <section class="agent">Agent Used: Google MedLM</section>
+                    <section class="outcome">Outcome: 35% faster decision-making.</section>
+                    <a href="marketplace.html#Google-MedLM">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Kaiser Permanente - Provider Insights</h3>
+                    <section class="intro">Introduction: Copilot for care gaps.</section>
+                    <section class="problem">Problem: Unaddressed preventive care.</section>
+                    <section class="methodology">Methodology: Innovaccer Copilot deployment.</section>
+                    <section class="agent">Agent Used: Innovaccer Provider Copilot</section>
+                    <section class="outcome">Outcome: 15% increase in gap closures.</section>
+                    <a href="marketplace.html#Innovaccer-Provider-Copilot">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Johns Hopkins - Real-World Evidence</h3>
+                    <section class="intro">Introduction: AI for protocol generation.</section>
+                    <section class="problem">Problem: Manual evidence synthesis.</section>
+                    <section class="methodology">Methodology: Atropos Health platform.</section>
+                    <section class="agent">Agent Used: Atropos Health</section>
+                    <section class="outcome">Outcome: 40% reduction in research time.</section>
+                    <a href="marketplace.html#Atropos-Health">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Mount Sinai - Open Access Evidence</h3>
+                    <section class="intro">Introduction: AI clinical search engine.</section>
+                    <section class="problem">Problem: Information overload.</section>
+                    <section class="methodology">Methodology: OpenEvidence tool.</section>
+                    <section class="agent">Agent Used: OpenEvidence</section>
+                    <section class="outcome">Outcome: 25% better adherence to guidelines.</section>
+                    <a href="marketplace.html#OpenEvidence">View Agent</a>
+                </div>
+            </div>
+
+            <!-- Patient Engagement Case Studies -->
+            <div id="patient-engagement-cs">
+                <h2>Patient Engagement</h2>
+                <div class="case-study">
+                    <h3>Santovia - Health Education</h3>
+                    <section class="intro">Introduction: AI for personalized education.</section>
+                    <section class="problem">Problem: Low patient literacy.</section>
+                    <section class="methodology">Methodology: Ada symptom checker integration.</section>
+                    <section class="agent">Agent Used: Ada</section>
+                    <section class="outcome">Outcome: 30% increase in engagement rates.</section>
+                    <a href="marketplace.html#Ada">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Regional Health System - Communication</h3>
+                    <section class="intro">Introduction: AI-driven outreach.</section>
+                    <section class="problem">Problem: High no-show rates.</section>
+                    <section class="methodology">Methodology: TeleVox automated messaging.</section>
+                    <section class="agent">Agent Used: TeleVox</section>
+                    <section class="outcome">Outcome: 20% reduction in no-shows.</section>
+                    <a href="marketplace.html#TeleVox">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>CVS Health - Virtual Assistance</h3>
+                    <section class="intro">Introduction: Voice AI for chronic care.</section>
+                    <section class="problem">Problem: Adherence issues.</section>
+                    <section class="methodology">Methodology: Simbie AI deployment.</section>
+                    <section class="agent">Agent Used: Simbie AI</section>
+                    <section class="outcome">Outcome: 25% better medication adherence.</section>
+                    <a href="marketplace.html#Simbie-AI">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>UnitedHealth - Workflow Engagement</h3>
+                    <section class="intro">Introduction: No-code patient flows.</section>
+                    <section class="problem">Problem: Manual follow-ups.</section>
+                    <section class="methodology">Methodology: Keragon automation.</section>
+                    <section class="agent">Agent Used: Keragon</section>
+                    <section class="outcome">Outcome: 40% time savings for staff.</section>
+                    <a href="marketplace.html#Keragon">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Babylon Health - Virtual Nursing</h3>
+                    <section class="intro">Introduction: Chatbot for daily engagement.</section>
+                    <section class="problem">Problem: Access to advice.</section>
+                    <section class="methodology">Methodology: Sensely Molly AI.</section>
+                    <section class="agent">Agent Used: Sensely</section>
+                    <section class="outcome">Outcome: 35% increase in satisfaction scores.</section>
+                    <a href="marketplace.html#Sensely">View Agent</a>
+                </div>
+            </div>
+
+            <!-- Operations Case Studies -->
+            <div id="operations-cs">
+                <h2>Operations</h2>
+                <div class="case-study">
+                    <h3>UCSF - Scribe Efficiency</h3>
+                    <section class="intro">Introduction: Ambient AI for ops.</section>
+                    <section class="problem">Problem: Documentation burden.</section>
+                    <section class="methodology">Methodology: DeepScribe implementation.</section>
+                    <section class="agent">Agent Used: DeepScribe</section>
+                    <section class="outcome">Outcome: 50% reduction in after-hours work.</section>
+                    <a href="marketplace.html#DeepScribe">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Intermountain - Analytics Ops</h3>
+                    <section class="intro">Introduction: Data-driven operations.</section>
+                    <section class="problem">Problem: Siloed data.</section>
+                    <section class="methodology">Methodology: Innovaccer unification.</section>
+                    <section class="agent">Agent Used: Innovaccer</section>
+                    <section class="outcome">Outcome: 15% cost savings.</section>
+                    <a href="marketplace.html#Innovaccer">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Mayo Clinic - Scheduling</h3>
+                    <section class="intro">Introduction: AI for capacity management.</section>
+                    <section class="problem">Problem: OR utilization lows.</section>
+                    <section class="methodology">Methodology: LeanTaaS iQueue.</section>
+                    <section class="agent">Agent Used: LeanTaaS</section>
+                    <section class="outcome">Outcome: 20% increase in throughput.</section>
+                    <a href="marketplace.html#LeanTaaS">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Northwell - Acute Care</h3>
+                    <section class="intro">Introduction: Real-time ops alerts.</section>
+                    <section class="problem">Problem: Bed turnover delays.</section>
+                    <section class="methodology">Methodology: Qventus OS.</section>
+                    <section class="agent">Agent Used: Qventus</section>
+                    <section class="outcome">Outcome: 25% faster discharges.</section>
+                    <a href="marketplace.html#Qventus">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>HCA Healthcare - Revenue Cycle</h3>
+                    <section class="intro">Introduction: AI for billing ops.</section>
+                    <section class="problem">Problem: High denial rates.</section>
+                    <section class="methodology">Methodology: Medallion automation.</section>
+                    <section class="agent">Agent Used: Medallion</section>
+                    <section class="outcome">Outcome: 30% denial reduction.</section>
+                    <a href="marketplace.html#Medallion">View Agent</a>
+                </div>
+            </div>
+
+            <!-- Research Case Studies -->
+            <div id="research-cs">
+                <h2>Research</h2>
+                <div class="case-study">
+                    <h3>NIH - Imaging Research</h3>
+                    <section class="intro">Introduction: Open AI for med imaging.</section>
+                    <section class="problem">Problem: Lack of standardized tools.</section>
+                    <section class="methodology">Methodology: MONAI framework adoption.</section>
+                    <section class="agent">Agent Used: MONAI</section>
+                    <section class="outcome">Outcome: Accelerated model development by 40%.</section>
+                    <a href="marketplace.html#MONAI">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Stanford - Discovery Acceleration</h3>
+                    <section class="intro">Introduction: GPU-accelerated research.</section>
+                    <section class="problem">Problem: Compute-intensive simulations.</section>
+                    <section class="methodology">Methodology: NVIDIA Clara deployment.</section>
+                    <section class="agent">Agent Used: NVIDIA Clara</section>
+                    <section class="outcome">Outcome: 50x faster drug simulations.</section>
+                    <a href="marketplace.html#NVIDIA-Clara">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Broad Institute - Oncology Trials</h3>
+                    <section class="intro">Introduction: AI for trial design.</section>
+                    <section class="problem">Problem: Patient matching inefficiencies.</section>
+                    <section class="methodology">Methodology: Tempus data platform.</section>
+                    <section class="agent">Agent Used: Tempus</section>
+                    <section class="outcome">Outcome: 30% faster recruitment.</section>
+                    <a href="marketplace.html#Tempus">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Harvard - Pathology Datasets</h3>
+                    <section class="intro">Introduction: AI for research curation.</section>
+                    <section class="problem">Problem: Manual annotation.</section>
+                    <section class="methodology">Methodology: PathAI tools.</section>
+                    <section class="agent">Agent Used: PathAI</section>
+                    <section class="outcome">Outcome: 60% reduction in annotation time.</section>
+                    <a href="marketplace.html#PathAI">View Agent</a>
+                </div>
+                <div class="case-study">
+                    <h3>Oxford - Protein Research</h3>
+                    <section class="intro">Introduction: AI for structural biology.</section>
+                    <section class="problem">Problem: Protein folding challenges.</section>
+                    <section class="methodology">Methodology: DeepMind AlphaFold.</section>
+                    <section class="agent">Agent Used: Google DeepMind Health</section>
+                    <section class="outcome">Outcome: Solved 200M+ structures.</section>
+                    <a href="marketplace.html#Google-DeepMind-Health">View Agent</a>
+                </div>
+            </div>
 
             <button class="submit-btn" onclick="alert('Submit your case study')">Submit Case Study</button>
         </div>
     </main>
 
     <footer class="footer">
-        <!-- Same footer -->
+        <div class="container">
+            <p>&copy; 2025 HealthNavi. Navigating AI in Healthcare.</p>
+        </div>
     </footer>
 
     <script src="script.js"></script>
