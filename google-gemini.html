@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - HealthNavi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header class="header">
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="healthnavi_logo.png" alt="HealthNavi Logo">
+                <span>HealthNavi</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="marketplace.html" class="active">Marketplace</a></li>
+                    <li><a href="case-studies.html">Case Studies</a></li>
+                    <li><a href="forum.html">Forum</a></li>
+                    <li><a href="learning.html">Learning & Development</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="marketplace-page">
+        <div class="container">
+            <h1 class="page-title">AI Healthcare Marketplace</h1>
+            <p class="page-description">Discover cutting-edge AI products tailored for the healthcare industry. Explore solutions across various AI categories and functional areas.</p>
+
+            <div class="marketplace-actions">
+                <button class="submit-product-btn" onclick="document.getElementById('productSubmissionModal').style.display='block'">Submit Your Product</button>
+            </div>
+
+            <div class="ai-categories-nav">
+                <ul class="category-tabs">
+                    <li class="tab-item"><a href="#agentic-ai" class="tab-link active">Agentic AI</a></li>
+                    <li class="tab-item"><a href="#ambiance-ai" class="tab-link">Ambiance AI</a></li>
+                    <li class="tab-item"><a href="#robotic-ai" class="tab-link">Robotic AI</a></li>
+                    <li class="tab-item"><a href="#clinical-ai" class="tab-link">Clinical AI</a></li>
+                </ul>
+            </div>
+
+            <div class="ai-products-list">
+                <!-- Agentic AI Section --><section id="agentic-ai" class="ai-category-section active">
+                    <h2 class="category-heading">Agentic AI <span class="category-subtitle">Autonomous Decision & Task Execution</span></h2>
+                    <div class="functional-areas-filter">
+                        <span class="filter-label">Filter by Function:</span>
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="diagnostics">Diagnostics</button>
+                        <button class="filter-btn" data-filter="clinical-decision">Clinical Decision Support</button>
+                        <button class="filter-btn" data-filter="patient-engagement">Patient Engagement</button>
+                        <button class="filter-btn" data-filter="operations">Operations</button>
+                        <button class="filter-btn" data-filter="research">Research</button>
+                    </div>
+                    <div class="product-grid">
+                        <!-- Example Agentic AI Product --><div class="product-card" data-functions="diagnostics clinical-decision operations">
+                            <h3 class="product-name">MediSense AI</h3>
+                            <p class="product-description">An intelligent agent designed for preliminary diagnostic assessment and streamlining hospital workflows.</p>
+                            <div class="product-functions">
+                                <span>Diagnostics</span>, <span>Clinical Decision</span>, <span>Operations</span>
+                            </div>
+                            <a href="#" class="product-link">View Product Details</a>
+                        </div>
+                        <div class="product-card" data-functions="patient-engagement clinical-decision">
+                            <h3 class="product-name">CareNavigator Agent</h3>
+                            <p class="product-description">An AI agent providing personalized patient navigation, appointment scheduling, and medication reminders.</p>
+                            <div class="product-functions">
+                                <span>Patient Engagement</span>, <span>Clinical Decision</span>
+                            </div>
+                            <a href="#" class="product-link">View Product Details</a>
+                        </div>
+                        <!-- Add more Agentic AI products here --></div>
+                </section>
+
+                <!-- Ambiance AI Section --><section id="ambiance-ai" class="ai-category-section">
+                    <h2 class="category-heading">Ambiance AI <span class="category-subtitle">Context-Aware & Environmental Intelligence</span></h2>
+                    <div class="functional-areas-filter">
+                        <span class="filter-label">Filter by Function:</span>
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="operations">Operations</button>
+                        <button class="filter-btn" data-filter="patient-engagement">Patient Engagement</button>
+                    </div>
+                    <div class="product-grid">
+                        <div class="product-card" data-functions="operations patient-engagement">
+                            <h3 class="product-name">EnviroHealth Monitor</h3>
+                            <p class="product-description">AI system for optimizing hospital environment (lighting, temperature) for patient comfort and staff efficiency.</p>
+                            <div class="product-functions">
+                                <span>Operations</span>, <span>Patient Engagement</span>
+                            </div>
+                            <a href="#" class="product-link">View Product Details</a>
+                        </div>
+                        <!-- Add more Ambiance AI products here --></div>
+                </section>
+
+                <!-- Robotic AI Section --><section id="robotic-ai" class="ai-category-section">
+                    <h2 class="category-heading">Robotic AI <span class="category-subtitle">Physical Automation & Assistance</span></h2>
+                    <div class="functional-areas-filter">
+                        <span class="filter-label">Filter by Function:</span>
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="operations">Operations</button>
+                        <button class="filter-btn" data-filter="clinical-decision">Clinical Decision Support</button>
+                    </div>
+                    <div class="product-grid">
+                        <div class="product-card" data-functions="operations clinical-decision">
+                            <h3 class="product-name">SurgiBot Assistant</h3>
+                            <p class="product-description">Robotic arm enhanced with AI for precision surgery, reducing human error and improving outcomes.</p>
+                            <div class="product-functions">
+                                <span>Operations</span>, <span>Clinical Decision</span>
+                            </div>
+                            <a href="#" class="product-link">View Product Details</a>
+                        </div>
+                        <!-- Add more Robotic AI products here --></div>
+                </section>
+
+                <!-- Clinical AI Section --><section id="clinical-ai" class="ai-category-section">
+                    <h2 class="category-heading">Clinical AI <span class="category-subtitle">Data Analysis & Diagnostic Support</span></h2>
+                    <div class="functional-areas-filter">
+                        <span class="filter-label">Filter by Function:</span>
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="diagnostics">Diagnostics</button>
+                        <button class="filter-btn" data-filter="clinical-decision">Clinical Decision Support</button>
+                        <button class="filter-btn" data-filter="research">Research</button>
+                    </div>
+                    <div class="product-grid">
+                        <div class="product-card" data-functions="diagnostics research">
+                            <h3 class="product-name">PathoInsight AI</h3>
+                            <p class="product-description">AI-
