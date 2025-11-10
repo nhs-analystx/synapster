@@ -1,0 +1,89 @@
+<!-- marketplace.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - HealthNavi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00C851;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="40" height="40" rx="8" fill="none" stroke="url(#grad1)" stroke-width="2"/>
+                    <path d="M12 8 L12 32 M12 8 L28 20 L12 32" stroke="url(#grad1)" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <circle cx="20" cy="20" r="2" fill="url(#grad1)"/>
+                    <circle cx="15" cy="15" r="1" fill="url(#grad1)" opacity="0.7"/>
+                    <circle cx="25" cy="25" r="1" fill="url(#grad1)" opacity="0.7"/>
+                </svg>
+                <span>HealthNavi</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="marketplace.html">Marketplace</a>
+                <a href="casestudies.html">Case Studies</a>
+                <a href="forum.html">Forum</a>
+                <a href="about.html">About Us</a>
+                <a href="learning.html">L&D</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="marketplace">
+        <div class="container">
+            <h1>AI Marketplace</h1>
+            <p>Discover agentic, ambiance, robotic, and clinical AI solutions for healthcare.</p>
+            
+            <!-- Category Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showCategory('agentic')">Agentic AI</button>
+                <button class="tab" onclick="showCategory('ambiance')">Ambiance AI</button>
+                <button class="tab" onclick="showCategory('robotic')">Robotic AI</button>
+                <button class="tab" onclick="showCategory('clinical')">Clinical AI</button>
+            </div>
+
+            <!-- Subcategories and Products -->
+            <div id="agentic" class="category active">
+                <h2>Subcategories</h2>
+                <ul class="subcats">
+                    <li onclick="showSubcat('diagnostics')">Diagnostics</li>
+                    <li onclick="showSubcat('clinical-decision')">Clinical Decision</li>
+                    <li onclick="showSubcat('patient-engagement')">Patient Engagement</li>
+                    <li onclick="showSubcat('operations')">Operations</li>
+                    <li onclick="showSubcat('research')">Research</li>
+                </ul>
+                <div id="diagnostics" class="subcat">
+                    <div class="product">
+                        <h3>DiagBot Pro</h3>
+                        <p>AI-driven diagnostic imaging analysis.</p>
+                        <ul>Functions: Image recognition, Anomaly detection</ul>
+                        <a href="#">Product Link</a>
+                    </div>
+                    <!-- Add more placeholders -->
+                </div>
+                <!-- Other subcats similar -->
+            </div>
+            <!-- Repeat for other categories with placeholders -->
+
+            <button class="submit-btn" onclick="alert('Premium feature: Submit your product')">Submit Product (Premium)</button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 HealthNavi. Navigating AI in Healthcare.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
