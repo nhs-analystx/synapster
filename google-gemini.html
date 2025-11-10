@@ -1,132 +1,392 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketplace - HealthNavi</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-</head>
-<body>
-    <header class="header">
-        <div class="container nav-container">
-            <div class="logo">
-                <img src="healthnavi_logo.png" alt="HealthNavi Logo">
-                <span>HealthNavi</span>
-            </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="marketplace.html" class="active">Marketplace</a></li>
-                    <li><a href="case-studies.html">Case Studies</a></li>
-                    <li><a href="forum.html">Forum</a></li>
-                    <li><a href="learning.html">Learning & Development</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+/* Marketplace Page Styling */
+.marketplace-page {
+    padding: 40px 0;
+    min-height: calc(100vh - 120px); /* Adjust based on header/footer height */
+}
 
-    <main class="marketplace-page">
-        <div class="container">
-            <h1 class="page-title">AI Healthcare Marketplace</h1>
-            <p class="page-description">Discover cutting-edge AI products tailored for the healthcare industry. Explore solutions across various AI categories and functional areas.</p>
+.page-title {
+    font-size: 2.8em;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
 
-            <div class="marketplace-actions">
-                <button class="submit-product-btn" onclick="document.getElementById('productSubmissionModal').style.display='block'">Submit Your Product</button>
-            </div>
+.page-description {
+    text-align: center;
+    font-size: 1.1em;
+    color: var(--text-color-light);
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+}
 
-            <div class="ai-categories-nav">
-                <ul class="category-tabs">
-                    <li class="tab-item"><a href="#agentic-ai" class="tab-link active">Agentic AI</a></li>
-                    <li class="tab-item"><a href="#ambiance-ai" class="tab-link">Ambiance AI</a></li>
-                    <li class="tab-item"><a href="#robotic-ai" class="tab-link">Robotic AI</a></li>
-                    <li class="tab-item"><a href="#clinical-ai" class="tab-link">Clinical AI</a></li>
-                </ul>
-            </div>
+.marketplace-actions {
+    text-align: center;
+    margin-bottom: 40px;
+}
 
-            <div class="ai-products-list">
-                <!-- Agentic AI Section --><section id="agentic-ai" class="ai-category-section active">
-                    <h2 class="category-heading">Agentic AI <span class="category-subtitle">Autonomous Decision & Task Execution</span></h2>
-                    <div class="functional-areas-filter">
-                        <span class="filter-label">Filter by Function:</span>
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="diagnostics">Diagnostics</button>
-                        <button class="filter-btn" data-filter="clinical-decision">Clinical Decision Support</button>
-                        <button class="filter-btn" data-filter="patient-engagement">Patient Engagement</button>
-                        <button class="filter-btn" data-filter="operations">Operations</button>
-                        <button class="filter-btn" data-filter="research">Research</button>
-                    </div>
-                    <div class="product-grid">
-                        <!-- Example Agentic AI Product --><div class="product-card" data-functions="diagnostics clinical-decision operations">
-                            <h3 class="product-name">MediSense AI</h3>
-                            <p class="product-description">An intelligent agent designed for preliminary diagnostic assessment and streamlining hospital workflows.</p>
-                            <div class="product-functions">
-                                <span>Diagnostics</span>, <span>Clinical Decision</span>, <span>Operations</span>
-                            </div>
-                            <a href="#" class="product-link">View Product Details</a>
-                        </div>
-                        <div class="product-card" data-functions="patient-engagement clinical-decision">
-                            <h3 class="product-name">CareNavigator Agent</h3>
-                            <p class="product-description">An AI agent providing personalized patient navigation, appointment scheduling, and medication reminders.</p>
-                            <div class="product-functions">
-                                <span>Patient Engagement</span>, <span>Clinical Decision</span>
-                            </div>
-                            <a href="#" class="product-link">View Product Details</a>
-                        </div>
-                        <!-- Add more Agentic AI products here --></div>
-                </section>
+.submit-product-btn {
+    background-color: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-                <!-- Ambiance AI Section --><section id="ambiance-ai" class="ai-category-section">
-                    <h2 class="category-heading">Ambiance AI <span class="category-subtitle">Context-Aware & Environmental Intelligence</span></h2>
-                    <div class="functional-areas-filter">
-                        <span class="filter-label">Filter by Function:</span>
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="operations">Operations</button>
-                        <button class="filter-btn" data-filter="patient-engagement">Patient Engagement</button>
-                    </div>
-                    <div class="product-grid">
-                        <div class="product-card" data-functions="operations patient-engagement">
-                            <h3 class="product-name">EnviroHealth Monitor</h3>
-                            <p class="product-description">AI system for optimizing hospital environment (lighting, temperature) for patient comfort and staff efficiency.</p>
-                            <div class="product-functions">
-                                <span>Operations</span>, <span>Patient Engagement</span>
-                            </div>
-                            <a href="#" class="product-link">View Product Details</a>
-                        </div>
-                        <!-- Add more Ambiance AI products here --></div>
-                </section>
+.submit-product-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
 
-                <!-- Robotic AI Section --><section id="robotic-ai" class="ai-category-section">
-                    <h2 class="category-heading">Robotic AI <span class="category-subtitle">Physical Automation & Assistance</span></h2>
-                    <div class="functional-areas-filter">
-                        <span class="filter-label">Filter by Function:</span>
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="operations">Operations</button>
-                        <button class="filter-btn" data-filter="clinical-decision">Clinical Decision Support</button>
-                    </div>
-                    <div class="product-grid">
-                        <div class="product-card" data-functions="operations clinical-decision">
-                            <h3 class="product-name">SurgiBot Assistant</h3>
-                            <p class="product-description">Robotic arm enhanced with AI for precision surgery, reducing human error and improving outcomes.</p>
-                            <div class="product-functions">
-                                <span>Operations</span>, <span>Clinical Decision</span>
-                            </div>
-                            <a href="#" class="product-link">View Product Details</a>
-                        </div>
-                        <!-- Add more Robotic AI products here --></div>
-                </section>
+.ai-categories-nav {
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
 
-                <!-- Clinical AI Section --><section id="clinical-ai" class="ai-category-section">
-                    <h2 class="category-heading">Clinical AI <span class="category-subtitle">Data Analysis & Diagnostic Support</span></h2>
-                    <div class="functional-areas-filter">
-                        <span class="filter-label">Filter by Function:</span>
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="diagnostics">Diagnostics</button>
-                        <button class="filter-btn" data-filter="clinical-decision">Clinical Decision Support</button>
-                        <button class="filter-btn" data-filter="research">Research</button>
-                    </div>
-                    <div class="product-grid">
-                        <div class="product-card" data-functions="diagnostics research">
-                            <h3 class="product-name">PathoInsight AI</h3>
-                            <p class="product-description">AI-
+.category-tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.tab-item .tab-link {
+    color: var(--text-color-light);
+    text-decoration: none;
+    font-size: 1.15em;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.tab-item .tab-link:hover {
+    color: var(--primary-color);
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.tab-item .tab-link.active {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+}
+
+.ai-category-section {
+    display: none; /* Hidden by default */
+    padding: 30px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.ai-category-section:last-child {
+    border-bottom: none;
+}
+
+.ai-category-section.active {
+    display: block; /* Show active section */
+}
+
+.category-heading {
+    font-size: 2.2em;
+    color: var(--text-color-light);
+    margin-bottom: 25px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.category-subtitle {
+    font-size: 0.6em;
+    color: #a0a0b0;
+    margin-top: 5px;
+    font-weight: 400;
+}
+
+.functional-areas-filter {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.filter-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-right: 15px;
+    font-size: 0.95em;
+}
+
+.filter-btn {
+    background-color: #3a3a5e;
+    color: var(--text-color-light);
+    border: 1px solid var(--border-color);
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin: 5px;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.filter-btn.active {
+    background-color: var(--accent-green);
+    color: white;
+    border-color: var(--accent-green);
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background-color: #2e2e4a;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 123, 255, 0.3);
+}
+
+.product-name {
+    font-size: 1.6em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.product-description {
+    font-size: 0.95em;
+    color: #b0b0c0;
+    margin-bottom: 15px;
+    flex-grow: 1; /* Allows description to take up available space */
+}
+
+.product-functions span {
+    display: inline-block;
+    background-color: #3a3a5e;
+    color: #d0d0e0;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.product-link {
+    display: inline-block;
+    margin-top: 15px;
+    background-color: var(--accent-green);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    align-self: flex-start; /* Aligns button to the left */
+}
+
+.product-link:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #2e2e4a;
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 90%; /* Could be more responsive */
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    color: var(--text-color-light);
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-content p {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 0.95em;
+    color: #b0b0c0;
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color-light);
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group textarea,
+.form-group select {
+    width: calc(100% - 24px); /* Account for padding */
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #3a3a5e;
+    color: var(--text-color-light);
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.checkbox-group label {
+    display: inline-block;
+    margin-left: 8px;
+    margin-bottom: 5px;
+    font-weight: 400;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 5px;
+    transform: scale(1.2);
+}
+
+.submit-form-btn {
+    width: 100%;
+    background-color: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-form-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+
+/* Responsive adjustments for Marketplace */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2em;
+    }
+    .page-description {
+        font-size: 1em;
+        margin-bottom: 30px;
+    }
+    .ai-categories-nav {
+        margin-bottom: 30px;
+    }
+    .category-tabs {
+        gap: 15px;
+    }
+    .tab-item .tab-link {
+        font-size: 1em;
+        padding: 8px 15px;
+    }
+    .category-heading {
+        font-size: 1.8em;
+    }
+    .functional-areas-filter {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+    .filter-label {
+        flex-basis: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+    .product-grid {
+        grid-template-columns: 1fr; /* Stack products on small screens */
+    }
+    .product-card {
+        padding: 20px;
+    }
+    .product-name {
+        font-size: 1.4em;
+    }
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+}
