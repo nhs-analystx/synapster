@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="logo">
@@ -51,7 +52,7 @@
                 <button class="tab" onclick="showCategory('clinical')">Clinical AI</button>
             </div>
 
-            <!-- Subcategories and Products -->
+            <!-- Agentic Category -->
             <div id="agentic" class="category active">
                 <h2>Subcategories</h2>
                 <ul class="subcats">
@@ -61,18 +62,188 @@
                     <li onclick="showSubcat('operations')">Operations</li>
                     <li onclick="showSubcat('research')">Research</li>
                 </ul>
-                <div id="diagnostics" class="subcat">
+                
+                <!-- Diagnostics Subcat -->
+                <div id="diagnostics" class="subcat active">
                     <div class="product">
-                        <h3>DiagBot Pro</h3>
-                        <p>AI-driven diagnostic imaging analysis.</p>
-                        <ul>Functions: Image recognition, Anomaly detection</ul>
-                        <a href="#">Product Link</a>
+                        <h3>Aidoc</h3>
+                        <p>AI-powered radiology workflow orchestration and prioritization.</p>
+                        <ul>Functions: Image analysis, Anomaly detection, Triage</ul>
+                        <a href="https://www.aidoc.com/" target="_blank">Product Link</a>
                     </div>
-                    <!-- Add more placeholders -->
+                    <div class="product">
+                        <h3>PathAI</h3>
+                        <p>AI platform for pathology diagnostics.</p>
+                        <ul>Functions: Tissue analysis, Cancer detection, Biomarker identification</ul>
+                        <a href="https://www.pathai.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Tempus</h3>
+                        <p>AI-driven precision medicine platform.</p>
+                        <ul>Functions: Genomic sequencing, Diagnostic insights, Clinical trial matching</ul>
+                        <a href="https://www.tempus.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Viz.ai</h3>
+                        <p>AI for stroke and neurovascular diagnostics.</p>
+                        <ul>Functions: CT scan analysis, Alerting, Workflow automation</ul>
+                        <a href="https://www.viz.ai/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Butterfly iQ</h3>
+                        <p>Portable ultrasound with AI guidance.</p>
+                        <ul>Functions: Real-time imaging, Auto-capture, Guidance</ul>
+                        <a href="https://www.butterflynetwork.com/" target="_blank">Product Link</a>
+                    </div>
                 </div>
-                <!-- Other subcats similar -->
+                
+                <!-- Clinical Decision Subcat -->
+                <div id="clinical-decision" class="subcat">
+                    <div class="product">
+                        <h3>DAX Copilot</h3>
+                        <p>AI medical scribe for clinical notes and decisions.</p>
+                        <ul>Functions: Ambient listening, Note generation, Decision support</ul>
+                        <a href="https://www.microsoft.com/en-us/dax-copilot" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Google MedLM</h3>
+                        <p>AI model for medical Q&A and decision support.</p>
+                        <ul>Functions: Query answering, Evidence summarization, Risk assessment</ul>
+                        <a href="https://cloud.google.com/vertex-ai/docs/generative-ai/medlm" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Innovaccer Provider Copilot</h3>
+                        <p>AI copilot for care coordination and decisions.</p>
+                        <ul>Functions: Patient insights, Gap closure, Workflow optimization</ul>
+                        <a href="https://innovaccer.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>OpenEvidence</h3>
+                        <p>AI search engine for clinical evidence.</p>
+                        <ul>Functions: Literature search, Summarization, Recommendation</ul>
+                        <a href="https://www.openevidence.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Atropos Health</h3>
+                        <p>AI platform for evidence-based decisions.</p>
+                        <ul>Functions: Real-world evidence, Outcome prediction, Protocol generation</ul>
+                        <a href="https://www.atroposhealth.com/" target="_blank">Product Link</a>
+                    </div>
+                </div>
+                
+                <!-- Patient Engagement Subcat -->
+                <div id="patient-engagement" class="subcat">
+                    <div class="product">
+                        <h3>Ada</h3>
+                        <p>AI symptom checker for patient self-triage.</p>
+                        <ul>Functions: Symptom assessment, Care guidance, Follow-up reminders</ul>
+                        <a href="https://ada.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Simbie AI</h3>
+                        <p>Voice-based patient engagement platform.</p>
+                        <ul>Functions: Conversational AI, Education, Adherence monitoring</ul>
+                        <a href="https://www.simbie.ai/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>TeleVox</h3>
+                        <p>AI-driven patient communication tools.</p>
+                        <ul>Functions: Automated messaging, Appointment reminders, Feedback collection</ul>
+                        <a href="https://www.televox.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Keragon</h3>
+                        <p>No-code AI for patient outreach.</p>
+                        <ul>Functions: Workflow automation, Personalization, Engagement analytics</ul>
+                        <a href="https://www.keragon.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Sensely</h3>
+                        <p>Molly AI virtual nurse for engagement.</p>
+                        <ul>Functions: Chatbot interactions, Vital monitoring, Education delivery</ul>
+                        <a href="https://www.sensely.com/" target="_blank">Product Link</a>
+                    </div>
+                </div>
+                
+                <!-- Operations Subcat -->
+                <div id="operations" class="subcat">
+                    <div class="product">
+                        <h3>DeepScribe</h3>
+                        <p>AI ambient scribe for operational efficiency.</p>
+                        <ul>Functions: Note-taking, Transcription, Workflow streamlining</ul>
+                        <a href="https://www.deepscribe.ai/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Innovaccer</h3>
+                        <p>AI platform for healthcare operations analytics.</p>
+                        <ul>Functions: Data unification, Predictive ops, Resource allocation</ul>
+                        <a href="https://innovaccer.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>LeanTaaS</h3>
+                        <p>AI for hospital operations optimization.</p>
+                        <ul>Functions: Scheduling, Capacity management, Throughput improvement</ul>
+                        <a href="https://leantaas.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Qventus</h3>
+                        <p>AI operating system for acute care.</p>
+                        <ul>Functions: Real-time alerts, Decision support, Ops automation</ul>
+                        <a href="https://www.qventus.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Medallion</h3>
+                        <p>AI for revenue cycle operations.</p>
+                        <ul>Functions: Claims processing, Denial prediction, Billing optimization</ul>
+                        <a href="https://www.medallionhealth.com/" target="_blank">Product Link</a>
+                    </div>
+                </div>
+                
+                <!-- Research Subcat -->
+                <div id="research" class="subcat">
+                    <div class="product">
+                        <h3>MONAI</h3>
+                        <p>Open-source AI for medical imaging research.</p>
+                        <ul>Functions: Model training, Annotation, Collaboration</ul>
+                        <a href="https://monai.io/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>NVIDIA Clara</h3>
+                        <p>AI platform for healthcare research and discovery.</p>
+                        <ul>Functions: Simulation, Drug discovery, Imaging analysis</ul>
+                        <a href="https://www.nvidia.com/en-us/clara/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Tempus</h3>
+                        <p>AI for oncology research and trials.</p>
+                        <ul>Functions: Data aggregation, Biomarker discovery, Trial matching</ul>
+                        <a href="https://www.tempus.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>PathAI</h3>
+                        <p>AI for pathology research.</p>
+                        <ul>Functions: Dataset curation, Model validation, Insight generation</ul>
+                        <a href="https://www.pathai.com/" target="_blank">Product Link</a>
+                    </div>
+                    <div class="product">
+                        <h3>Google DeepMind Health</h3>
+                        <p>AI research tools for protein folding and more.</p>
+                        <ul>Functions: AlphaFold, Genomic analysis, Predictive modeling</ul>
+                        <a href="https://deepmind.google/health/" target="_blank">Product Link</a>
+                    </div>
+                </div>
             </div>
-            <!-- Repeat for other categories with placeholders -->
+
+            <!-- Other Categories (placeholders - expand similarly) -->
+            <div id="ambiance" class="category">
+                <p>Ambiance AI solutions (e.g., environmental sensing) - Coming soon with 5+ products.</p>
+            </div>
+            <div id="robotic" class="category">
+                <p>Robotic AI solutions - Coming soon with 5+ products.</p>
+            </div>
+            <div id="clinical" class="category">
+                <p>Clinical AI solutions - Coming soon with 5+ products.</p>
+            </div>
 
             <button class="submit-btn" onclick="alert('Premium feature: Submit your product')">Submit Product (Premium)</button>
         </div>
