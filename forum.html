@@ -1,0 +1,58 @@
+<!-- forum.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum - HealthNavi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <!-- Same header -->
+    </header>
+
+    <main class="forum">
+        <div class="container">
+            <h1>AI-Powered Forum</h1>
+            <p>FAQs, Q&A, code sharing, and community chats.</p>
+
+            <!-- Chatbot Forum -->
+            <div class="forum-chat">
+                <div id="forum-messages" class="chat-messages">
+                    <div class="message bot">Ask me anything about AI in healthcare!</div>
+                </div>
+                <input type="text" id="forum-input" placeholder="Your question..." />
+                <button onclick="sendForumMessage()">Ask</button>
+            </div>
+
+            <!-- GitHub-like Sections -->
+            <section class="repos">
+                <h2>Code Repos & Showcases</h2>
+                <div class="repo">
+                    <h3>AI-Diag Repo</h3>
+                    <p>Share and fork diagnostic AI code.</p>
+                    <a href="#">View Repo</a>
+                </div>
+                <!-- More -->
+            </section>
+
+            <section class="communities">
+                <h2>Communities</h2>
+                <div class="community">
+                    <h3>Diagnostics Devs</h3>
+                    <p>Chat and collaborate.</p>
+                </div>
+                <!-- More -->
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <!-- Same -->
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
