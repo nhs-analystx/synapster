@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthNavi - Navigating AI in Healthcare</title>
+    <style>
+        /* Futuristic CSS: Dark theme, gradients, glassmorphism */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #0A2540 0%, #00D4FF 100%); color: #FFFFFF; overflow-x: hidden; }
+        nav { position: fixed; top: 0; width: 100%; background: rgba(10, 37, 64, 0.9); backdrop-filter: blur(10px); padding: 1rem 0; z-index: 1000; }
+        nav ul { list-style: none; display: flex; justify-content: center; gap: 2rem; }
+        nav a { color: #FFFFFF; text-decoration: none; font-weight: bold; transition: color 0.3s; }
+        nav a:hover { color: #00D4FF; }
+        section { min-height: 100vh; padding: 5rem 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        #landing { background: rgba(0,0,0,0.5); }
+        .chatbot { width: 80%; max-width: 500px; height: 400px; border: 1px solid #00D4FF; border-radius: 20px; padding: 1rem; background: rgba(255,255,255,0.1); overflow-y: auto; }
+        .chat-input { width: 100%; padding: 0.5rem; margin-top: 1rem; border-radius: 10px; border: none; }
+        .product-grid, .case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 1.5rem; transition: transform 0.3s; }
+        .card:hover { transform: scale(1.05); }
+        details { cursor: pointer; margin: 1rem 0; }
+        summary { font-weight: bold; }
+        form { display: flex; flex-direction: column; gap: 1rem; max-width: 400px; }
+        input, textarea, button { padding: 0.5rem; border-radius: 10px; border: none; }
+        button { background: #00D4FF; color: #0A2540; font-weight: bold; cursor: pointer; }
+        .logo { width: 200px; height: 60px; margin-bottom: 2rem; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        section { animation: fadeIn 1s ease-in; }
+        @media (max-width: 768px) { nav ul { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#landing" onclick="scrollToSection('landing')">Home</a></li>
+            <li><a href="#marketplace" onclick="scrollToSection('marketplace')">Marketplace</a></li>
+            <li><a href="#casestudies" onclick="scrollToSection('casestudies')">Case Studies</a></li>
+            <li><a href="#forum" onclick="scrollToSection('forum')">Forum</a></li>
+            <li><a href="#learning" onclick="scrollToSection('learning')">L&D</a></li>
+            <li><a href="#about" onclick="scrollToSection('about')">About Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Landing Page: AI Chatbot -->
+    <section id="landing">
+        <div class="logo">
+            <!-- Inline SVG Logo -->
+            <svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#00D4FF;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0099CC;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                        <feMerge> 
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <rect width="200" height="60" fill="#0A2540" rx="10" opacity="0.8"/>
+                <text x="50" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="url(#grad)" filter="url(#glow)">Health</text>
+                <text x="140" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#FFFFFF">Navi</text>
+                <path d="M 10 20 L 20 30 L 10 40 M 15 25 L 25 25" stroke="url(#grad)" stroke-width="2" fill="none" filter="url(#glow)"/>
+            </svg>
+        </div>
+        <h1>Navigate the Future of Healthcare AI</h1>
+        <p>Chat with our AI to discover solutions in agentic, ambiance, robotic, and clinical AI.</p>
+        <div class="chatbot" id="chatbot">
+            <div id="chat-messages"></div>
+            <input type="text" class="chat-input" id="chat-input" placeholder="Ask about diagnostics, patient engagement, or more..." onkeypress="handleChat(event)">
+        </div>
+    </section>
+
+    <!-- Marketplace -->
+    <section id="marketplace">
+        <h1>AI Marketplace</h1>
+        <p>Browse agents by category (Agentic, Ambiance, Robotic, Clinical). Submit your product if premium.</p>
+        <div class="product-grid">
+            <!-- Example Products from Research -->
+            <div class="card">
+                <h3>PathAI (Clinical - Diagnostics)</h3>
+                <p>AI-powered pathology platform for accurate cancer diagnostics.</p>
+                <details>
+                    <summary>Functions (Click to Expand)</summary>
+                    <ul>
+                        <li>Image analysis for tumor detection</li>
+                        <li>Integration with EHRs for faster reporting</li>
+                    </ul>
+                </details>
+                <a href="https://www.pathai.com/" target="_blank">Product Link</a>
+            </div>
+            <div class="card">
+                <h3>da Vinci Surgical System (Robotic - Operations)</h3>
+                <p>Intuitive Surgical's robot for minimally invasive procedures.</p>
+                <details>
+                    <summary>Functions (Click to Expand)</summary>
+                    <ul>
+                        <li>Precision cutting and suturing</li>
+                        <li>3D visualization for surgeons</li>
+                    </ul>
+                </details>
+                <a href="https://www.intuitive.com/en-us/products-and-services/da-vinci" target="_blank">Product Link</a>
+            </div>
+            <div class="card">
+                <h3>Ada Health (Agentic - Patient Engagement)</h3>
+                <p>Symptom checker app for personalized health advice.</p>
+                <details>
+                    <summary>Functions (Click to Expand)</summary>
+                    <ul>
+                        <li>Chat-based triage</li>
+                        <li>Appointment scheduling</li>
+                    </ul>
+                </details>
+                <a href="https://ada.com/" target="_blank">Product Link</a>
+            </div>
+            <div class="card">
+                <h3>Care.ai (Ambiance - Research)</h3>
+                <p>Ambient AI for smart hospital rooms and monitoring.</p>
+                <details>
+                    <summary>Functions (Click to Expand)</summary>
+                    <ul>
+                        <li>Patient fall detection via computer vision</li>
+                        <li>Data analytics for clinical trials</li>
+                    </ul>
+                </details>
+                <a href="https://www.care.ai/" target="_blank">Product Link</a>
+            </div>
+            <div class="card">
+                <h3>IBM Watson Health (Clinical - Clinical Decision)</h3>
+                <p>AI for evidence-based treatment recommendations.</p>
+                <details>
+                    <summary>Functions (Click to Expand)</summary>
+                    <ul>
+                        <li>Oncology treatment planning</li>
+                        <li>Drug interaction predictions</li>
+                    </ul>
+                </details>
+                <a href="https://www.ibm.com/watson-health" target="_blank">Product Link</a>
+            </div>
+            <div class="card">
+                <h3>Moxi Robot (Robotic - Operations)</h3>
+                <p>Diligent Robotics' assistant for hospital logistics.</p>
+                <details>
+                    <summary>Functions (Click to Expand)</summary>
+                    <ul>
+                        <li>Supply delivery</li>
+                        <li>Lab sample transport</li>
+                    </ul>
+                </details>
+                <a href="https://www.diligentrobots.com/moxi" target="_blank">Product Link</a>
+            </div>
+            <div class="card">
+                <h3>Hippocratic AI (Agentic - Patient Engagement)</h3>
+                <p>LLM-based agent for non-diagnostic patient interactions.</p>
+                <details>
+                    <summary>Functions (Click to Expand)</summary>
+                    <ul>
+                        <li>Follow-up calls</li>
+                        <li>Emotional support chat</li>
+                    </ul>
+                </details>
+                <a href="https://www.hippocraticai.com/" target="_blank">Product Link</a>
+            </div>
+            <div class="card">
+                <h3>Enlitic (Clinical - Diagnostics)</h3>
+                <p>AI for radiology triage and workflow optimization.</p>
+                <details>
+                    <summary>Functions (Click to Expand)</summary>
+                    <ul>
+                        <li>Priority case routing</li>
+                        <li>Image prioritization</li>
+                    </ul>
+                </details>
+                <a href="https://www.enlitic.com/" target="_blank">Product Link</a>
+            </div>
+        </div>
+        <form onsubmit="submitProduct(event)">
+            <h3>Submit Your Product (Premium Users)</h3>
+            <input type="text" placeholder="Product Name" required>
+            <textarea placeholder="Description & Functions" required></textarea>
+            <input type="url" placeholder="Product Link" required>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="casestudies">
+        <h1>Case Studies</h1>
+        <p>Real-world examples indexed by category/function. Submit yours below. Accessible from Marketplace/Forum.</p>
+        <div class="case-grid">
+            <!-- Real Case Studies from Research -->
+            <div class="card">
+                <h3>Cleveland Clinic Chatbots (Agentic - Patient Engagement)</h3>
+                <p><strong>Introduction:</strong> AI chatbots for enhanced communication.<br>
+                <strong>Problem:</strong> Low patient interaction in remote care.<br>
+                <strong>Methodology:</strong> NLP and ML for personalized responses.<br>
+                <strong>Agent Used:</strong> Custom AI-driven bots.<br>
+                <strong>Improved Outcome:</strong> Increased engagement, reduced no-shows by 20%.<sup><a href="#">[1]</a></sup></p>
+                <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11702416/" target="_blank">Read Full Case</a>
+            </div>
+            <div class="card">
+                <h3>University of Florida Health (Clinical - Clinical Decision)</h3>
+                <p><strong>Introduction:</strong> AI integration in decision support.<br>
+                <strong>Problem:</strong> Delayed informed decisions.<br>
+                <strong>Methodology:</strong> Predictive analytics on EHR data.<br>
+                <strong>Agent Used:</strong> Inferscience AI platform.<br>
+                <strong>Improved Outcome:</strong> 30% faster decisions, better resource allocation.<sup><a href="#">[3]</a></sup></p>
+                <a href="https://www.inferscience.com/7-ai-in-healthcare-case-studies-transforming-patient-care" target="_blank">Read Full Case</a>
+            </div>
+            <div class="card">
+                <h3>Diagnostikum Radiology (Robotic/Clinical - Diagnostics)</h3>
+                <p><strong>Introduction:</strong> AI for OCT eye scans.<br>
+                <strong>Problem:</strong> Slow referral decisions.<br>
+                <strong>Methodology:</strong> Deep learning on 15K scans.<br>
+                <strong>Agent Used:</strong> IDx-DR software.<br>
+                <strong>Improved Outcome:</strong> 94% accuracy, faster treatments.<sup><a href="#">[4]</a></sup></p>
+                <a href="https://www.designveloper.com/guide/case-studies-of-ai-in-healthcare/" target="_blank">Read Full Case</a>
+            </div>
+            <div class="card">
+                <h3>UF Health Predictive Systems (Ambiance - Research)</h3>
+                <p><strong>Introduction:</strong> AI for monitoring and research.<br>
+                <strong>Problem:</strong> Inefficient patient monitoring.<br>
+                <strong>Methodology:</strong> ML models on genetic data.<br>
+                <strong>Agent Used:</strong> Custom predictive AI.<br>
+                <strong>Improved Outcome:</strong> Reduced readmissions by 25%.<sup><a href="#">[4]</a></sup></p>
+                <a href="https://www.designveloper.com/guide/case-studies-of-ai-in-healthcare/" target="_blank">Read Full Case</a>
+            </div>
+            <div class="card">
+                <h3>Babylon Health Symptom Checker (Agentic - Diagnostics)</h3>
+                <p><strong>Introduction:</strong> Chatbot for triage.<br>
+                <strong>Problem:</strong> Overburdened GPs.<br>
+                <strong>Methodology:</strong> LLM-based assessments.<br>
+                <strong>Agent Used:</strong> Babylon app.<br>
+                <strong>Improved Outcome:</strong> Millions of assessments, cost savings.<sup><a href="#">[5]</a></sup></p>
+                <a href="https://intuitionlabs.ai/articles/ai-clinical-decision-support-evolution" target="_blank">Read Full Case</a>
+            </div>
+            <div class="card">
+                <h3>OSF Healthcare Digital Front Door (Robotic - Operations)</h3>
+                <p><strong>Introduction:</strong> AI navigation assistant.<br>
+                <strong>Problem:</strong> Inefficient scheduling.<br>
+                <strong>Methodology:</strong> RPA for virtual assistance.<br>
+                <strong>Agent Used:</strong> Fabric's Clare bot.<br>
+                <strong>Improved Outcome:</strong> Reduced costs, better access.<sup><a href="#">[12]</a></sup></p>
+                <a href="https://www.vktr.com/ai-disruption/5-ai-case-studies-in-health-care/" target="_blank">Read Full Case</a>
+            </div>
+        </div>
+        <form onsubmit="submitCase(event)">
+            <h3>Submit Your Case Study</h3>
+            <input type="text" placeholder="Title & Category" required>
+            <textarea placeholder="Introduction, Problem, Methodology, Agent, Outcome" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="footnotes"><small><a name="#">[1]</a> PMC ; <a href="#">[3]</a> Inferscience; etc.</small></div>
+    </section>
+
+    <!-- Forum: AI-Powered Chatbot Forum -->
+    <section id="forum">
+        <h1>AI Forum - FAQs, Q&A, & Community</h1>
+        <p>Discuss, share code like GitHub, showcase products. Powered by AI moderation.</p>
+        <div class="card">
+            <h3>Sample Q&A</h3>
+            <details>
+                <summary>Q: How to implement agentic AI in diagnostics?</summary>
+                <p>A: Use tools like PathAI for integration. <br> Code Snippet: <pre><code>// Example Python import
+import pathai
+result = pathai.analyze_image('scan.jpg')</code></pre></p>
+            </details>
+            <details>
+                <summary>Q: Best robotic AI for operations?</summary>
+                <p>A: da Vinci system excels in precision. Share your experiences below.</p>
+            </details>
+        </div>
+        <form onsubmit="submitForum(event)">
+            <input type="text" placeholder="Your Question/Post">
+            <textarea placeholder="Details/Code/Product Showcase"></textarea>
+            <button type="submit">Post</button>
+        </form>
+    </section>
+
+    <!-- Learning & Development -->
+    <section id="learning">
+        <h1>Learning & Development</h1>
+        <p>Pathways for developers/leaders: AI basics, industry implementation, similar products.</p>
+        <div class="product-grid">
+            <div class="card">
+                <h3>Developer Pathway: Agentic AI</h3>
+                <p>Learn to build autonomous agents. Resources: Coursera AI Specialization.<br>Similar Products: Hippocratic AI for engagement.</p>
+                <a href="https://www.coursera.org/specializations/ai-for-everyone" target="_blank">Start Learning</a>
+            </div>
+            <div class="card">
+                <h3>Leader Pathway: Healthcare Implementation</h3>
+                <p>Industry guides for clinical ops. Case: Mayo Clinic PKD AI.<br>Similar: da Vinci for robotics.</p>
+                <a href="https://www.keragon.com/blog/ai-in-healthcare-examples" target="_blank">Explore</a>
+            </div>
+            <div class="card">
+                <h3>Research Pathway: Ambiance AI</h3>
+                <p>Ambient monitoring tutorials. Similar: Care.ai smart rooms.</p>
+                <a href="https://www.simbie.ai/agentic-ai-use-cases-in-healthcare/" target="_blank">Dive In</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us -->
+    <section id="about">
+        <h1>About HealthNavi</h1>
+        <p>We founded HealthNavi to democratize AI in healthcare, starting with diagnostics and expanding to all industries. Through our marketplace, we connect innovators with buyers; L&D empowers skill-building; the community fosters collaboration; and case studies prove real impact. Our goal: Safer, smarter care for everyone—reducing errors by 30% and accelerating research. Join us in navigating tomorrow's health.</p>
+    </section>
+
+    <script>
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+        function handleChat(event) {
+            if (event.key === 'Enter') {
+                const input = document.getElementById('chat-input');
+                const messages = document.getElementById('chat-messages');
+                messages.innerHTML += `<p><strong>You:</strong> ${input.value}</p>`;
+                // Simulated AI response
+                setTimeout(() => {
+                    messages.innerHTML += `<p><strong>HealthNavi AI:</strong> Based on your query, check our ${input.value.includes('diagnostics') ? 'Clinical AI' : 'Marketplace'} section!</p>`;
+                    messages.scrollTop = messages.scrollHeight;
+                }, 500);
+                input.value = '';
+                document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+            }
+        }
+        function submitProduct(event) { event.preventDefault(); alert('Product submitted! (Demo)'); }
+        function submitCase(event) { event.preventDefault(); alert('Case submitted! (Demo)'); }
+        function submitForum(event) { event.preventDefault(); alert('Post submitted! (Demo)'); }
+    </script>
+</body>
+</html>
