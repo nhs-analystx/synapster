@@ -1,4 +1,4 @@
-/* style.css - Futuristic, clean design like Apple/Xiaomi: Minimalist, ample whitespace, subtle gradients, smooth animations */
+/* style.css - Updated with dynamic hover effects */
 :root {
     --bg-color: #ffffff;
     --text-color: #000000;
@@ -63,16 +63,22 @@ body {
     gap: 0.5rem;
 }
 
+.nav {
+    display: flex;
+    gap: 1rem;
+}
+
 .nav a {
     color: var(--text-color);
     text-decoration: none;
-    margin-left: 2rem;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    transform: translateY(0);
 }
 
 .nav a:hover {
     color: var(--accent-color);
+    transform: translateY(-2px) scale(1.05);
 }
 
 main {
@@ -155,11 +161,13 @@ p {
     border: none;
     border-radius: 25px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    transform: translateY(0);
 }
 
 .chat-input button:hover {
     background: #0056cc;
+    transform: translateY(-2px);
 }
 
 /* Marketplace */
@@ -177,6 +185,11 @@ p {
     border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.tab:hover {
+    transform: translateY(-2px);
 }
 
 .tab.active {
@@ -206,12 +219,14 @@ p {
     background: rgba(0,122,255,0.1);
     border-radius: 20px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    transform: translateY(0);
 }
 
 .subcats li:hover {
     background: var(--accent-color);
     color: white;
+    transform: translateY(-3px);
 }
 
 .product {
@@ -220,6 +235,13 @@ p {
     border-radius: 10px;
     margin-bottom: 1rem;
     box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
 }
 
 .product h3 {
@@ -242,6 +264,13 @@ p {
     border-radius: 30px;
     font-size: 1.1rem;
     cursor: pointer;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
 }
 
 /* Case Studies */
@@ -251,6 +280,13 @@ p {
     border-radius: 10px;
     margin-bottom: 2rem;
     box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.case-study:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
 }
 
 .case-study section {
@@ -258,6 +294,11 @@ p {
     padding: 1rem;
     background: rgba(255,255,255,0.05);
     border-left: 4px solid var(--accent-color);
+}
+
+.case-study h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
 }
 
 /* Forum */
@@ -279,6 +320,13 @@ p {
     border-radius: 10px;
     box-shadow: var(--shadow);
     text-align: center;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.pathway:hover, .industry:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
 }
 
 /* About */
@@ -297,6 +345,11 @@ p {
     margin-bottom: 1rem;
     padding-left: 1.5rem;
     position: relative;
+    transition: all 0.3s ease;
+}
+
+.goals li:hover {
+    transform: translateX(5px);
 }
 
 .goals li::before {
