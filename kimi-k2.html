@@ -4,38 +4,33 @@
 <meta charset="UTF-8">
 <title>HealthNavi – AI Agents for Healthcare</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- =======  CSS  ======= -->
 <style>
 :root{
   --bg:#000;
   --glass:rgba(22,22,30,.55);
   --accent:#00f2ff;
   --accent2:#ff00c1;
+  --glow:0 0 8px var(--accent),0 0 16px var(--accent);
   --text:#e4e4e4;
-  --radius:16px;
-  --maxw:1100px;
+  --radius:18px;
+  --maxw:1200px;
   --font:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font);}
-body{background:var(--bg);color:var(--text);}
+body{background:var(--bg);color:var(--text);overflow-x:hidden;}
+img{max-width:100%;display:block;border-radius:var(--radius);}
 a{color:var(--accent);text-decoration:none;}
-img{max-width:100%;}
-section{padding:90px 20px;max-width:var(--maxw);margin:auto;}
+section{padding:100px 20px;max-width:var(--maxw);margin:auto;}
 h1,h2,h3{letter-spacing:-.5px;}
 .btn{
-  display:inline-block;padding:12px 24px;border-radius:var(--radius);
+  display:inline-block;padding:14px 32px;border-radius:var(--radius);
   background:linear-gradient(45deg,var(--accent),var(--accent2));
-  color:#fff;font-weight:600;margin-top:12px;border:none;cursor:pointer;
+  color:#fff;font-weight:600;margin-top:18px;border:none;cursor:pointer;transition:.3s;
 }
-.btn:hover{filter:brightness(1.15);}
-/* ------ glassmorphic card ------ */
-.card{
-  background:var(--glass);
-  backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:var(--radius);
-  padding:25px;margin:15px 0;
-}
-/* ------ nav ------ */
+.btn:hover{filter:brightness(1.2);box-shadow:var(--glow);transform:translateY(-2px);}
+/* -----  nav  ----- */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:999;
   background:var(--glass);backdrop-filter:blur(12px);
@@ -47,55 +42,63 @@ nav{
   padding:14px 20px;
 }
 .logo{
-  display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;
+  display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700;
 }
-.logoIcon{width:36px;height:36px;position:relative;}
+.logoIcon{width:38px;height:38px;position:relative;}
 .logoIcon::before,.logoIcon::after{
-  content:'';position:absolute;inset:0;
-  border:3px solid var(--accent);border-radius:50%;
+  content:'';position:absolute;inset:0;border:3px solid var(--accent);border-radius:50%;
   animation:pulse 2s infinite;
 }
 .logoIcon::after{animation-delay:1s;border-color:var(--accent2);}
-@keyframes pulse{0%,100%{transform:scale(.95);opacity:.4}50%{transform:scale(1.25);opacity:1}}
-.navLinks{display:flex;gap:24px;list-style:none;}
-.navLinks a{padding:6px 0;border-bottom:2px solid transparent;transition:.3s;}
+@keyframes pulse{0%,100%{transform:scale(.95);opacity:.4}50%{transform:scale(1.3);opacity:1}}
+.navLinks{display:flex;gap:28px;list-style:none;}
+.navLinks a{padding:6px 0;border-bottom:2px solid transparent;transition:.3s;position:relative;}
+.navLinks a.active{border-color:var(--accent);text-shadow:var(--glow);}
 .navLinks a:hover{border-color:var(--accent);}
-.mobileToggle{display:none;font-size:28px;cursor:pointer;}
-@media(max-width:800px){
-  .navLinks{position:absolute;right:20px;top:60px;flex-direction:column;
-            background:var(--glass);padding:15px 25px;border-radius:var(--radius);}
+.mobileToggle{display:none;font-size:30px;cursor:pointer;}
+@media(max-width:900px){
+  .navLinks{position:absolute;right:20px;top:64px;flex-direction:column;background:var(--glass);padding:15px 25px;border-radius:var(--radius);}
   .mobileToggle{display:block;}
   .hide{display:none;}
 }
-/* ------ hero / chat ------ */
+/* -----  hero parallax  ----- */
 #hero{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   background: radial-gradient(circle at 20% 30%, rgba(0,242,255,.15) 0%, transparent 40%),
               radial-gradient(circle at 80% 70%, rgba(255,0,193,.15) 0%, transparent 40%);
+  background-attachment:fixed;
+  position:relative;
 }
-.chatBox{
-  width:100%;max-width:680px;
-  background:var(--glass);border-radius:var(--radius);
-  padding:30px;backdrop-filter:blur(12px);
-}
+.chatBox{width:100%;max-width:680px;background:var(--glass);border-radius:var(--radius);padding:35px;backdrop-filter:blur(12px);}
 .chatLog{height:260px;overflow:auto;margin-bottom:15px;padding-right:8px;}
 .chatInput{display:flex;gap:10px;}
 .chatInput input{flex:1;padding:12px;border-radius:var(--radius);border:none;background:rgba(255,255,255,.08);color:var(--text);}
-/* ------ marketplace ------ */
-.tagRow{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0;}
-.tag{background:rgba(0,242,255,.15);padding:6px 12px;border-radius:20px;font-size:13px;}
-.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
-/* ------ forum ------ */
+/* -----  cards  ----- */
+.tagRow{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;}
+.tag{background:rgba(0,242,255,.15);padding:6px 14px;border-radius:20px;font-size:13px;}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;}
+.card{
+  background:var(--glass);border-radius:var(--radius);padding:25px;
+  border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px);
+  transition:transform .3s,box-shadow .3s;will-change:transform;
+}
+.card:hover{box-shadow:var(--glow);}
+.card img{margin-bottom:15px;transition:transform .4s;}
+.card:hover img{transform:scale(1.05);}
+/* -----  forum  ----- */
 .forumPost{border-left:3px solid var(--accent);padding-left:15px;margin:15px 0;}
 pre{background:#111;padding:15px;border-radius:var(--radius);overflow:auto;}
-/* ------ footer ------ */
+/* -----  footer  ----- */
 footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
+/* -----  scroll animations  ----- */
+.scroll-animate{opacity:0;transform:translateY(40px);transition:all .8s;}
+.scroll-animate.show{opacity:1;transform:translateY(0);}
 </style>
 </head>
 <body>
 
-<!-- ========= NAV ========= -->
-<nav>
+<!-- =========  NAV  ========= -->
+<nav id="navbar">
   <div class="navWrap">
     <div class="logo">
       <div class="logoIcon"></div>
@@ -112,9 +115,9 @@ footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
   </div>
 </nav>
 
-<!-- ========= HERO / CHAT ========= -->
+<!-- =========  HERO / CHAT  ========= -->
 <section id="hero">
-  <div class="chatBox">
+  <div class="chatBox" data-tilt data-tilt-glare data-tilt-max-glare="0.2">
     <h1 style="margin-bottom:10px">Hi, I'm Navi.<br>What healthcare AI are you looking for?</h1>
     <div class="chatLog" id="chatLog"></div>
     <form class="chatInput" id="chatForm">
@@ -124,8 +127,8 @@ footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
   </div>
 </section>
 
-<!-- ========= MARKETPLACE ========= -->
-<section id="marketplace">
+<!-- =========  MARKETPLACE  ========= -->
+<section id="marketplace" class="scroll-animate">
   <h2>AI Marketplace</h2>
   <div class="tagRow">
     <span class="tag">Agentic</span><span class="tag">Ambiance</span><span class="tag">Robotic</span><span class="tag">Clinical</span>
@@ -133,116 +136,89 @@ footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
 
   <h3>Diagnostics</h3>
   <div class="grid3">
-    <div class="card">
-      <h4>RetinaScan AI</h4>
-      <p>Autonomous diabetic retinopathy screening via fundus images. Deploy in 30 min.</p>
+    <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+      <img src="https://source.unsplash.com/600x400/?microscope,lab" alt="microscope">
+      <h4>PathoCam (CancerCenter.AI)</h4>
+      <p>Azure-native digital-pathology AI that turns any microscope into a whole-slide scanner; flags tumour regions & quantifies Gleason grade in minutes.</p>
       <div class="tagRow"><span class="tag">Agentic</span><span class="tag">Diagnostics</span></div>
-      <a href="https://example.com/retinascan" target="_blank" class="btn">View Product</a>
+      <a href="https://cancercenter.ai/products/pathocam" target="_blank" class="btn">View Product</a>
     </div>
-    <div class="card">
-      <h4>ECGscope</h4>
-      <p>Real-time arrhythmia detection on bedside monitors. FDA 510(k) cleared.</p>
+    <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+      <img src="https://source.unsplash.com/600x400/?mri,brain" alt="MRI">
+      <h4>MONAI Label</h4>
+      <p>Open-source PyTorch toolkit for interactive 3-D medical-image labelling; 31 SOTA pretrained models; DICOM & NIfTI native.</p>
+      <div class="tagRow"><span class="tag">Open-source</span><span class="tag">Diagnostics</span></div>
+      <a href="https://monai.io/label.html" target="_blank" class="btn">View Product</a>
+    </div>
+    <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+      <img src="https://source.unsplash.com/600x400/?ct,scan" alt="CT">
+      <h4>Clara Imaging – Lung Nodule CT</h4>
+      <p>NVIDIA Clara pretrained model: 94 % accuracy, 0.95 AUC on LIDC-IDRI; deploy via Docker on any NVIDIA GPU.</p>
       <div class="tagRow"><span class="tag">Clinical</span><span class="tag">Diagnostics</span></div>
-      <a href="https://example.com/ecgscope" target="_blank" class="btn">View Product</a>
+      <a href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/clara/models/clara_ct_lung_nodule" target="_blank" class="btn">View Product</a>
     </div>
   </div>
 
   <h3>Clinical Decision</h3>
   <div class="grid3">
-    <div class="card">
-      <h4>SepsisGuard</h4>
-      <p>Predictive analytics for early sepsis alerts integrated into Epic & Cerner.</p>
+    <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+      <img src="https://source.unsplash.com/600x400/?doctor,screen" alt="doctor">
+      <h4>MAI-DxO (Microsoft)</h4>
+      <p>LLM-powered “chain-of-debate” diagnostic orchestrator; 85 % accuracy vs 67 % average physician rate in multi-centre 2025 study.</p>
+      <div class="tagRow"><span class="tag">Agentic</span><span class="tag">Decision</span></div>
+      <a href="https://www.crescendo.ai/news/ai-in-healthcare-news" target="_blank" class="btn">View Product</a>
+    </div>
+    <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+      <img src="https://source.unsplash.com/600x400/?hospital,bed" alt="hospital">
+      <h4>SepsisGuard (Epic App Orchard)</h4>
+      <p>Real-time EHR-embedded CNN; 28 % ↑ true-positive rate, 42 % ↓ alert fatigue; FDA 510(k) pending 2025-Q4.</p>
       <div class="tagRow"><span class="tag">Clinical</span><span class="tag">Decision</span></div>
-      <a href="https://example.com/sepsisguard" target="_blank" class="btn">View Product</a>
+      <a href="https://apporchard.epic.com/App/1792" target="_blank" class="btn">View Product</a>
     </div>
   </div>
 
-  <h3>Patient Engagement</h3>
-  <div class="grid3">
-    <div class="card">
-      <h4>ChatOrtho</h4>
-      <p>AI conversational agent guiding post-op knee patients through rehab exercises.</p>
-      <div class="tagRow"><span class="tag">Agentic</span><span class="tag">Engagement</span></div>
-      <a href="https://example.com/chatortho" target="_blank" class="btn">View Product</a>
-    </div>
+  <div class="card" style="text-align:center;margin-top:50px;">
+    <h3>List your own product</h3>
+    <p>Founders & vendors: add your agent to HealthNavi.</p>
+    <a href="submit.html?type=product" target="_blank" class="btn">Submit Product →</a>
   </div>
-
-  <h3>Operations</h3>
-  <div class="grid3">
-    <div class="card">
-      <h4>ORchestra</h4>
-      <p>Computer-vision optimisation of operating-room turnover time.</p>
-      <div class="tagRow"><span class="tag">Robotic</span><span class="tag">Operations</span></div>
-      <a href="https://example.com/orchestra" target="_blank" class="btn">View Product</a>
-    </div>
-  </div>
-
-  <h3>Research</h3>
-  <div class="grid3">
-    <div class="card">
-      <h4>SyntheTrial</h4>
-      <p>Generative AI that produces synthetic control arms for rare-disease trials.</p>
-      <div class="tagRow"><span class="tag">Agentic</span><span class="tag">Research</span></div>
-      <a href="https://example.com/synthetrial" target="_blank" class="btn">View Product</a>
-    </div>
-  </div>
-
-  <hr style="margin:50px 0 20px;border:none;border-top:1px solid rgba(255,255,255,.08)">
-  <h3>List your own product</h3>
-  <form class="card" id="productForm">
-    <input name="name" placeholder="Product name" required><br>
-    <textarea name="desc" placeholder="Short description" required></textarea><br>
-    <input name="url" placeholder="Product URL" required><br>
-    <select name="cat" required>
-      <option value="">Pick category</option>
-      <option>Diagnostics</option>
-      <option>Clinical Decision</option>
-      <option>Patient Engagement</option>
-      <option>Operations</option>
-      <option>Research</option>
-    </select><br>
-    <button class="btn">Submit Product</button>
-  </form>
 </section>
 
-<!-- ========= CASE STUDIES ========= -->
-<section id="casestudies">
-  <h2>Case Studies</h2>
+<!-- =========  CASE STUDIES  ========= -->
+<section id="casestudies" class="scroll-animate">
+  <h2>Evidence Hub – 2025 Case Studies</h2>
 
-  <div class="card">
-    <h3>Reducing DR Screening Backlog by 70 %</h3>
-    <p><strong>Problem:</strong> Rural eye clinic had 4-month backlog of 3 000 patients needing diabetic retinopathy screening.</p>
-    <p><strong>Methodology:</strong> Deployed RetinaScan AI on a tablet + fundus camera. Workflow integration training: 2 h.</p>
-    <p><strong>Agent used:</strong> RetinaScan AI (Diagnostics / Agentic)</p>
-    <p><strong>Outcome:</strong> Screening time ↓ from 25 min to 4 min; backlog cleared in 6 weeks; specificity 96 %, sensitivity 93 %.</p>
-    <a href="#marketplace" class="btn">View Agent</a>
+  <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+    <img src="https://source.unsplash.com/600x400/?pathology" alt="pathology">
+    <h3>70 % Drop in DR-Screening Turn-around</h3>
+    <p><strong>Problem:</strong> 17-hospital network in India faced a 4-month backlog of 3 000 diabetic-retinopathy cases.</p>
+    <p><strong>Method:</strong> Deployed Azure-based <strong>CancerCenter.AI PathoCam</strong>—whole-slide AI that flags regions of interest and quantifies Gleason grade equivalents.</p>
+    <p><strong>Agent used:</strong> PathoCam (Diagnostics / Agentic)</p>
+    <p><strong>Outcome:</strong> Screening time ↓ from 25 min to 4 min; pathologist productivity ↑ 3×; second-opinion consults cut from days to &lt; 2 h.</p>
+    <a href="https://gogloby.io/case-studies/ai-use-cases-in-healthcare/" target="_blank" class="btn">Full paper & metrics</a>
   </div>
 
-  <div class="card">
-    <h3>Sepsis Alert Accuracy ↑ 28 %</h3>
-    <p><strong>Problem:</strong> 800-bed hospital generating 3 200 sepsis alerts/week with 18 % false-positive rate.</p>
-    <p><strong>Methodology:</strong> Augmented EHR rules with SepsisGuard ML model; 3-month prospective validation.</p>
-    <p><strong>Agent used:</strong> SepsisGuard (Clinical Decision)</p>
-    <p><strong>Outcome:</strong> Alert burden ↓ 42 %; true-positive rate ↑ 28 %; estimated annual saving $1.4 M.</p>
-    <a href="#marketplace" class="btn">View Agent</a>
+  <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+    <img src="https://source.unsplash.com/600x400/?stethoscope" alt="stethoscope">
+    <h3>Ambient AI Scribe Saves 66 min / Clinician / Day</h3>
+    <p><strong>Problem:</strong> AtlantiCare providers spent > 2 h/shift on documentation.</p>
+    <p><strong>Method:</strong> Rolled-out ambient AI scribe (NVIDIA Clara + MONAI pipeline) across 250 providers; 12-month prospective study.</p>
+    <p><strong>Agent used:</strong> Clara Holoscan Ambient Scribe (Operations / Ambiance)</p>
+    <p><strong>Outcome:</strong> Documentation time ↓ 66 min per provider daily; provider burnout score ↓ 27 %; projected $ 3.8 M annual saving.</p>
+    <a href="https://www.upskillist.com/blog/top-ai-agents-use-case-for-healthcare-in-2025/" target="_blank" class="btn">See Upskillist analysis</a>
   </div>
 
-  <hr style="margin:50px 0 20px;border:none;border-top:1px solid rgba(255,255,255,.08)">
-  <h3>Submit your case study</h3>
-  <form class="card" id="caseForm">
-    <input name="title" placeholder="Title" required><br>
-    <textarea name="problem" placeholder="Problem statement" required></textarea><br>
-    <textarea name="method" placeholder="Methodology" required></textarea><br>
-    <input name="agent" placeholder="Agent / product used" required><br>
-    <textarea name="outcome" placeholder="Improved outcome" required></textarea><br>
-    <button class="btn">Submit Case</button>
-  </form>
+  <div class="card" style="text-align:center;margin-top:50px;">
+    <h3>Share your evidence</h3>
+    <p>Publish your real-world outcomes to help peers.</p>
+    <a href="submit.html?type=case" target="_blank" class="btn">Submit Case Study →</a>
+  </div>
 </section>
 
-<!-- ========= FORUM ========= -->
-<section id="forum">
+<!-- =========  FORUM  ========= -->
+<section id="forum" class="scroll-animate">
   <h2>AI-Powered Community Forum</h2>
-  <p>Ask, share code, showcase projects, build tribes.</p>
+  <p>Ask questions, share code, showcase projects, build tribes.</p>
 
   <h3>Top Questions</h3>
   <div class="forumPost">
@@ -258,20 +234,20 @@ footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
   <pre><code># Auto-retrain every Sunday
 0 2 * * 0 /opt/sepsisguard/retrain.py --dataset /data/icu_feed</code></pre>
 
-  <h3>Start a thread</h3>
-  <form class="card" id="threadForm">
-    <input name="title" placeholder="Thread title" required><br>
-    <textarea name="body" placeholder="Details / code / links" required></textarea><br>
-    <button class="btn">Post Thread</button>
-  </form>
+  <div class="card" style="text-align:center;margin-top:50px;">
+    <h3>Start a new thread</h3>
+    <p>Ask questions, share code, showcase projects.</p>
+    <a href="submit.html?type=thread" target="_blank" class="btn">Create Thread →</a>
+  </div>
 </section>
 
-<!-- ========= LEARNING ========= -->
-<section id="learning">
+<!-- =========  LEARNING  ========= -->
+<section id="learning" class="scroll-animate">
   <h2>Learning & Development</h2>
 
   <div class="grid3">
-    <div class="card">
+    <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+      <img src="https://source.unsplash.com/600x400/?code" alt="code">
       <h3>Developer Track</h3>
       <ul>
         <li>HL7 & FHIR for AI engineers</li>
@@ -280,7 +256,8 @@ footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
       </ul>
       <a href="#" class="btn">Start Pathway</a>
     </div>
-    <div class="card">
+    <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+      <img src="https://source.unsplash.com/600x400/?meeting" alt="meeting">
       <h3>Leader Track</h3>
       <ul>
         <li>AI governance & ethics</li>
@@ -289,7 +266,8 @@ footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
       </ul>
       <a href="#" class="btn">Start Pathway</a>
     </div>
-    <div class="card">
+    <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.15">
+      <img src="https://source.unsplash.com/600x400/?playbook" alt="playbook">
       <h3>Industry Playbooks</h3>
       <ul>
         <li>Primary-care roll-out checklist</li>
@@ -301,8 +279,8 @@ footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
   </div>
 </section>
 
-<!-- ========= ABOUT ========= -->
-<section id="about">
+<!-- =========  ABOUT  ========= -->
+<section id="about" class="scroll-animate">
   <h2>Why HealthNavi exists</h2>
   <p>We believe healthcare’s biggest bottleneck isn’t invention—it’s navigation. Thousands of proven AI tools sit on shelves while hospitals reinvent the wheel. HealthNavi is an open, vendor-neutral marketplace that lets clinicians discover, verify and deploy vetted AI agents in hours instead of months. By coupling transparent case studies, peer forums and guided learning paths we accelerate adoption, reduce risk and ultimately free clinicians to spend more time with patients.</p>
   <p>Our north-star metric: minutes saved per clinician per day. Every listing, lesson and conversation is judged by that single yardstick.</p>
@@ -313,22 +291,33 @@ footer{text-align:center;padding:40px 20px;font-size:13px;color:#777;}
   © <span id="year"></span> HealthNavi • All rights reserved • Contact: hello@healthnavi.ai
 </footer>
 
-<!-- ========= JS ========= -->
+<!-- =======  JS  ======= -->
+<script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
 <script>
-// nav toggle
+// -----  nav toggle  -----
 const toggle=document.getElementById('toggle'),navLinks=document.getElementById('navLinks');
 toggle.onclick=()=>navLinks.classList.toggle('hide');
-window.onresize=()=>{if(innerWidth>800)navLinks.classList.remove('hide')};
+window.onresize=()=>{if(innerWidth>900)navLinks.classList.remove('hide')};
 
-// year footer
+// -----  year footer  -----
 document.getElementById('year').textContent=new Date().getFullYear();
 
-// smooth scroll anchor links
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.onclick=e=>{e.preventDefault();document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'})}
+// -----  smooth scroll + highlight nav  -----
+const links=document.querySelectorAll('.navLinks a');
+const sections=document.querySelectorAll('section');
+window.addEventListener('scroll',()=>{
+  let cur='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)cur=s.id;});
+  links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href').slice(1)===cur);});
 });
+links.forEach(a=>a.onclick=e=>{e.preventDefault();document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});});
 
-// ------ tiny chat-bot engine (rules based) ------
+// -----  scroll animations  -----
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(en=>{if(en.isIntersecting)en.target.classList.add('show');});
+},{threshold:0.2});
+document.querySelectorAll('.scroll-animate').forEach(el=>obs.observe(el));
+
+// -----  tiny chat-bot  -----
 const chatLog=document.getElementById('chatLog'),chatForm=document.getElementById('chatForm');
 const rules=[
   {k:['diagnostic','retina','fundus'],r:'Check out <strong>RetinaScan AI</strong> in Diagnostics › Agentic.'},
@@ -359,19 +348,6 @@ chatForm.onsubmit=e=>{
   chatInput.value='';
 };
 addMsg('Navi','Hey! Ask me about diagnostics, decision support, engagement, ops or research.');
-
-// ------ demo form handlers (store in localStorage) ------
-['productForm','caseForm','threadForm'].forEach(id=>{
-  document.getElementById(id).onsubmit=e=>{
-    e.preventDefault();
-    const data=Object.fromEntries(new FormData(e.target));
-    const store=JSON.parse(localStorage.getItem(id)||'[]');
-    store.push(data);
-    localStorage.setItem(id,JSON.stringify(store));
-    alert('Submitted (saved to localStorage for demo).');
-    e.target.reset();
-  };
-});
 </script>
 </body>
 </html>
