@@ -9,8 +9,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
-        <!-- Same header -->
+        <div class="container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00C851;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="40" height="40" rx="8" fill="none" stroke="url(#grad1)" stroke-width="2"/>
+                    <path d="M12 8 L12 32 M12 8 L28 20 L12 32" stroke="url(#grad1)" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <circle cx="20" cy="20" r="2" fill="url(#grad1)"/>
+                    <circle cx="15" cy="15" r="1" fill="url(#grad1)" opacity="0.7"/>
+                    <circle cx="25" cy="25" r="1" fill="url(#grad1)" opacity="0.7"/>
+                </svg>
+                <span>HealthNavi</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="marketplace.html">Marketplace</a>
+                <a href="casestudies.html">Case Studies</a>
+                <a href="forum.html">Forum</a>
+                <a href="about.html">About Us</a>
+                <a href="learning.html">L&D</a>
+            </nav>
+        </div>
     </header>
 
     <main class="learning">
@@ -43,7 +69,9 @@
     </main>
 
     <footer class="footer">
-        <!-- Same -->
+        <div class="container">
+            <p>&copy; 2025 HealthNavi. Navigating AI in Healthcare.</p>
+        </div>
     </footer>
 
     <script src="script.js"></script>
