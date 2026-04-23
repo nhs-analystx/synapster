@@ -1,487 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HealthNavi – AI-Powered Healthcare Marketplace</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>uPull.ai | We scale your people to deliver AI</title>
+    <style>
+        :root {
+            --primary-color: #4F46E5; /* Indigo */
+            --primary-dark: #3730A3;
+            --secondary-color: #0F172A; /* Slate dark */
+            --text-color: #334155;
+            --text-light: #64748B;
+            --bg-light: #F8FAFC;
+            --danger-color: #EF4444;
+            --success-color: #10B981;
+        }
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-  <!-- Icons & Animations -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
-  <script src="https://cdn.lottiefiles.com/lottie-player@latest/dist/lottie-player.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
+        body {
+            color: var(--text-color);
+            background-color: #ffffff;
+            line-height: 1.6;
+        }
 
-  <style>
-    :root {
-      --navy: #0A2540;
-      --teal: #00D4FF;
-      --teal-dark: #0099CC;
-      --white: #FFFFFF;
-      --glass: rgba(255, 255, 255, 0.1);
-      --glow: 0 0 20px rgba(0, 212, 255, 0.6);
-    }
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 5%;
+        }
+        
+        .text-center { text-align: center; }
+        .section-title { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
+        .section-subtitle { font-size: 1.2rem; color: var(--text-light); margin-bottom: 3rem; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--navy);
-      color: var(--white);
-      overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(0, 153, 204, 0.15) 0%, transparent 50%);
-      background-attachment: fixed;
-    }
+        /* Navigation */
+        header {
+            background-color: var(--secondary-color);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-    /* Navigation */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      padding: 1rem 5%;
-      backdrop-filter: blur(12px);
-      background: rgba(10, 37, 64, 0.7);
-      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-      transition: all 0.4s;
-    }
-    nav.scrolled { background: rgba(10, 37, 64, 0.95); }
-    nav ul {
-      display: flex; justify-content: center; gap: 2.5rem; list-style: none;
-    }
-    nav a {
-      color: var(--white); text-decoration: none; font-weight: 500;
-      position: relative; transition: color 0.3s;
-    }
-    nav a::after {
-      content: ''; position: absolute; bottom: -8px; left: 0; width: 0;
-      height: 2px; background: var(--teal); transition: width 0.3s;
-    }
-    nav a:hover { color: var(--teal); }
-    nav a:hover::after { width: 100%; }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
 
-    /* Hero Section */
-    #hero {
-      height: 100vh; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; text-align: center;
-      position: relative; overflow: hidden;
-    }
-    #hero::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, rgba(10,37,64,0.8), rgba(0,212,255,0.1));
-      z-index: 1;
-    }
-    #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-    .hero-content { position: relative; z-index: 2; max-width: 900px; padding: 2rem; }
-    .logo-svg { width: 280px; margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px var(--teal)); }
-    h1 { font-size: 3.5rem; font-weight: 900; background: linear-gradient(90deg, #00D4FF, #FFFFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .chatbot-container {
-      margin-top: 2rem; width: 90%; max-width: 600px; height: 420px;
-      background: var(--glass); border: 1px solid rgba(0,212,255,0.3);
-      border-radius: 24px; padding: 1.5rem; backdrop-filter: blur(12px);
-      box-shadow: var(--glow);
-    }
-    .chat-messages { height: 300px; overflow-y: auto; padding-right: 10px; }
-    .msg { margin: 0.8rem 0; padding: 0.8rem 1.2rem; border-radius: 18px; max-width: 80%; animation: fadeIn 0.5s; }
-    .user { background: var(--teal); color: var(--navy); align-self: flex-end; margin-left: auto; }
-    .ai { background: rgba(255,255,255,0.15); color: var(--white); }
-    .typing { display: flex; gap: 5px; }
-    .typing dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; animation: pulse 1.5s infinite; }
-    .typing dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing dot:nth-child(3) { animation-delay: 0.4s; }
+        .logo span { color: var(--primary-color); }
 
-    /* Sections */
-    section { padding: 120px 5%; position: relative; }
-    .section-title {
-      font-size: 2.8rem; font-weight: 900; text-align: center; margin-bottom: 3rem;
-      background: linear-gradient(90deg, #00D4FF, #FFFFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+        nav ul { list-style: none; display: flex; gap: 2rem; }
+        nav a { color: #CBD5E1; text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        nav a:hover { color: white; }
 
-    /* Filters */
-    .filters {
-      display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;
-    }
-    .filter-btn {
-      padding: 0.7rem 1.5rem; border: 1px solid var(--teal); border-radius: 50px;
-      background: transparent; color: var(--white); cursor: pointer; transition: all 0.3s;
-    }
-    .filter-btn.active, .filter-btn:hover {
-      background: var(--teal); color: var(--navy); box-shadow: var(--glow);
-    }
+        /* Hero Section (Slide 1) */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-light) 0%, #E0E7FF 100%);
+            padding: 8rem 5%;
+            text-align: center;
+        }
 
-    /* Cards Grid */
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;
-    }
-    .card {
-      background: var(--glass); border-radius: 24px; padding: 1.8rem;
-      backdrop-filter: blur(12px); border: 1px solid rgba(0,212,255,0.2);
-      transition: all 0.4s; position: relative; overflow: hidden;
-    }
-    .card::before {
-      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-      background: linear-gradient(90deg, var(--teal), var(--teal-dark)); opacity: 0; transition: opacity 0.3s;
-    }
-    .card:hover::before { opacity: 1; }
-    .card:hover { transform: translateY(-10px); box-shadow: var(--glow), 0 20px 40px rgba(0,0,0,0.3); }
-    .card h3 { margin-bottom: 0.8rem; font-size: 1.4rem; }
-    .functions { margin: 1rem 0; }
-    details { cursor: pointer; }
-    summary { font-weight: 600; color: var(--teal); list-style: none; position: relative; padding-left: 1.5rem; }
-    summary::before { content: '▶'; position: absolute; left: 0; transition: transform 0.3s; }
-    details[open] summary::before { transform: rotate(90deg); }
+        .hero h1 { font-size: 4rem; color: var(--secondary-color); margin-bottom: 1.5rem; line-height: 1.1; letter-spacing: -1px;}
+        .hero p { font-size: 1.5rem; max-width: 800px; margin: 0 auto 2.5rem auto; color: var(--text-color); }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+        .btn:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
 
-    /* Forms */
-    form { max-width: 500px; margin: 3rem auto; display: flex; flex-direction: column; gap: 1rem; }
-    input, textarea, button {
-      padding: 1rem; border-radius: 16px; border: none; font-family: inherit;
-    }
-    input, textarea { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(0,212,255,0.3); }
-    button {
-      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
-      color: var(--navy); font-weight: 700; cursor: pointer; transition: all 0.3s;
-      box-shadow: var(--glow);
-    }
-    button:hover { transform: scale(1.05); }
+        /* The Challenge Section (Slide 2 & 3) */
+        .challenge-section { background-color: white; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+        .alert-box { background: #FEF2F2; border-left: 4px solid var(--danger-color); padding: 2rem; border-radius: 0 8px 8px 0; }
+        .alert-box h3 { color: var(--danger-color); margin-bottom: 1rem; }
+        .highlight-box { background: var(--bg-light); padding: 2rem; border-radius: 8px; border: 1px solid #E2E8F0;}
+        .highlight-box h3 { color: var(--secondary-color); margin-bottom: 1rem; }
 
-    /* Animations */
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
-    .aos-animate { animation: fadeIn 0.8s ease-out; }
+        /* Approach Section (Slide 4) */
+        .approach-section { background-color: var(--secondary-color); color: white; }
+        .approach-section .section-title { color: white; }
+        .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+        .card-old { background: rgba(255,255,255,0.05); border-top: 4px solid var(--danger-color); padding: 2rem; border-radius: 8px; }
+        .card-new { background: white; color: var(--text-color); border-top: 4px solid var(--success-color); padding: 2rem; border-radius: 8px; transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .card-new h3 { color: var(--success-color); }
+        .card-old h3 { color: #FCA5A5; }
+        ul.custom-list { list-style: none; margin-top: 1rem; }
+        ul.custom-list li { margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; }
+        ul.custom-list li::before { content: "→"; position: absolute; left: 0; color: inherit; }
+        .card-new ul.custom-list li::before { color: var(--success-color); }
 
-    /* Confetti Canvas */
-    #confetti-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; }
+        /* Capability Section (Slide 5, 6, 7) */
+        .capability-section { background-color: var(--bg-light); }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .cap-card { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
+        .cap-card h3 { color: var(--primary-color); font-size: 1.4rem; margin-bottom: 1rem; }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      h1 { font-size: 2.5rem; }
-      .section-title { font-size: 2.2rem; }
-      nav ul { flex-direction: column; gap: 1rem; }
-    }
-  </style>
+        /* Methodology (Slide 8 & 9) */
+        .methodology-section { background-color: white; }
+        .staircase { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem;}
+        .step { background: var(--bg-light); padding: 1.5rem; border-left: 6px solid var(--primary-color); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .step h4 { font-size: 1.3rem; color: var(--secondary-color); width: 20%; }
+        .step p { width: 55%; color: var(--text-color); }
+        .step .roi { width: 20%; text-align: right; font-weight: bold; color: var(--success-color); font-size: 1.2rem; }
+
+        /* CTA Section (Slide 10) */
+        .cta-section { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); color: white; text-align: center; }
+        .cta-section .section-title { color: white; }
+        .checklist { display: inline-block; text-align: left; background: rgba(255,255,255,0.1); padding: 2rem 3rem; border-radius: 8px; margin-bottom: 2rem; font-size: 1.2rem; }
+        .checklist label { display: block; margin-bottom: 1rem; cursor: pointer; }
+        .checklist input[type="checkbox"] { transform: scale(1.5); margin-right: 15px; accent-color: var(--success-color); }
+
+        /* Footer */
+        footer { background-color: #020617; color: #94A3B8; text-align: center; padding: 3rem 5%; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .grid-2, .vs-grid, .grid-3 { grid-template-columns: 1fr; }
+            .step { flex-direction: column; text-align: center; gap: 1rem; border-left: none; border-top: 6px solid var(--primary-color); }
+            .step h4, .step p, .step .roi { width: 100%; text-align: center; }
+            nav ul { display: none; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Confetti -->
-  <canvas id="confetti-canvas"></canvas>
+    <header>
+        <a href="#" class="logo">uPull<span>.ai</span></a>
+        <nav>
+            <ul>
+                <li><a href="#challenge">The Challenge</a></li>
+                <li><a href="#approach">Our Approach</a></li>
+                <li><a href="#capability">Capability</a></li>
+                <li><a href="#methodology">Methodology</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- Navigation -->
-<nav id="navbar">
-  <div class="navWrap">
-    <div class="logo">
-      <!--  PNG logo + ring  -->
-      <div class="logoIcon">
-        <img src="https://i.imgur.com/5gzpW3B.png" alt="HealthNavi logo">
-      </div>
-      <span>HealthNavi</span>
-    </div>
-    <ul class="navLinks hide" id="navLinks">
-      <li><a href="#marketplace">Marketplace</a></li>
-      <li><a href="#casestudies">Case Studies</a></li>
-      <li><a href="#forum">Forum</a></li>
-      <li><a href="#learning">Learning</a></li>
-      <li><a href="#about">About</a></li>
-    </ul>
-    <div class="mobileToggle" id="toggle">☰</div>
-  </div>
-</nav>
+    <section class="hero">
+        <h1>We don't scale AI.<br>We scale your people to deliver it.</h1>
+        <p>From tool-led pilots to workforce-led transformation.</p>
+        <a href="#cta" class="btn">Start Your Proof of Value</a>
+    </section>
 
-<!-- =========  SMALL CSS PATCH  –  add inside <style>  ========= -->
-<style>
-/* ----  logo image ---- */
-.logoIcon img{
-  width:100%;height:100%;object-fit:contain;
-  filter:drop-shadow(0 0 6px var(--accent));
-}
-/* ----  keep the pulse ring behind the image ---- */
-.logoIcon{
-  width:40px;height:40px;position:relative;
-}
-.logoIcon::before,.logoIcon::after{
-  content:'';position:absolute;inset:-4px;
-  border:2px solid var(--accent);border-radius:50%;
-  animation:pulse 2s infinite;
-}
-.logoIcon::after{animation-delay:1s;border-color:var(--accent2);}
-@keyframes pulse{0%,100%{transform:scale(.9);opacity:.3}50%{transform:scale(1.25);opacity:1}}
-/* ----  title text glow ---- */
-.logo span{margin-left:8px;font-size:22px;font-weight:700;
-          background:linear-gradient(45deg,var(--accent),var(--accent2));
-          -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-          text-shadow:0 0 10px rgba(0,242,255,.35);}
-</style>
-  <!-- Hero with 3D Orbs -->
-  <section id="hero">
-    <div id="canvas-container"></div>
-    <div class="hero-content">
-      <svg class="logo-svg" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#00D4FF"/>
-            <stop offset="100%" stop-color="#0099CC"/>
-          </linearGradient>
-          <filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <text x="70" y="55" font-family="Inter" font-size="38" font-weight="900" fill="url(#grad)" filter="url(#glow)">Health</text>
-        <text x="180" y="55" font-family="Inter" font-size="38" font-weight="900" fill="#FFFFFF">Navi</text>
-        <path d="M 15 28 L 30 40 L 15 52 M 22 34 L 38 34" stroke="url(#grad)" stroke-width="3" fill="none" filter="url(#glow)"/>
-      </svg>
-      <h1>Navigate AI in Healthcare</h1>
-      <p>Ask me anything about diagnostics, robotics, or patient engagement.</p>
-      <div class="chatbot-container">
-        <div class="chat-messages" id="chat-messages"></div>
-        <input type="text" id="chat-input" placeholder="e.g., Show me robotic AI for surgery..." onkeypress="handleEnter(event)"/>
-      </div>
-    </div>
-  </section>
+    <section id="challenge" class="challenge-section">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">High investment. Limited impact.</h2>
+                <p class="section-subtitle">AI is being pushed onto people—not pulled into workflows.</p>
+            </div>
+            
+            <div class="grid-2">
+                <div class="alert-box">
+                    <h3>The Broken Equation</h3>
+                    <p><strong>Investment:</strong> £300k+ spent on transformation with multiple AI tools deployed.</p><br>
+                    <p><strong>Process Friction:</strong> We are optimising activity—not outcomes.</p><br>
+                    <p><strong>Output Pathway:</strong> Minimal scalable productivity gains.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>The Push vs. The Pull</h3>
+                    <p><strong>The Push:</strong> Blindly forcing AI and Copilots onto staff.</p>
+                    <p><strong>The Pull:</strong> Integrating AI Modules, Data Insights, and Automation Blocks directly where needed.</p><br>
+                    <p style="font-weight: bold; color: var(--primary-color); border-top: 1px solid #E2E8F0; padding-top: 1rem;">
+                        "You cannot transform a workflow without the people who run it."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- Marketplace -->
-  <section id="marketplace" data-aos="fade-up">
-    <h2 class="section-title">AI Marketplace</h2>
-    <div class="filters">
-      <button class="filter-btn active" data-cat="all">All</button>
-      <button class="filter-btn" data-cat="agentic">Agentic</button>
-      <button class="filter-btn" data-cat="ambiance">Ambiance</button>
-      <button class="filter-btn" data-cat="robotic">Robotic</button>
-      <button class="filter-btn" data-cat="clinical">Clinical</button>
-    </div>
-    <div class="grid" id="product-grid">
-      <!-- Products will be injected via JS -->
-    </div>
-    <form id="submit-product">
-      <h3 style="text-align:center; color:var(--teal);">List Your AI Product</h3>
-      <input type="text" placeholder="Product Name" required/>
-      <textarea placeholder="Description + Functions (comma-separated)" required></textarea>
-      <input type="url" placeholder="Product URL" required/>
-      <select><option>Agentic</option><option>Ambiance</option><option>Robotic</option><option>Clinical</option></select>
-      <button type="submit">Submit Product</button>
-    </form>
-  </section>
+    <section id="approach" class="approach-section">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Stop pushing tools. Start fixing workflows.</h2>
+            </div>
+            
+            <div class="vs-grid">
+                <div class="card-old">
+                    <h3>The Old Way</h3>
+                    <ul class="custom-list">
+                        <li><strong>Approach:</strong> Deploy tools (e.g., Copilot)</li>
+                        <li><strong>Process:</strong> Expect staff to adapt</li>
+                        <li><strong>People:</strong> AI pushed onto staff</li>
+                        <li><strong>Result:</strong> Low adoption, low ROI</li>
+                    </ul>
+                </div>
+                <div class="card-new">
+                    <h3>The New Way</h3>
+                    <ul class="custom-list">
+                        <li><strong>Start</strong> with a workflow</li>
+                        <li><strong>Redesign</strong> the process</li>
+                        <li><strong>Train staff</strong> to pull AI into their work</li>
+                        <li><strong>Result:</strong> High adoption, scalable outcomes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- Case Studies -->
-  <section id="casestudies" data-aos="fade-up">
-    <h2 class="section-title">Case Studies</h2>
-    <div class="grid" id="case-grid"></div>
-    <form id="submit-case">
-      <h3 style="text-align:center; color:var(--teal);">Submit Case Study</h3>
-      <input type="text" placeholder="Title" required/>
-      <textarea placeholder="Intro | Problem | Method | Agent | Outcome (use |)" required></textarea>
-      <button type="submit">Submit</button>
-    </form>
-  </section>
+    <section id="capability" class="capability-section">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">We build internal capability,<br>not external dependency.</h2>
+                <p class="section-subtitle">The choice is not whether to adopt AI—but how.</p>
+            </div>
 
-  <!-- Forum -->
-  <section id="forum" data-aos="fade-up">
-    <h2 class="section-title">AI Forum & Community</h2>
-    <div style="max-width:800px; margin:auto;">
-      <div class="card">
-        <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_2LdQqU.json" background="transparent" speed="1" style="width:100%;height:200px;" loop autoplay></lottie-player>
-        <details><summary>How to deploy agentic AI in clinics?</summary><p>Use <a href="https://ada.com" target="_blank">Ada Health</a> APIs. Example: <pre><code>fetch('https://api.ada.com/symptom', {body: JSON.stringify(symptoms)})</code></pre></p></details>
-      </div>
-    </div>
-  </section>
+            <div class="grid-3">
+                <div class="cap-card">
+                    <h3>Navigating Intersecting Forces</h3>
+                    <p>Faced with unprecedented cost pressures vs. rapid AI availability, the "Success Zone" requires augmentation and total workflow ownership. Poor implementation risks replacement instead of augmentation.</p>
+                    <p style="margin-top: 1rem; font-weight: bold; font-size: 0.9rem;">Transformation fails without workflow ownership.</p>
+                </div>
+                
+                <div class="cap-card">
+                    <h3>Capability Builders</h3>
+                    <p>We are not traditional consultants. We bring NHS & Public Sector experience with a deep understanding of operational reality. We shift your organisation from dependency to capability.</p>
+                </div>
 
-  <!-- Learning -->
-  <section id="learning" data-aos="fade-up">
-    <h2 class="section-title">Learning & Development</h2>
-    <div class="grid">
-      <div class="card" data-tilt>
-        <h3>Developer Path</h3>
-        <p>Build agentic AI with Python & LLMs.</p>
-        <a href="https://www.coursera.org/learn/generative-ai-with-llms" target="_blank" style="color:var(--teal);">Start →</a>
-      </div>
-      <div class="card" data-tilt>
-        <h3>Leadership Path</h3>
-        <p>Implement AI at scale in hospitals.</p>
-        <a href="https://www.mckinsey.com/industries/healthcare/our-insights/the-executive-guide-to-ai-in-healthcare" target="_blank" style="color:var(--teal);">Read Guide →</a>
-      </div>
-    </div>
-  </section>
+                <div class="cap-card">
+                    <h3>Transformation as BAU</h3>
+                    <p>Create a self-funding transformation cycle where internal intrapreneurs drive change. AI becomes natively embedded in daily work, reducing reliance on external consultants while generating savings to fund further improvements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- About -->
-  <section id="about" data-aos="fade-up">
-    <h2 class="section-title">About HealthNavi</h2>
-    <p style="max-width:800px; margin:auto; line-height:1.8; font-size:1.1rem;">
-      We are building the **global navigation system for healthcare AI**. From agentic triage bots to ambient smart wards, we connect innovators, clinicians, and researchers. Our marketplace, community, and L&D hub accelerate adoption—proven to reduce diagnostic errors by <strong>30%</strong> and speed research by <strong>4x</strong>.
-    </p>
-  </section>
+    <section id="methodology" class="methodology-section">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Start small. Prove value. Scale capability.</h2>
+                <p class="section-subtitle">We don't do transformation for you. We build your capability to deliver it.</p>
+            </div>
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+            <div class="staircase">
+                <div class="step">
+                    <h4>1. Prove (Locally)</h4>
+                    <p>Focus on 1 workflow and 2 staff members over a 4–6 week period.</p>
+                    <div class="roi">~2:1 Return</div>
+                </div>
+                <div class="step">
+                    <h4>2. Build (Regionally)</h4>
+                    <p>Engage a sponsor + 2–3 intrapreneurs to train, deliver, and cascade the workflow.</p>
+                    <div class="roi">~5:1 Return</div>
+                </div>
+                <div class="step">
+                    <h4>3. Scale (Nationally)</h4>
+                    <p>Utilize platforms and dashboards for an organisation-wide rollout to standardize operations.</p>
+                    <div class="roi">10:1+ Return</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <script>
-    AOS.init({ once: true });
+    <section id="cta" class="cta-section">
+        <div class="container">
+            <h2 class="section-title">Stop pushing AI tools.<br>Start fixing workflows.</h2>
+            <p class="section-subtitle" style="color: #E2E8F0;">...and scale the people who improve them.</p>
+            
+            <div class="checklist">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.4rem;">Next Steps to begin Proof of Value:</h3>
+                <label><input type="checkbox"> Identify 1 workflow</label>
+                <label><input type="checkbox"> Select 2 staff members</label>
+                <label><input type="checkbox"> Begin 4-week Proof of Value sprint</label>
+            </div>
+            
+            <br>
+            <a href="mailto:contact@upull.ai" class="btn" style="background: white; color: var(--primary-color);">Contact Us to Begin</a>
+        </div>
+    </section>
 
-    // Navbar Scroll
-    window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-    });
+    <footer>
+        <p>&copy; 2026 uPull.ai. We scale your people. All rights reserved.</p>
+    </footer>
 
-    // 3D Floating Orbs (Three.js)
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-    const geometry = new THREE.SphereGeometry(1, 32, 32);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00D4FF, wireframe: true, opacity: 0.6, transparent: true });
-    const orbs = [];
-    for (let i = 0; i < 8; i++) {
-      const orb = new THREE.Mesh(geometry, material);
-      orb.position.set(
-        (Math.random() - 0.5) * 20,
-        (Math.random() - 0.5) * 20,
-        (Math.random() - 0.5) * 20
-      );
-      orb.scale.setScalar(Math.random() * 0.8 + 0.5);
-      scene.add(orb);
-      orbs.push(orb);
-    }
-    camera.position.z = 15;
-
-    function animate() {
-      requestAnimationFrame(animate);
-      orbs.forEach((orb, i) => {
-        orb.rotation.x += 0.005;
-        orb.rotation.y += 0.008;
-        orb.position.y += Math.sin(Date.now() * 0.001 + i) * 0.02;
-      });
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Chatbot
-    const chatMessages = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
-
-    function addMessage(text, sender) {
-      const msg = document.createElement('div');
-      msg.className = `msg ${sender}`;
-      msg.innerHTML = text;
-      chatMessages.appendChild(msg);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function showTyping() {
-      const typing = document.createElement('div');
-      typing.className = 'msg ai typing';
-      typing.innerHTML = '<div class="typing"><dot></dot><dot></dot><dot></dot></div>';
-      chatMessages.appendChild(typing);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      return typing;
-    }
-
-    function handleEnter(e) {
-      if (e.key === 'Enter' && chatInput.value.trim()) {
-        addMessage(chatInput.value, 'user');
-        const typing = showTyping();
-        setTimeout(() => {
-          typing.remove();
-          const query = chatInput.value.toLowerCase();
-          let response = "Let me show you the best matches in the Marketplace.";
-          if (query.includes('diagnos')) response = "Check Clinical AI → PathAI, Enlitic.";
-          if (query.includes('robot')) response = "Robotic AI → da Vinci, Moxi.";
-          if (query.includes('patient')) response = "Agentic AI → Ada Health, Hippocratic AI.";
-          addMessage(response, 'ai');
-          chatInput.value = '';
-        }, 1200);
-      }
-    }
-
-    // Marketplace Data
-    const products = [
-      { name: "PathAI", cat: "clinical", desc: "AI pathology for cancer detection.", funcs: ["Tumor grading", "EHR integration"], link: "https://pathai.com" },
-      { name: "da Vinci", cat: "robotic", desc: "Surgical robot for precision.", funcs: ["3D vision", "Tremor filtration"], link: "https://intuitive.com" },
-      { name: "Ada Health", cat: "agentic", desc: "Symptom checker chatbot.", funcs: ["Triage", "Appointment"], link: "https://ada.com" },
-      { name: "Care.ai", cat: "ambiance", desc: "Smart room monitoring.", funcs: ["Fall detection", "Analytics"], link: "https://care.ai" },
-      { name: "IBM Watson", cat: "clinical", desc: "Decision support engine.", funcs: ["Oncology", "Drug AI"], link: "https://ibm.com/watson-health" },
-      { name: "Moxi", cat: "robotic", desc: "Hospital logistics robot.", funcs: ["Delivery", "Lab transport"], link: "https://diligentrobots.com" },
-    ];
-
-    function renderProducts(filter = 'all') {
-      const grid = document.getElementById('product-grid');
-      grid.innerHTML = '';
-      products
-        .filter(p => filter === 'all' || p.cat === filter)
-        .forEach(p => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.setAttribute('data-tilt', '');
-          card.innerHTML = `
-            <h3>${p.name} <small style="color:#00D4FF;">[${p.cat.toUpperCase()}]</small></h3>
-            <p>${p.desc}</p>
-            <details class="functions">
-              <summary>Functions</summary>
-              <ul>${p.funcs.map(f => `<li>${f}</li>`).join('')}</ul>
-            </details>
-            <a href="${p.link}" target="_blank" style="color:var(--teal); font-weight:600;">View Product →</a>
-          `;
-          grid.appendChild(card);
-          VanillaTilt.init(card, { max: 15, speed: 400, glare: true, "max-glare": 0.3 });
-        });
-    }
-    renderProducts();
-
-    // Filter Buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelector('.filter-btn.active').classList.remove('active');
-        btn.classList.add('active');
-        renderProducts(btn.dataset.cat);
-      });
-    });
-
-    // Case Studies
-    const cases = [
-      { title: "Cleveland Clinic Chatbots", cat: "Agentic", intro: "AI for patient comms", problem: "Low engagement", method: "NLP", agent: "Custom LLM", outcome: "20% fewer no-shows", link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11702416/" },
-      { title: "UF Health AI Decisions", cat: "Clinical", intro: "Predictive care", problem: "Slow decisions", method: "ML on EHR", agent: "Inferscience", outcome: "30% faster", link: "https://inferscience.com" },
-    ];
-
-    function renderCases() {
-      const grid = document.getElementById('case-grid');
-      cases.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <h3>${c.title}</h3>
-          <p><strong>Intro:</strong> ${c.intro}<br>
-          <strong>Problem:</strong> ${c.problem}<br>
-          <strong>Outcome:</strong> ${c.outcome}</p>
-          <a href="${c.link}" target="_blank" style="color:var(--teal);">Read Full →</a>
-        `;
-        grid.appendChild(card);
-      });
-    }
-    renderCases();
-
-    // Form Submission + Confetti
-    document.getElementById('submit-product').onsubmit = e => { e.preventDefault(); confetti(); alert('Product submitted!'); };
-    document.getElementById('submit-case').onsubmit = e => { e.preventDefault(); confetti(); alert('Case submitted!'); };
-
-    function confetti() {
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-    }
-
-    // Smooth Scroll
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-      });
-    });
-  </script>
 </body>
 </html>
