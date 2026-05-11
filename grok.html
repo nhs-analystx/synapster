@@ -3,298 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>uPull.ai | We scale your people to deliver AI</title>
+    <title>Architecting the Autonomous Enterprise</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
         :root {
-            --primary-color: #4F46E5; /* Indigo */
-            --primary-dark: #3730A3;
-            --secondary-color: #0F172A; /* Slate dark */
-            --text-color: #334155;
-            --text-light: #64748B;
-            --bg-light: #F8FAFC;
-            --danger-color: #EF4444;
-            --success-color: #10B981;
+            --primary: #0f172a;
+            --accent: #3b82f6;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            color: var(--text-color);
-            background-color: #ffffff;
-            line-height: 1.6;
-        }
-
-        /* Utility Classes */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 5rem 5%;
         }
         
-        .text-center { text-align: center; }
-        .section-title { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
-        .section-subtitle { font-size: 1.2rem; color: var(--text-light); margin-bottom: 3rem; }
-
-        /* Navigation */
-        header {
-            background-color: var(--secondary-color);
-            padding: 1rem 5%;
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav a:hover {
+            color: #60a5fa;
+        }
+        
+        .slides-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            scroll-behavior: smooth;
+        }
+        
+        .slide {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            scroll-snap-align: start;
+            background: #0f172a;
+        }
+        
+        .slide-content {
+            max-width: 1376px;
+            max-height: 768px;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+            overflow: hidden;
+        }
+        
+        .slide-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #1e2937;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            background: rgba(15, 23, 42, 0.85);
             color: white;
-            position: sticky;
-            top: 0;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.9);
+            padding: 12px 24px;
+            border-radius: 9999px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
             z-index: 1000;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
         }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
+        
+        button {
+            background: #1e2937;
             color: white;
-            text-decoration: none;
-            letter-spacing: -0.5px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
         }
-
-        .logo span { color: var(--primary-color); }
-
-        nav ul { list-style: none; display: flex; gap: 2rem; }
-        nav a { color: #CBD5E1; text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
-        nav a:hover { color: white; }
-
-        /* Hero Section (Slide 1) */
-        .hero {
-            background: linear-gradient(135deg, var(--bg-light) 0%, #E0E7FF 100%);
-            padding: 8rem 5%;
+        
+        button:hover {
+            background: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .progress {
+            height: 4px;
+            background: #334155;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s;
+        }
+        
+        .title-slide {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        }
+        
+        footer {
             text-align: center;
-        }
-
-        .hero h1 { font-size: 4rem; color: var(--secondary-color); margin-bottom: 1.5rem; line-height: 1.1; letter-spacing: -1px;}
-        .hero p { font-size: 1.5rem; max-width: 800px; margin: 0 auto 2.5rem auto; color: var(--text-color); }
-        
-        .btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: background-color 0.3s ease, transform 0.2s;
-        }
-        .btn:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
-
-        /* The Challenge Section (Slide 2 & 3) */
-        .challenge-section { background-color: white; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
-        .alert-box { background: #FEF2F2; border-left: 4px solid var(--danger-color); padding: 2rem; border-radius: 0 8px 8px 0; }
-        .alert-box h3 { color: var(--danger-color); margin-bottom: 1rem; }
-        .highlight-box { background: var(--bg-light); padding: 2rem; border-radius: 8px; border: 1px solid #E2E8F0;}
-        .highlight-box h3 { color: var(--secondary-color); margin-bottom: 1rem; }
-
-        /* Approach Section (Slide 4) */
-        .approach-section { background-color: var(--secondary-color); color: white; }
-        .approach-section .section-title { color: white; }
-        .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
-        .card-old { background: rgba(255,255,255,0.05); border-top: 4px solid var(--danger-color); padding: 2rem; border-radius: 8px; }
-        .card-new { background: white; color: var(--text-color); border-top: 4px solid var(--success-color); padding: 2rem; border-radius: 8px; transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .card-new h3 { color: var(--success-color); }
-        .card-old h3 { color: #FCA5A5; }
-        ul.custom-list { list-style: none; margin-top: 1rem; }
-        ul.custom-list li { margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; }
-        ul.custom-list li::before { content: "→"; position: absolute; left: 0; color: inherit; }
-        .card-new ul.custom-list li::before { color: var(--success-color); }
-
-        /* Capability Section (Slide 5, 6, 7) */
-        .capability-section { background-color: var(--bg-light); }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .cap-card { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
-        .cap-card h3 { color: var(--primary-color); font-size: 1.4rem; margin-bottom: 1rem; }
-
-        /* Methodology (Slide 8 & 9) */
-        .methodology-section { background-color: white; }
-        .staircase { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem;}
-        .step { background: var(--bg-light); padding: 1.5rem; border-left: 6px solid var(--primary-color); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
-        .step h4 { font-size: 1.3rem; color: var(--secondary-color); width: 20%; }
-        .step p { width: 55%; color: var(--text-color); }
-        .step .roi { width: 20%; text-align: right; font-weight: bold; color: var(--success-color); font-size: 1.2rem; }
-
-        /* CTA Section (Slide 10) */
-        .cta-section { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); color: white; text-align: center; }
-        .cta-section .section-title { color: white; }
-        .checklist { display: inline-block; text-align: left; background: rgba(255,255,255,0.1); padding: 2rem 3rem; border-radius: 8px; margin-bottom: 2rem; font-size: 1.2rem; }
-        .checklist label { display: block; margin-bottom: 1rem; cursor: pointer; }
-        .checklist input[type="checkbox"] { transform: scale(1.5); margin-right: 15px; accent-color: var(--success-color); }
-
-        /* Footer */
-        footer { background-color: #020617; color: #94A3B8; text-align: center; padding: 3rem 5%; }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .grid-2, .vs-grid, .grid-3 { grid-template-columns: 1fr; }
-            .step { flex-direction: column; text-align: center; gap: 1rem; border-left: none; border-top: 6px solid var(--primary-color); }
-            .step h4, .step p, .step .roi { width: 100%; text-align: center; }
-            nav ul { display: none; }
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <a href="#" class="logo">uPull<span>.ai</span></a>
-        <nav>
-            <ul>
-                <li><a href="#challenge">The Challenge</a></li>
-                <li><a href="#approach">Our Approach</a></li>
-                <li><a href="#capability">Capability</a></li>
-                <li><a href="#methodology">Methodology</a></li>
-            </ul>
+    <header class="header">
+        <div style="font-weight: 700; font-size: 1.3rem; display: flex; align-items: center; gap: 12px;">
+            <span style="color: #60a5fa;">⚡</span>
+            Autonomous Enterprise
+        </div>
+        <nav class="nav">
+            <a href="#slide1">Overview</a>
+            <a href="#slide2">Vision</a>
+            <a href="#slide3">Architecture</a>
+            <a href="#slide15">Conclusion</a>
         </nav>
     </header>
 
-    <section class="hero">
-        <h1>We don't scale AI.<br>We scale your people to deliver it.</h1>
-        <p>From tool led pilots to workforce led transformation.</p>
-        <a href="#cta" class="btn">Start Your Proof of Value</a>
-    </section>
+    <div class="slides-container" id="slides">
+        <!-- Slide 1 -->
+        <section id="slide1" class="slide title-slide">
+            <div class="slide-content">
+                <img src="image1.png" alt="Slide 1 - Title">
+            </div>
+            <div class="slide-number">1 / 15</div>
+        </section>
 
-    <section id="challenge" class="challenge-section">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">High investment. Limited impact.</h2>
-                <p class="section-subtitle">AI is being pushed onto people—not pulled into workflows.</p>
+        <!-- Slide 2 -->
+        <section id="slide2" class="slide">
+            <div class="slide-content">
+                <img src="image2.png" alt="Slide 2">
             </div>
-            
-            <div class="grid-2">
-                <div class="alert-box">
-                    <h3>The Broken Equation</h3>
-                    <p><strong>Investment:</strong> £300k+ spent on transformation with multiple AI tools deployed.</p><br>
-                    <p><strong>Process Friction:</strong> We are optimising activity—not outcomes.</p><br>
-                    <p><strong>Output Pathway:</strong> Minimal scalable productivity gains.</p>
-                </div>
-                
-                <div class="highlight-box">
-                    <h3>The Push vs. The Pull</h3>
-                    <p><strong>The Push:</strong> Blindly forcing AI and Copilots onto staff.</p>
-                    <p><strong>The Pull:</strong> Integrating AI Modules, Data Insights, and Automation Blocks directly where needed.</p><br>
-                    <p style="font-weight: bold; color: var(--primary-color); border-top: 1px solid #E2E8F0; padding-top: 1rem;">
-                        "You cannot transform a workflow without the people who run it."
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="slide-number">2 / 15</div>
+        </section>
 
-    <section id="approach" class="approach-section">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">Stop pushing tools. Start fixing workflows.</h2>
+        <!-- Slide 3 -->
+        <section id="slide3" class="slide">
+            <div class="slide-content">
+                <img src="image3.png" alt="Slide 3">
             </div>
-            
-            <div class="vs-grid">
-                <div class="card-old">
-                    <h3>The Old Way</h3>
-                    <ul class="custom-list">
-                        <li><strong>Approach:</strong> Deploy tools (e.g., Copilot)</li>
-                        <li><strong>Process:</strong> Expect staff to adapt</li>
-                        <li><strong>People:</strong> AI pushed onto staff</li>
-                        <li><strong>Result:</strong> Low adoption, low ROI</li>
-                    </ul>
-                </div>
-                <div class="card-new">
-                    <h3>The New Way</h3>
-                    <ul class="custom-list">
-                        <li><strong>Start</strong> with a workflow</li>
-                        <li><strong>Redesign</strong> the process</li>
-                        <li><strong>Train staff</strong> to pull AI into their work</li>
-                        <li><strong>Result:</strong> High adoption, scalable outcomes</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="slide-number">3 / 15</div>
+        </section>
 
-    <section id="capability" class="capability-section">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">We build internal capability,<br>not external dependency.</h2>
-                <p class="section-subtitle">The choice is not whether to adopt AI—but how.</p>
+        <!-- Continue for all slides -->
+        <section id="slide4" class="slide">
+            <div class="slide-content">
+                <img src="image4.png" alt="Slide 4">
             </div>
+            <div class="slide-number">4 / 15</div>
+        </section>
 
-            <div class="grid-3">
-                <div class="cap-card">
-                    <h3>Navigating Intersecting Forces</h3>
-                    <p>Faced with unprecedented cost pressures vs. rapid AI availability, the "Success Zone" requires augmentation and total workflow ownership. Poor implementation risks replacement instead of augmentation.</p>
-                    <p style="margin-top: 1rem; font-weight: bold; font-size: 0.9rem;">Transformation fails without workflow ownership.</p>
-                </div>
-                
-                <div class="cap-card">
-                    <h3>Capability Builders</h3>
-                    <p>We are not traditional consultants. We bring NHS & Public Sector experience with a deep understanding of operational reality. We shift your organisation from dependency to capability.</p>
-                </div>
-
-                <div class="cap-card">
-                    <h3>Transformation as BAU</h3>
-                    <p>Create a self-funding transformation cycle where internal intrapreneurs drive change. AI becomes natively embedded in daily work, reducing reliance on external consultants while generating savings to fund further improvements.</p>
-                </div>
+        <section id="slide5" class="slide">
+            <div class="slide-content">
+                <img src="image5.png" alt="Slide 5">
             </div>
-        </div>
-    </section>
+            <div class="slide-number">5 / 15</div>
+        </section>
 
-    <section id="methodology" class="methodology-section">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">Start small. Prove value. Scale capability.</h2>
-                <p class="section-subtitle">We don't do transformation for you. We build your capability to deliver it.</p>
+        <section id="slide6" class="slide">
+            <div class="slide-content">
+                <img src="image6.png" alt="Slide 6">
             </div>
+            <div class="slide-number">6 / 15</div>
+        </section>
 
-            <div class="staircase">
-                <div class="step">
-                    <h4>1. Prove (Locally)</h4>
-                    <p>Focus on 1 workflow and 2 staff members over a 4–6 week period.</p>
-                    <div class="roi">~2:1 Return</div>
-                </div>
-                <div class="step">
-                    <h4>2. Build (Regionally)</h4>
-                    <p>Engage a sponsor + 2–3 intrapreneurs to train, deliver, and cascade the workflow.</p>
-                    <div class="roi">~5:1 Return</div>
-                </div>
-                <div class="step">
-                    <h4>3. Scale (Nationally)</h4>
-                    <p>Utilize platforms and dashboards for an organisation-wide rollout to standardize operations.</p>
-                    <div class="roi">10:1+ Return</div>
-                </div>
+        <section id="slide7" class="slide">
+            <div class="slide-content">
+                <img src="image7.png" alt="Slide 7">
             </div>
-        </div>
-    </section>
+            <div class="slide-number">7 / 15</div>
+        </section>
 
-    <section id="cta" class="cta-section">
-        <div class="container">
-            <h2 class="section-title">Stop pushing AI tools.<br>Start fixing workflows.</h2>
-            <p class="section-subtitle" style="color: #E2E8F0;">...and scale the people who improve them.</p>
-            
-            <div class="checklist">
-                <h3 style="margin-bottom: 1.5rem; font-size: 1.4rem;">Next Steps to begin Proof of Value:</h3>
-                <label><input type="checkbox"> Identify 1 workflow</label>
-                <label><input type="checkbox"> Select 2 staff members</label>
-                <label><input type="checkbox"> Begin 4-week Proof of Value sprint</label>
+        <section id="slide8" class="slide">
+            <div class="slide-content">
+                <img src="image8.png" alt="Slide 8">
             </div>
-            
-            <br>
-            <a href="mailto:contact@upull.ai" class="btn" style="background: white; color: var(--primary-color);">Contact Us to Begin</a>
-        </div>
-    </section>
+            <div class="slide-number">8 / 15</div>
+        </section>
+
+        <section id="slide9" class="slide">
+            <div class="slide-content">
+                <img src="image9.png" alt="Slide 9">
+            </div>
+            <div class="slide-number">9 / 15</div>
+        </section>
+
+        <section id="slide10" class="slide">
+            <div class="slide-content">
+                <img src="image10.png" alt="Slide 10">
+            </div>
+            <div class="slide-number">10 / 15</div>
+        </section>
+
+        <section id="slide11" class="slide">
+            <div class="slide-content">
+                <img src="image11.png" alt="Slide 11">
+            </div>
+            <div class="slide-number">11 / 15</div>
+        </section>
+
+        <section id="slide12" class="slide">
+            <div class="slide-content">
+                <img src="image12.png" alt="Slide 12">
+            </div>
+            <div class="slide-number">12 / 15</div>
+        </section>
+
+        <section id="slide13" class="slide">
+            <div class="slide-content">
+                <img src="image13.png" alt="Slide 13">
+            </div>
+            <div class="slide-number">13 / 15</div>
+        </section>
+
+        <section id="slide14" class="slide">
+            <div class="slide-content">
+                <img src="image14.png" alt="Slide 14">
+            </div>
+            <div class="slide-number">14 / 15</div>
+        </section>
+
+        <section id="slide15" class="slide">
+            <div class="slide-content">
+                <img src="image15.png" alt="Slide 15 - Final">
+            </div>
+            <div class="slide-number">15 / 15</div>
+        </section>
+    </div>
+
+    <div class="controls">
+        <button onclick="prevSlide()">← Previous</button>
+        <span id="current-slide" style="font-weight: 600; min-width: 80px; text-align: center;">1 / 15</span>
+        <button onclick="nextSlide()">Next →</button>
+        <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    </div>
+
+    <div class="progress" id="progress"></div>
 
     <footer>
-        <p>&copy; 2026 uPull.ai. We scale your people. All rights reserved.</p>
+        Architecting the Autonomous Enterprise • Interactive Presentation
     </footer>
 
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 15;
+        const slidesContainer = document.getElementById('slides');
+        
+        function updateProgress() {
+            const progress = document.getElementById('progress');
+            const percentage = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+            progress.style.width = `${percentage}%`;
+            document.getElementById('current-slide').textContent = `${currentSlide} / ${totalSlides}`;
+        }
+        
+        function goToSlide(n) {
+            currentSlide = Math.max(1, Math.min(n, totalSlides));
+            const slideElement = document.getElementById(`slide${currentSlide}`);
+            if (slideElement) {
+                slideElement.scrollIntoView({ behavior: 'smooth' });
+            }
+            updateProgress();
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullscreen();
+            }
+        });
+        
+        // Scroll tracking
+        slidesContainer.addEventListener('scroll', () => {
+            const scrollPosition = slidesContainer.scrollTop;
+            const slideHeight = window.innerHeight;
+            const newSlide = Math.floor(scrollPosition / slideHeight) + 1;
+            
+            if (newSlide !== currentSlide && newSlide >= 1 && newSlide <= totalSlides) {
+                currentSlide = newSlide;
+                updateProgress();
+            }
+        });
+        
+        // Initialize
+        window.onload = function() {
+            updateProgress();
+            
+            // Make images sharper on high DPI
+            const images = document.querySelectorAll('.slide-content img');
+            images.forEach(img => {
+                img.style.imageRendering = 'crisp-edges';
+            });
+        };
+    </script>
 </body>
 </html>
