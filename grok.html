@@ -176,7 +176,7 @@ h1 em { font-style: normal; color: var(--amber); display: block; }
     <div>
       <div class="hero-eyebrow">uPull.ai — Strategic Bridge Protocol</div>
       <h1>Architecting<em>the Autonomous</em>NHS</h1>
-      <p class="hero-sub">AI Agent Assurance · Local Data Sovereignty · Guaranteed 5:1 ROI. Bridging the digital delivery gap without compromising NHS core capabilities.</p>
+      <p class="hero-sub">AI Agent Assurance · Local Data Sovereignty ·  Bridging the digital delivery gap without compromising NHS core capabilities.</p>
       <div class="hero-actions">
         <a href="#solution" class="btn-a">Initiate Transition →</a>
         <a href="#engine" class="btn-b">Explore the Engine</a>
@@ -190,7 +190,7 @@ h1 em { font-style: normal; color: var(--amber); display: block; }
 
 <!-- TICKER -->
 <div class="ticker-strip" aria-hidden="true">
-  <span class="ticker-inner">// ARCHITECTING THE AUTONOMOUS NHS &nbsp;·&nbsp; 5:1 GUARANTEED ROI &nbsp;·&nbsp; LOCAL DATA SOVEREIGNTY &nbsp;·&nbsp; ZERO CORE CANNIBALISM &nbsp;·&nbsp; AI AGENT ASSURANCE ENGINE ACTIVE &nbsp;·&nbsp;</span>
+  <span class="ticker-inner">// ARCHITECTING THE AUTONOMOUS NHS &nbsp;·&nbsp; LOCAL DATA SOVEREIGNTY &nbsp;·&nbsp; ZERO CORE CANNIBALISM &nbsp;·&nbsp; AI AGENT ASSURANCE ENGINE ACTIVE &nbsp;·&nbsp;</span>
 </div>
 
 <!-- Add the rest of your sections here (stats, problem, solution, engine, etc.) -->
@@ -344,4 +344,328 @@ animate();
 </script>
 
 </body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecting the Autonomous NHS — uPull.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #06090f;
+  --deep: #0c1220;
+  --panel: #111827;
+  --edge: #1e2d47;
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.18);
+  --amber-line: rgba(245,158,11,0.5);
+  --ice: #e0f2fe;
+  --mist: rgba(224,242,254,0.55);
+  --dim: rgba(224,242,254,0.3);
+  --ghost: rgba(224,242,254,0.08);
+  --syne: 'Syne', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--syne);
+  background: var(--void);
+  color: var(--ice);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Full-screen futuristic background */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* ─── HERO ─── */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-content {
+  position: relative;
+  z-index: 4;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 120px 60px 80px;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hero-eyebrow::before,
+.hero-eyebrow::after {
+  content: '';
+  height: 1px;
+  background: var(--amber);
+}
+.hero-eyebrow::before { width: 32px; }
+.hero-eyebrow::after { flex: 1; max-width: 40px; opacity: .4; }
+
+h1 {
+  font-size: clamp(52px, 6.5vw, 90px);
+  font-weight: 800;
+  line-height: .92;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+  color: #fff;
+}
+h1 em { font-style: normal; color: var(--amber); display: block; }
+
+.hero-sub {
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--dim);
+  max-width: 520px;
+  margin-bottom: 48px;
+}
+
+.btn-a, .btn-b, .roi-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 30px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all .2s;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+.btn-a {
+  background: var(--amber);
+  color: var(--void);
+}
+.btn-a:hover { opacity: .9; transform: translateY(-3px) scale(1.02); box-shadow: 0 0 25px rgba(245,158,11,.6); }
+
+.btn-b {
+  color: var(--dim);
+  border: 1px solid rgba(224,242,254,.2);
+}
+.btn-b:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: rgba(245,158,11,.08);
+}
+
+/* Other sections remain mostly the same but with enhanced hover effects */
+.sec { position: relative; padding: 100px 0; z-index: 2; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 60px; }
+
+.prob-card, .sol-row, .eng-card, .step {
+  transition: all .3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.prob-card:hover, .sol-row:hover, .eng-card:hover, .step:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 30px rgba(245,158,11,.15);
+}
+
+/* Futuristic glows */
+.glow-amber { filter: drop-shadow(0 0 12px var(--amber)); }
+
+/* Responsive */
+@media(max-width:900px){
+  .hero-content, .sol-layout, .flywheel-layout, .sov-layout, .problem-grid { grid-template-columns: 1fr; }
+  .hero-radar { display: none; }
+  .stats-strip { grid-template-columns: repeat(2,1fr); }
+  .wrap { padding: 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow">uPull.ai — Strategic Bridge Protocol</div>
+      <h1>Architecting<em>the Autonomous</em>NHS</h1>
+      <p class="hero-sub">AI Agent Assurance · Local Data Sovereignty · Guaranteed 5:1 ROI</p>
+      <div class="hero-actions">
+        <a href="#solution" class="btn-a">Initiate Transition →</a>
+        <a href="#engine" class="btn-b">Explore the Engine</a>
+      </div>
+    </div>
+    <div class="hero-radar">
+      <canvas id="radar-canvas"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- Rest of your sections (ticker, stats, problem, solution, etc.) remain the same.
+     You can keep all your existing HTML for those sections. -->
+
+<script>
+// === FUTURISTIC BACKGROUND CANVAS (Horizontal + Vertical Shooting Lines) ===
+const bgCanvas = document.getElementById('bg-canvas');
+const ctx = bgCanvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = bgCanvas.width = window.innerWidth;
+  H = bgCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+let lines = [];
+let particles = [];
+
+class FlowLine {
+  constructor(isHorizontal) {
+    this.isHorizontal = isHorizontal;
+    this.reset();
+  }
+  reset() {
+    if (this.isHorizontal) {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.length = 120 + Math.random() * 280;
+      this.speed = 2 + Math.random() * 4;
+    } else {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.length = 120 + Math.random() * 280;
+      this.speed = 1.8 + Math.random() * 3.5;
+    }
+    this.alpha = 0.08 + Math.random() * 0.12;
+    this.hueShift = Math.random() > 0.7 ? 38 : 200; // amber or ice
+  }
+  update() {
+    if (this.isHorizontal) {
+      this.x += this.speed;
+      if (this.x > W + 100) this.reset();
+    } else {
+      this.y += this.speed;
+      if (this.y > H + 100) this.reset();
+    }
+  }
+  draw() {
+    ctx.strokeStyle = this.hueShift === 38 
+      ? `rgba(245,158,11,${this.alpha})` 
+      : `rgba(224,242,254,${this.alpha * 0.7})`;
+    ctx.lineWidth = 1.2;
+    
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = this.hueShift === 38 ? '#f59e0b' : '#e0f2fe';
+
+    ctx.beginPath();
+    if (this.isHorizontal) {
+      ctx.moveTo(this.x - this.length, this.y);
+      ctx.lineTo(this.x, this.y);
+    } else {
+      ctx.moveTo(this.x, this.y - this.length);
+      ctx.lineTo(this.x, this.y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+}
+
+// Initialize lines
+function initLines() {
+  lines = [];
+  for (let i = 0; i < 28; i++) {
+    lines.push(new FlowLine(true));   // horizontal
+    lines.push(new FlowLine(false));  // vertical
+  }
+}
+initLines();
+
+// Particles (data nodes)
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.size = Math.random() * 1.8 + 0.8;
+    this.life = 180 + Math.random() * 120;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life--;
+    if (this.life <= 0) this.reset();
+  }
+  draw() {
+    ctx.fillStyle = 'rgba(245,158,11,0.7)';
+    ctx.shadowBlur = 6;
+    ctx.shadowColor = '#f59e0b';
+    ctx.fillRect(this.x, this.y, this.size, this.size);
+    ctx.shadowBlur = 0;
+  }
+}
+
+for (let i = 0; i < 45; i++) particles.push(new Particle());
+
+function animateBG() {
+  ctx.fillStyle = 'rgba(6,9,15,0.12)';
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle grid
+  ctx.strokeStyle = 'rgba(245,158,11,0.03)';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x < W; x += 60) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += 60) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  lines.forEach(line => {
+    line.update();
+    line.draw();
+  });
+
+  particles.forEach(p => {
+    p.update();
+    p.draw();
+  });
+
+  requestAnimationFrame(animateBG);
+}
+animateBG();
+
+// Keep your existing radar canvas, counters, reveals, and modal scripts
+// (They work perfectly as-is)
+</script>
+
+<!-- Paste the rest of your original HTML (ticker, stats, sections, footer, modal) here -->
+
+</body>
+</html>
 </html>
