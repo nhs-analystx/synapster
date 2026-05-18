@@ -1,392 +1,555 @@
-/* Marketplace Page Styling */
-.marketplace-page {
-    padding: 40px 0;
-    min-height: calc(100vh - 120px); /* Adjust based on header/footer height */
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecting the Autonomous NHS // Neural Dashboard</title>
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; form-action 'self';">
+    <meta name="referrer" content="no-referrer">
+    
+    <style>
+        /* CSS Variables mapping system/daylight settings via media queries */
+        :root {
+            --bg-base: #030712;
+            --bg-surface: rgba(17, 24, 39, 0.7);
+            --bg-card-hover: rgba(31, 41, 55, 0.9);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-glow: #06b6d4; /* Cyber Cyan */
+            --accent-warn: #f97316; /* Bio Amber */
+            --border-color: rgba(6, 182, 212, 0.2);
+            --border-hover: rgba(6, 182, 212, 0.6);
+            --grid-line: rgba(6, 182, 212, 0.04);
+            --canvas-particle: rgba(6, 182, 212, 0.4);
+            --canvas-line: rgba(6, 182, 212, 0.08);
+        }
 
-.page-title {
-    font-size: 2.8em;
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 20px;
-    text-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
-}
+        /* Automatic System Day Light Override via user preference */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-base: #f4f6f9;
+                --bg-surface: rgba(255, 255, 255, 0.85);
+                --bg-card-hover: rgba(243, 244, 246, 0.95);
+                --text-primary: #111827;
+                --text-secondary: #4b5563;
+                --accent-glow: #0891b2;
+                --accent-warn: #ea580c;
+                --border-color: rgba(8, 145, 178, 0.25);
+                --border-hover: rgba(8, 145, 178, 0.7);
+                --grid-line: rgba(8, 145, 178, 0.05);
+                --canvas-particle: rgba(8, 145, 178, 0.3);
+                --canvas-line: rgba(8, 145, 178, 0.06);
+            }
+        }
 
-.page-description {
-    text-align: center;
-    font-size: 1.1em;
-    color: var(--text-color-light);
-    max-width: 800px;
-    margin: 0 auto 40px auto;
-}
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
 
-.marketplace-actions {
-    text-align: center;
-    margin-bottom: 40px;
-}
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
 
-.submit-product-btn {
-    background-color: var(--accent-green);
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 30px;
-    font-size: 1.1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
+        /* Futuristic Background Matrix Grid & Canvas Layer */
+        #neural-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
 
-.submit-product-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
+        header {
+            text-align: center;
+            padding: 4rem 2rem 2rem 2rem;
+            position: relative;
+        }
 
-.ai-categories-nav {
-    margin-bottom: 40px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 15px;
-}
+        header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin: 0;
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 8px rgba(6, 182, 212, 0.2));
+        }
 
-.category-tabs {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    flex-wrap: wrap;
-}
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin-top: 1rem;
+            text-transform: uppercase;
+        }
 
-.tab-item .tab-link {
-    color: var(--text-color-light);
-    text-decoration: none;
-    font-size: 1.15em;
-    font-weight: 600;
-    padding: 10px 20px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    display: block;
-}
+        .ticker-wrap {
+            width: 100%;
+            background: rgba(6, 182, 212, 0.05);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.6rem 0;
+            overflow: hidden;
+        }
 
-.tab-item .tab-link:hover {
-    color: var(--primary-color);
-    background-color: rgba(0, 123, 255, 0.1);
-}
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker 25s linear infinite;
+            font-size: 0.85rem;
+            font-family: monospace;
+            letter-spacing: 2px;
+            color: var(--accent-glow);
+        }
 
-.tab-item .tab-link.active {
-    background-color: var(--primary-color);
-    color: white;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
-}
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
 
-.ai-category-section {
-    display: none; /* Hidden by default */
-    padding: 30px 0;
-    border-bottom: 1px solid var(--border-color);
-}
+        main {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
 
-.ai-category-section:last-child {
-    border-bottom: none;
-}
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
 
-.ai-category-section.active {
-    display: block; /* Show active section */
-}
+        /* 3D Holographic Card Architecture */
+        .cyber-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+            transition: transform 0.1s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
 
-.category-heading {
-    font-size: 2.2em;
-    color: var(--text-color-light);
-    margin-bottom: 25px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .cyber-card:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+        }
 
-.category-subtitle {
-    font-size: 0.6em;
-    color: #a0a0b0;
-    margin-top: 5px;
-    font-weight: 400;
-}
+        /* Interactive Holographic Word-Turn (Mouse over turns graphic to words) */
+        .hologram-asset {
+            width: 100%;
+            height: 140px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.functional-areas-filter {
-    text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px dashed var(--border-color);
-}
+        .cyber-card:hover .hologram-asset {
+            transform: rotateY(180deg);
+        }
 
-.filter-label {
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-right: 15px;
-    font-size: 0.95em;
-}
+        .holo-front, .holo-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            font-family: monospace;
+        }
 
-.filter-btn {
-    background-color: #3a3a5e;
-    color: var(--text-color-light);
-    border: 1px solid var(--border-color);
-    padding: 8px 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.9em;
-    margin: 5px;
-    transition: all 0.2s ease;
-}
+        /* Generates Abstract Geometric Vector Shapes instead of layout graphics */
+        .holo-front {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.01));
+            border: 1px dashed var(--border-color);
+            color: var(--accent-glow);
+        }
 
-.filter-btn:hover {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
+        /* Generates abstract HUD rings dynamically using CSS */
+        .holo-front::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border: 2px double var(--accent-glow);
+            border-radius: 50%;
+            animation: spin 8s linear infinite;
+        }
 
-.filter-btn.active {
-    background-color: var(--accent-green);
-    color: white;
-    border-color: var(--accent-green);
-    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);
-}
+        .holo-front::after {
+            content: '▲ TELEMETRY ACTIVE';
+            position: absolute;
+            bottom: 8px;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+        }
 
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
+        .holo-back {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--text-primary);
+            transform: rotateY(180deg);
+            font-size: 0.85rem;
+            text-align: center;
+            border: 1px solid var(--accent-glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-.product-card {
-    background-color: #2e2e4a;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-}
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 123, 255, 0.3);
-}
+        .cyber-card h2 {
+            font-size: 1.4rem;
+            margin: 0 0 1rem 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+        }
 
-.product-name {
-    font-size: 1.6em;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
+        .cyber-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
 
-.product-description {
-    font-size: 0.95em;
-    color: #b0b0c0;
-    margin-bottom: 15px;
-    flex-grow: 1; /* Allows description to take up available space */
-}
+        /* Telemetry Status Indicator Pill */
+        .status-tag {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-glow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
 
-.product-functions span {
-    display: inline-block;
-    background-color: #3a3a5e;
-    color: #d0d0e0;
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.8em;
-    margin-right: 8px;
-    margin-bottom: 8px;
-}
+        .warn-tag {
+            color: var(--accent-warn);
+            background: rgba(249, 115, 22, 0.1);
+            border-color: rgba(249, 115, 22, 0.3);
+        }
 
-.product-link {
-    display: inline-block;
-    margin-top: 15px;
-    background-color: var(--accent-green);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    align-self: flex-start; /* Aligns button to the left */
-}
+        /* Zoom in Modal Graphic Overlay System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vw;
+            height: 100vh;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.product-link:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-/* Modal Styling */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-    padding-top: 60px;
-}
+        .modal-container {
+            background: var(--bg-surface);
+            border: 2px solid var(--accent-glow);
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 650px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.3);
+            transform: scale(0.7) translateZ(0);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
 
-.modal-content {
-    background-color: #2e2e4a;
-    margin: 5% auto; /* 15% from the top and centered */
-    padding: 30px;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    width: 90%; /* Could be more responsive */
-    max-width: 600px;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    color: var(--text-color-light);
-}
+        .modal-overlay.active .modal-container {
+            transform: scale(1) translateZ(0);
+        }
 
-.modal-content h2 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    text-align: center;
-}
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: monospace;
+            padding: 0.4rem 0.8rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
 
-.modal-content p {
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 0.95em;
-    color: #b0b0c0;
-}
+        .close-btn:hover {
+            border-color: var(--accent-glow);
+            color: var(--accent-glow);
+        }
 
-.close-button {
-    color: #aaa;
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 35px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+        }
 
-.close-button:hover,
-.close-button:focus {
-    color: var(--primary-color);
-    text-decoration: none;
-    cursor: pointer;
-}
+        /* Anti-clickjacking containment logic */
+        style { display: block; }
+    </style>
+</head>
+<body>
 
-.form-group {
-    margin-bottom: 20px;
-}
+    <script>
+        if (self !== top) {
+            top.location = self.location;
+        }
+    </script>
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--text-color-light);
-}
+    <canvas id="neural-canvas"></canvas>
 
-.form-group input[type="text"],
-.form-group input[type="url"],
-.form-group textarea,
-.form-group select {
-    width: calc(100% - 24px); /* Account for padding */
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background-color: #3a3a5e;
-    color: var(--text-color-light);
-    font-size: 1em;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    outline: none;
-}
+    <header>
+        <h1>Architecting the Autonomous NHS</h1>
+        <p>Systemic Integration Protocol & Quantum Assurance Engine</p>
+    </header>
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-}
+    <div class="ticker-wrap">
+        <div class="ticker">
+            // OPERATIONAL PARADIGM SHIFT DETECTED // 5:1 ROI ASSURED // LOCAL SOVEREIGNTY SECURED // ZERO CANNIBALISATION TARGETS MANIFESTED // 
+        </div>
+    </div>
 
-.form-group textarea {
-    resize: vertical;
-    min-height: 100px;
-}
+    <main>
+        <div class="telemetry-grid">
 
-.checkbox-group label {
-    display: inline-block;
-    margin-left: 8px;
-    margin-bottom: 5px;
-    font-weight: 400;
-}
+            <div class="cyber-card" onclick="openTelemetry('The Delivery Crisis & Drivers', 'Digital transformation is no longer optional; it is the fundamental structural requirement for driving NHS productivity and service sustainability. Traditional external consultancy and implementation models remain prohibitively expensive and fundamentally fail to offer long-term knowledge distribution. As operational service demands continuously outstrip human infrastructure throughout pathways, systemic talent stagnation limits the headroom available to develop internal competencies.')">
+                <span class="status-tag warn-tag">CRISIS CRITICAL</span>
+                <div class="hologram-asset">
+                    <div class="holo-front"></div>
+                    <div class="holo-back">DEEP TELEMETRY: COMPREHENSIVE CRITICAL FAULTS DETECTED</div>
+                </div>
+                <h2>Structural Faults Compounding</h2>
+                <p>Digital conversion limitations are pushing delivery timelines to failure thresholds. Click to expand telemetry analytics...</p>
+            </div>
 
-.checkbox-group input[type="checkbox"] {
-    margin-right: 5px;
-    transform: scale(1.2);
-}
+            <div class="cyber-card" onclick="openTelemetry('uPull.ai: Strategic Solution Topology', 'uPull.ai operates as a specialized technical vector bridging implementation gaps. By provisioning highly targeted execution capacity directly adjacent to core NHS modules, the model establishes parallel structural support. Concurrently, embedded mentorship frameworks actively upskill existing resources, guaranteeing full knowledge repatriation. Underpinning this architecture is a 5:1 commercial blueprint returning compounded efficiency gains directly back to the Trust\'s balance sheet.')">
+                <span class="status-tag">STRATEGIC VECTOR</span>
+                <div class="hologram-asset">
+                    <div class="holo-front"></div>
+                    <div class="holo-back">DEEP TELEMETRY: 5:1 GUARANTEED SAVINGS VECTOR MATRIX</div>
+                </div>
+                <h2>uPull.ai Bridge Protocol</h2>
+                <p>Deploy high-horsepower execution capabilities while retaining system-level internal intelligence. Click to expand data...</p>
+            </div>
 
-.submit-form-btn {
-    width: 100%;
-    background-color: var(--accent-green);
-    color: white;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
+            <div class="cyber-card" onclick="openTelemetry('AI Agent Assurance Framework', 'AI Agent Assurance serves as the core mathematical and regulatory engine within the system topology. It operates as an optimized feedback linkage balancing modern execution capability against strict operational constraints. By continuously testing agent intent paths against static NHS rules, compliance limitations scale proportionally alongside enterprise autonomy, eliminating arbitrary drift.')">
+                <span class="status-tag">CORE ENGINE</span>
+                <div class="hologram-asset">
+                    <div class="holo-front"></div>
+                    <div class="holo-back">DEEP TELEMETRY: COMPLIANCE LINKAGE SYSTEM ENGINE</div>
+                </div>
+                <h2>AI Agent Assurance Engine</h2>
+                <p>Scaling autonomous agency proportionally with strict clinical and data safety parameters. Click to expand data...</p>
+            </div>
 
-.submit-form-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
+            <div class="cyber-card" onclick="openTelemetry('Threat Containment & Matrix Management', 'Unbound autonomous processes carry inherent systemic operational risks, including technical degradation and infrastructure exhaustion. The Assurance Engine executes real-time Matrix Management, isolating unverified autonomous choices from active operational layers. Threat vectors are caught inside sandbox layers, analyzed, and neutralized before mutating core parameters.')">
+                <span class="status-tag warn-tag">THREAT PROTECTION</span>
+                <div class="hologram-asset">
+                    <div class="holo-front"></div>
+                    <div class="holo-back">DEEP TELEMETRY: MATRIX CONTEXT SANDBOX CONTROLS</div>
+                </div>
+                <h2>Matrix Threat Allocation</h2>
+                <p>Isolating unbound autonomous behaviors via specialized isolation sandboxes. Click to expand data...</p>
+            </div>
 
+            <div class="cyber-card" onclick="openTelemetry('The Risk Warrant Module', 'The Risk Warrant sets a perimeter layer protecting key organizational operations and user reliance models. This technical separation barrier permits iterative transition procedures without exposing core infrastructure to external anomalies. This defensive design completely ensures zero technological cannibalization of inherited assets.')">
+                <span class="status-tag">PERIMETER SHIELD</span>
+                <div class="hologram-asset">
+                    <div class="holo-front"></div>
+                    <div class="holo-back">DEEP TELEMETRY: ABSOLUTE CORE ASSET PROTECTION SYSTEM</div>
+                </div>
+                <h2>The Risk Warrant Protocol</h2>
+                <p>Absolute insulation barrier preventing erosion of foundational clinical networks. Click to expand data...</p>
+            </div>
 
-/* Responsive adjustments for Marketplace */
-@media (max-width: 768px) {
-    .page-title {
-        font-size: 2em;
-    }
-    .page-description {
-        font-size: 1em;
-        margin-bottom: 30px;
-    }
-    .ai-categories-nav {
-        margin-bottom: 30px;
-    }
-    .category-tabs {
-        gap: 15px;
-    }
-    .tab-item .tab-link {
-        font-size: 1em;
-        padding: 8px 15px;
-    }
-    .category-heading {
-        font-size: 1.8em;
-    }
-    .functional-areas-filter {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-    }
-    .filter-label {
-        flex-basis: 100%;
-        text-align: center;
-        margin-bottom: 10px;
-        margin-right: 0;
-    }
-    .product-grid {
-        grid-template-columns: 1fr; /* Stack products on small screens */
-    }
-    .product-card {
-        padding: 20px;
-    }
-    .product-name {
-        font-size: 1.4em;
-    }
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-    }
-}
+            <div class="cyber-card" onclick="openTelemetry('National Sovereignty & Compute Layers', 'Achieving compliant integration demands localized geographical separation. The platform enforces strict legal, jurisdictional, and infrastructure parameters ensuring data packages remain within national boundaries. The compute layer isolates processing instances, ensuring total data alignment with sovereign constraints.')">
+                <span class="status-tag">LOCAL BOUNDARY</span>
+                <div class="hologram-asset">
+                    <div class="holo-front"></div>
+                    <div class="holo-back">DEEP TELEMETRY: GEOPOLITICAL COMPUTE ISOLATION ZONE</div>
+                </div>
+                <h2>Sovereign Data Topology</h2>
+                <p>Enforcing absolute data isolation boundaries across geographic compute farms. Click to expand data...</p>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="telemetry-modal" onclick="closeTelemetry()">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeTelemetry()">[ESC] CLOSE</button>
+            <span class="status-tag" id="modal-tag">TELEMETRY EXPANSION</span>
+            <h2 id="modal-title">System Metrics</h2>
+            <p id="modal-body">Loading secure telemetry data arrays...</p>
+        </div>
+    </div>
+
+    <footer>
+        // SECURE CONSOLE INTERFACE V4.26 // CORE ENCRYPTION OPERATIONAL // ARCHITECTING THE AUTONOMOUS NHS
+    </footer>
+
+    <script>
+        /* Interactive Background Neural Matrix Animation Engine */
+        const canvas = document.getElementById('neural-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const maxParticles = 65;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.7;
+                this.vy = (Math.random() - 0.5) * 0.7;
+                this.radius = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                // Collect dynamic theme variable color via computed style properties safely
+                const computedColor = getComputedStyle(document.documentElement).getPropertyValue('--canvas-particle').trim();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = computedColor;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < maxParticles; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const lineStyle = getComputedStyle(document.documentElement).getPropertyValue('--canvas-line').trim();
+            
+            // Render vector lines joining proximal data nodes
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = lineStyle;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        /* Dynamic 3D Gyroscopic Parallax Interactivity Matrix for Cyber Cards */
+        const cards = document.querySelectorAll('.cyber-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const xc = rect.width / 2;
+                const yc = rect.height / 2;
+                const angleX = (yc - y) / 12;
+                const angleY = (x - xc) / 12;
+                card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateZ(5px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+            });
+        });
+
+        /* Holographic Telemetry Zoom Overlay Mechanics */
+        const overlay = document.getElementById('telemetry-modal');
+        const mTitle = document.getElementById('modal-title');
+        const mBody = document.getElementById('modal-body');
+
+        function openTelemetry(title, content) {
+            mTitle.innerText = title;
+            mBody.innerText = content;
+            overlay.classList.add('active');
+        }
+
+        function closeTelemetry() {
+            overlay.classList.remove('active');
+        }
+
+        // Close on escape telemetry command key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeTelemetry();
+        });
+    </script>
+</body>
+</html>
