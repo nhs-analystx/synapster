@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>uPull.ai — Scaling People to Bridge the NHS Digital Delivery Gap</title>
+    <style>
+        :root {
+            --primary-navy: #0A192F;
+            --nhs-blue: #005EB8;
+            --accent-orange: #E65F2B;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation Layout */
+        header {
+            background-color: var(--primary-navy);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--nhs-blue);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-orange);
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-orange);
+        }
+
+        .cta-btn {
+            background-color: var(--accent-orange);
+            color: #ffffff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-btn:hover {
+            background-color: #c54f20;
+            color: #ffffff;
+        }
+
+        /* Layout Framework */
+        section {
+            padding: 4.5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary-navy);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--nhs-blue);
+            margin: 0.5rem auto 0 auto;
+        }
+
+        /* Hero Split Component */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            background: #ffffff;
+            margin: 2rem auto;
+            border-radius: 8px;
+            padding: 3rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 768px) {
+            .hero, .split-grid, .team-member { grid-template-columns: 1fr; flex-direction: column; text-align: center; }
+            .team-member { text-align: left; }
+        }
+
+        .hero-left h1 {
+            font-size: 2.6rem;
+            color: var(--primary-navy);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-left p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Operational Crisis Panel */
+        .crisis-vise-box {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 8px;
+            border-left: 6px solid var(--accent-orange);
+            text-align: center;
+        }
+
+        .vise-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-orange);
+            margin-bottom: 1rem;
+        }
+
+        .vise-core {
+            border: 2px dashed rgba(255,255,255,0.2);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            background: rgba(230, 95, 43, 0.1);
+        }
+
+        /* Pressures Alignment Grid */
+        .pressures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .pressure-card {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-top: 4px solid var(--nhs-blue);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .pressure-card h3 {
+            color: var(--primary-navy);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pressure-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Paradigm Blocks */
+        .split-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .model-box {
+            padding: 2.5rem;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .model-box.push { border-top: 5px solid #cbd5e1; }
+        .model-box.pull { border-top: 5px solid var(--accent-orange); background: #fffcf9; }
+
+        .model-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-navy);
+        }
+
+        .quote-box {
+            font-style: italic;
+            border-left: 3px solid var(--text-muted);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+        }
+
+        /* Timeline / Roadmap Layout */
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .step-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .step-badge {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--primary-navy);
+            color: #ffffff;
+            padding: 0.2rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .step-card.active .step-badge {
+            background: var(--accent-orange);
+        }
+
+        .step-card h3 {
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-navy);
+        }
+
+        /* Financial Engine Flywheel */
+        .flywheel-section {
+            background: var(--primary-navy);
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 4rem 3rem;
+        }
+
+        .flywheel-section .section-title {
+            color: #ffffff;
+        }
+
+        .flywheel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .metric-highlight {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-orange);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Clinical Case Studies */
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .case-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .case-card h3 {
+            color: var(--nhs-blue);
+            margin-bottom: 1rem;
+        }
+
+        .case-tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: var(--nhs-blue);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Strategic Leadership Profiles */
+        .team-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .team-section {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .team-member {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            border: 4px solid var(--border-color);
+        }
+
+        .member-details h3 {
+            font-size: 1.5rem;
+            color: var(--primary-navy);
+        }
+
+        .member-role {
+            color: var(--accent-orange);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Conversional Action Funnel */
+        .funnel-banner {
+            background: linear-gradient(135deg, var(--nhs-blue) 0%, var(--primary-navy) 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 4rem 5%;
+        }
+
+        .funnel-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 2.5rem auto;
+            flex-wrap: wrap;
+        }
+
+        .funnel-step {
+            flex: 1;
+            min-width: 250px;
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 6px;
+            backdrop-filter: blur(5px);
+        }
+
+        .funnel-step num {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-orange);
+        }
+
+        footer {
+            background: #09111e;
+            color: #94a3b8;
+            padding: 2rem 5%;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid #1e293b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">uPull<span>.ai</span></a>
+            <nav>
+                <a href="#philosophy">Our Philosophy</a>
+                <a href="#roadmap">Roadmap</a>
+                <a href="#why-us">Value Engine</a>
+                <a href="#cases">Case Studies</a>
+                <a href="#leadership">Leadership</a>
+                <button class="cta-btn" style="margin-left: 1.5rem;">Begin Proof of Value</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero / Crisis Section -->
+    <section class="hero">
+        <div class="hero-left">
+            <h1>Scaling People to Bridge the NHS Digital Delivery Gap</h1>
+            <p>Unprecedented financial and operational pressures force an impossible choice: rush artificial intelligence adoption and risk poor implementation, or face system collapse. We break the vise.</p>
+            <button class="cta-btn">Explore the Pull Principle</button>
+        </div>
+        <div class="hero-right">
+            <div class="crisis-vise-box">
+                <div class="vise-title">Operational Constraint</div>
+                <div style="font-size: 1.1rem; font-weight: 600;">The Delivery Crisis Framework</div>
+                <div class="vise-core">
+                    <div style="font-weight: bold; font-size: 1.2rem; color: var(--accent-orange);">HIGH RISK ENVIRONMENT</div>
+                    <div style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.8;">As defined in reference asset "Scaling people for AI_2.jpg"</div>
+                </div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">System Overload vs. Rapid Procurement</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pressures Data Grid -->
+    <section style="padding-top: 0;">
+        <div class="pressures-grid">
+            <div class="pressure-card">
+                <h3>Productivity Imperative</h3>
+                <p>Digital transformation is no longer optional; it is fundamentally required for long-term sustainability.</p>
+            </div>
+            <div class="pressure-card">
+                <h3>Capacity Deficit</h3>
+                <p>Existing systems are overloaded, placing high pressure on staff and restricting internal capability.</p>
+            </div>
+            <div class="pressure-card">
+                <h3>Financial Barrier</h3>
+                <p>Traditional external delivery teams and "Big Consulting" models have become prohibitively expensive.</p>
+            </div>
+            <div class="pressure-card">
+                <h3>Talent Stagnation</h3>
+                <p>Relying strictly on outsourced expertise leaves internal workforces unable to adapt or scale long-term.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Push vs Pull Paradigm -->
+    <section id="philosophy" style="background: #f1f5f9; max-width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 class="section-title">The Push vs. Pull Dilemma</h2>
+            <div class="split-grid">
+                <div class="model-box push">
+                    <h3>The Old Way: The 'Push' Model</h3>
+                    <p>Organisations deploy generic technology tools globally and expect staff to adapt blindly without operational or process redesign.</p>
+                    <div class="quote-box">
+                        "You cannot transform a workflow without the people who run it."
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Result: Consistently low adoption rates and poor return on investment.</p>
+                </div>
+                <div class="model-box pull">
+                    <h3>The New Way: The 'Pull' Principle</h3>
+                    <p>We target an isolated, critical workflow, comprehensively redesign the pathway, and upskill the local frontline workforce to natively <strong>pull AI systems</strong> into their everyday operations.</p>
+                    <p style="margin-top: 1rem; color: var(--accent-orange); font-weight: 600;">Result: Immediate operational adoption and robust, self-sustaining growth scales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Three Stage Delivery Roadmap -->
+    <section id="roadmap">
+        <h2 class="section-title">The Three-Stage Delivery Roadmap</h2>
+        <div class="roadmap">
+            <div class="step-card active">
+                <div class="step-badge">Stage A: 1–6 Weeks</div>
+                <h3>Prove</h3>
+                <p>Focus intensely on <strong>1 single workflow</strong> and <strong>2 internal staff members</strong> to demonstrate rapid, low-risk proof of value.</p>
+                <div style="margin-top: 1rem; font-weight: bold; color: var(--accent-orange);">Initial 2:1 Return</div>
+            </div>
+            <div class="step-card">
+                <div class="step-badge">Stage B: Expansion</div>
+                <h3>Build</h3>
+                <p>Engage a dedicated executive sponsor and empower <strong>2–3 local Intrapreneurs</strong> to systematically scale the proofed model framework.</p>
+                <div style="margin-top: 1rem; font-weight: bold; color: var(--nhs-blue);">Standard 5:1 Return</div>
+            </div>
+            <div class="step-card">
+                <div class="step-badge">Stage C: Standardisation</div>
+                <h3>Scale</h3>
+                <p>Execute a coordinated, organisation-wide rollout leveraging centralized delivery platforms and diagnostic performance dashboards.</p>
+                <div style="margin-top: 1rem; font-weight: bold; color: var(--primary-navy);">Systemic 10:1+ Return</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Engine Flywheel -->
+    <section id="why-us" style="max-width: 100%; padding: 0 5%;">
+        <div class="flywheel-section">
+            <h2 class="section-title">The Self-Funding Flywheel</h2>
+            <div class="flywheel-grid">
+                <div>
+                    <div class="metric-highlight">5:1</div>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Guaranteed Standard ROI</p>
+                    <p style="opacity: 0.8; font-size: 0.9rem;">For every £1 allocated into the uPull.ai platform, £5 is reliably returned through cashable efficiencies and direct systemic baseline optimization.</p>
+                </div>
+                <div>
+                    <div class="metric-highlight">£51M</div>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Regional Scaling Impact</p>
+                    <p style="opacity: 0.8; font-size: 0.9rem;">Demonstrated regional potential scaling value across expanding networks of Integrated Care Boards and collective regional health groups.</p>
+                </div>
+                <div>
+                    <div class="metric-highlight">>£250M</div>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">National Potential Value</p>
+                    <p style="opacity: 0.8; font-size: 0.9rem;">Projected aggregate net saving value unlocked upon standardized replication across the broader national framework layout.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="cases">
+        <h2 class="section-title">Healthcare Case Studies</h2>
+        <div class="case-grid">
+            <div class="case-card">
+                <span class="case-tag">Clinical Workflow Optimization</span>
+                <h3>Ambient Voice Integration & Medical Scribing</h3>
+                <p><strong>The Challenge:</strong> Frontline clinical teams spending vital diagnostic timeline blocks typing up encounter paperwork, escalating administrative fatigue.</p>
+                <p style="margin-top: 0.5rem;"><strong>The Redesign:</strong> Embedded real-time processing ambient tools allowing clinicians to prioritize patient dialogue while records are structured safely under manual validation.</p>
+            </div>
+            <div class="case-card">
+                <span class="case-tag">Administrative Pathways</span>
+                <h3>Intelligent Care Triage Automation</h3>
+                <p><strong>The Challenge:</strong> Disjointed legacy documentation architectures leading to severe backlogs during initial patient processing lines and referrals data-entry loops.</p>
+                <p style="margin-top: 0.5rem;"><strong>The Redesign:</strong> Deployed automated classification engines that intelligently extract patient histories into baseline EHR platforms, producing a 30% reduction in missed appointments.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section -->
+    <section id="leadership" style="background: #f1f5f9; max-width: 100%;">
+        <h2 class="section-title">Our Founders & Consultants</h2>
+        <div class="team-grid">
+            
+            <!-- Alex's Profile -->
+            <div class="team-section">
+                <div class="team-member">
+                    <div class="member-avatar">AC</div>
+                    <div class="member-details">
+                        <h3>Alex Cheung</h3>
+                        <div class="member-role">Co-Founder & Principal AI Strategist</div>
+                        <p style="color: #64748B; font-size: 0.95rem;">Alex Cheung is a health technology entrepreneur and digital innovation community leader with extensive experience in building and scaling digital health communities. He works at the intersection of healthcare, technology and commercial strategy, helping organisations adopt innovative solutions that improve care delivery, operational performance and patient outcomes. Alex specialises in the governance, technical auditing, and maturity scoring of AI agents to ensure autonomous systems remain safe, compliant, and deeply embedded into operational workflows.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hassan's Profile -->
+            <div class="team-section">
+                <div class="team-member">
+                    <div class="member-avatar">HC</div>
+                    <div class="member-details">
+                        <h3>Hassan Chaudhury</h3>
+                        <div class="member-role">Co-Founder & Digital Health Consultant</div>
+                        <p style="color: #64748B; font-size: 0.95rem;">Hassan Chaudhury is a digital health entrepreneur, strategist and adviser with over 20 years' experience across healthcare, life sciences and health technology. He has worked with the NHS, governments, global organisations and startups to drive innovation, commercial growth and the adoption of digital health solutions.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suki's Profile -->
+            <div class="team-section">
+                <div class="team-member">
+                    <div class="member-avatar">SP</div>
+                    <div class="member-details">
+                        <h3>Dr Sukhmeet (Suki) Panesar</h3>
+                        <div class="member-role">Clinical Innovation & Population Health Adviser</div>
+                        <p style="color: #64748B; font-size: 0.95rem;">Dr Sukhmeet (Suki) Panesar is a clinician, digital health strategist and healthcare innovation adviser with extensive experience across the NHS, global health systems and the private sector. He specialises in health data, digital transformation and population health, helping organisations use technology and data to improve healthcare outcomes and system performance.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Action Funnel Banner -->
+    <div class="funnel-banner">
+        <h2>Ready to Bridge Your Digital Delivery Gap?</h2>
+        <p style="opacity: 0.9; margin-top: 0.5rem;">Initiate your targeted transformation path in three clear steps</p>
+        <div class="funnel-steps">
+            <div class="funnel-step">
+                <num>1</num>
+                <h4 style="margin: 0.5rem 0;">Identify 1 Workflow</h4>
+                <p style="font-size: 0.85rem; opacity: 0.8;">Pinpoint a single operational process ripe for digital transformation.</p>
+            </div>
+            <div class="funnel-step">
+                <num>2</num>
+                <h4 style="margin: 0.5rem 0;">Select 2 Staff</h4>
+                <p style="font-size: 0.85rem; opacity: 0.8;">Choose two internal team members to become your first practitioners.</p>
+            </div>
+            <div class="funnel-step">
+                <num>3</num>
+                <h4 style="margin: 0.5rem 0;">Begin Proof of Value</h4>
+                <p style="font-size: 0.85rem; opacity: 0.8;">Start the journey with a focused, entirely low-risk localized pilot.</p>
+            </div>
+        </div>
+        <button class="cta-btn" style="background: #ffffff; color: var(--primary-navy); padding: 0.8rem 2rem; font-size: 1.1rem;">Launch Pilot Initiative</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>uPull.ai Ltd.</strong> &bull; Registered Office: London, United Kingdom &bull; enquiries@upull.ai</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.6;">&copy; 2026 uPull.ai. All rights reserved. Standard UK English Edition. Compiled from methodology resources detailing architectural components of "Scaling people for AI_2.jpg".</p>
+    </footer>
+
+</body>
+</html>
