@@ -20,6 +20,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -28,6 +29,7 @@
             line-height: 1.6;
         }
 
+        /* Navigation Layout */
         header {
             background-color: var(--primary-navy);
             padding: 1rem 5%;
@@ -71,269 +73,244 @@
         .cta-btn {
             background-color: var(--accent-orange);
             color: #ffffff;
-            padding: 0.6rem 1.2rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 4px;
             font-weight: 600;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: transform 0.2s, background-color 0.3s;
             text-decoration: none;
             display: inline-block;
         }
 
         .cta-btn:hover {
             background-color: #c54f20;
+            transform: translateY(-2px);
         }
 
         main {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 5%;
+            padding: 0 5%;
         }
 
         section {
-            padding: 4.5rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        section:last-of-type {
-            border-bottom: none;
+            padding: 5rem 0;
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             color: var(--primary-navy);
-            margin-bottom: 3rem;
-            position: relative;
+            margin-bottom: 1rem;
+            font-weight: 800;
         }
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background-color: var(--nhs-blue);
-            margin: 0.5rem auto 0 auto;
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 4rem auto;
         }
 
-        /* Hero Layout */
-        .hero {
+        /* Hero Layout with Dynamic Background Banner */
+        .hero-banner {
+            background: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.95)), 
+                        url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 4rem;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 0.8fr;
             gap: 3rem;
             align-items: center;
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 3rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-top: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
 
-        @media (max-width: 768px) {
-            .hero, .split-grid, .team-grid, .case-grid { grid-template-columns: 1fr; }
+        @media (max-width: 900px) {
+            .hero-banner, .split-grid, .team-grid, .case-grid { grid-template-columns: 1fr; }
+            .hero-banner { padding: 2rem; }
         }
 
         .hero-left h1 {
-            font-size: 2.6rem;
-            color: var(--primary-navy);
-            line-height: 1.2;
+            font-size: 3rem;
+            line-height: 1.15;
             margin-bottom: 1.5rem;
+            font-weight: 800;
         }
 
         .hero-left p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
+            opacity: 0.9;
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
         }
 
-        .crisis-vise-box {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: #ffffff;
+        /* Interactive Vise Visualization Card */
+        .crisis-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 2.5rem;
             border-radius: 8px;
             border-left: 6px solid var(--accent-orange);
             text-align: center;
         }
 
-        .vise-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent-orange);
-            margin-bottom: 1rem;
-        }
-
-        .vise-core {
-            border: 2px dashed rgba(255,255,255,0.2);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            background: rgba(230, 95, 43, 0.1);
-        }
-
-        /* Pressures Alignment Grid */
+        /* Pressures Layout Grid */
         .pressures-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1.5rem;
-            margin-top: 3rem;
+            margin-top: -2rem;
+            padding-bottom: 4rem;
         }
 
         .pressure-card {
             background: #ffffff;
-            padding: 1.5rem;
-            border-radius: 6px;
+            padding: 2rem;
+            border-radius: 8px;
             border-top: 4px solid var(--nhs-blue);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .pressure-card:hover {
+            transform: translateY(-5px);
         }
 
         .pressure-card h3 {
             color: var(--primary-navy);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
         }
 
-        .pressure-card p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Paradigm Grid */
+        /* Paradigm Grid with Visual Assets */
         .split-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 3rem;
         }
 
         .model-box {
-            padding: 2.5rem;
+            padding: 3rem 2.5rem;
             border-radius: 8px;
             background: #ffffff;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .model-box.push { border-top: 5px solid #cbd5e1; }
-        .model-box.pull { border-top: 5px solid var(--accent-orange); background: #fffcf9; }
+        .model-box.push { border-top: 6px solid #cbd5e1; }
+        .model-box.pull { border-top: 6px solid var(--accent-orange); background: #fffcf9; }
 
-        .model-box h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary-navy);
+        .model-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
         }
 
-        .quote-box {
-            font-style: italic;
-            border-left: 3px solid var(--text-muted);
-            padding-left: 1rem;
-            margin: 1.5rem 0;
-            color: var(--text-muted);
-        }
-
-        /* Roadmap Steps */
-        .roadmap {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .step-card {
-            background: #ffffff;
-            padding: 2rem;
-            border-radius: 8px;
-            position: relative;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-        }
-
-        .step-badge {
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: var(--primary-navy);
-            color: #ffffff;
-            padding: 0.2rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .step-card.active .step-badge {
-            background: var(--accent-orange);
-        }
-
-        .step-card h3 {
-            margin-top: 0.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary-navy);
-        }
-
-        /* Flywheel Box */
-        .flywheel-section {
+        /* Interactive Slider Component */
+        .interactive-calculator {
             background: var(--primary-navy);
             color: #ffffff;
             border-radius: 12px;
-            padding: 4rem 3rem;
+            padding: 4rem;
             text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
 
-        .flywheel-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3rem;
+        .slider-container {
+            max-width: 600px;
+            margin: 2.5rem auto;
         }
 
-        .metric-highlight {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent-orange);
-            line-height: 1;
-            margin-bottom: 0.5rem;
+        .range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+            padding: 0;
+            margin: 0;
+            height: 8px;
         }
 
-        /* Case Studies Layout */
-        .case-grid {
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent-orange);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .calculator-results {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
+            max-width: 600px;
+            margin: 2rem auto 0 auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+        }
+
+        .calc-metric {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-orange);
+        }
+
+        /* Case Studies Component */
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
         }
 
         .case-card {
             background: #ffffff;
-            padding: 2rem;
             border-radius: 8px;
+            overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        .case-card h3 {
-            color: var(--nhs-blue);
-            margin-bottom: 1rem;
+        .case-banner {
+            height: 220px;
+            width: 100%;
+            object-fit: cover;
         }
 
-        .case-tag {
-            display: inline-block;
-            background: #e0f2fe;
-            color: var(--nhs-blue);
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+        .case-content {
+            padding: 2.5rem;
         }
 
-        /* Updated Team Grid Layout */
+        /* Team Section Layout */
         .team-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .team-card {
             background: #ffffff;
-            padding: 2.5rem 2rem;
+            padding: 3rem 2rem;
             border-radius: 8px;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             border-top: 4px solid var(--border-color);
-            transition: border-color 0.3s;
+            text-align: center;
         }
 
         .team-card:first-of-type {
@@ -341,82 +318,58 @@
         }
 
         .member-avatar {
-            width: 80px;
-            height: 80px;
-            background: #e2e8f0;
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
+            margin: 0 auto 1.5rem auto;
+            border: 4px solid var(--border-color);
         }
 
-        .team-card h3 {
-            font-size: 1.4rem;
-            color: var(--primary-navy);
-            margin-bottom: 0.2rem;
-        }
-
-        .member-role {
-            color: var(--accent-orange);
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .team-card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            text-align: justify;
-        }
-
-        /* Action Funnel */
+        /* Action Funnel Elements */
         .funnel-banner {
             background: linear-gradient(135deg, var(--nhs-blue) 0%, var(--primary-navy) 100%);
             color: #ffffff;
             text-align: center;
-            padding: 4rem 5%;
+            padding: 5rem 5%;
             margin-top: 4rem;
-            border-radius: 8px;
+            border-radius: 12px;
         }
 
         .funnel-steps {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            margin: 2.5rem auto;
+            margin: 3rem auto;
             flex-wrap: wrap;
         }
 
         .funnel-step {
             flex: 1;
             min-width: 250px;
-            background: rgba(255,255,255,0.1);
-            padding: 1.5rem;
-            border-radius: 6px;
+            background: rgba(255,255,255,0.08);
+            padding: 2rem;
+            border-radius: 8px;
             backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .funnel-step num {
             display: block;
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 800;
             color: var(--accent-orange);
+            margin-bottom: 0.5rem;
         }
 
         footer {
             background: #09111e;
             color: #94a3b8;
-            padding: 3rem 5%;
+            padding: 4rem 5%;
             text-align: center;
             font-size: 0.9rem;
             border-top: 1px solid #1e293b;
-            margin-top: 4rem;
+            margin-top: 5rem;
         }
 
         footer a {
@@ -428,6 +381,7 @@
 </head>
 <body>
 
+    <!-- Header Navigation Element -->
     <header>
         <div class="nav-container">
             <a href="#" class="logo">uPull<span>.ai</span></a>
@@ -442,26 +396,29 @@
         </div>
     </header>
 
+    <!-- Main Content Container -->
     <main>
-        <section class="hero" id="hero">
+        <!-- Hero Split Section -->
+        <section class="hero-banner" id="hero">
             <div class="hero-left">
                 <h1>Scaling People to Bridge the NHS Digital Delivery Gap</h1>
                 <p>Unprecedented financial and operational pressures force an impossible choice: rush artificial intelligence adoption and risk poor implementation, or face system collapse. We break the vise.</p>
                 <a href="#philosophy" class="cta-btn">Explore the Pull Principle</a>
             </div>
             <div class="hero-right">
-                <article class="crisis-vise-box">
+                <article class="crisis-card">
                     <div class="vise-title">Operational Constraint</div>
-                    <div style="font-size: 1.1rem; font-weight: 600;">The Delivery Crisis Vise</div>
+                    <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">The Delivery Crisis Vise</div>
                     <div class="vise-core">
-                        <div style="font-weight: bold; font-size: 1.2rem; color: var(--accent-orange);">HIGH RISK ENVIRONMENT</div>
+                        <div style="font-weight: 800; font-size: 1.3rem; color: var(--accent-orange); letter-spacing: 1px;">HIGH RISK ENVIRONMENT</div>
                     </div>
-                    <p style="font-size: 0.9rem; opacity: 0.9;">System Overload vs. Rapid Procurement Procurement</p>
+                    <p style="font-size: 0.95rem; opacity: 0.9;">System Overload vs. Rapid Procurement Procurement</p>
                 </article>
             </div>
         </section>
 
-        <section style="padding-top: 2rem;">
+        <!-- Pressures Section -->
+        <section style="padding-top: 4rem;">
             <div class="pressures-grid">
                 <article class="pressure-card">
                     <h3>Productivity Imperative</h3>
@@ -482,146 +439,184 @@
             </div>
         </section>
 
+        <!-- Push vs Pull Paradigm Section -->
         <section id="philosophy">
             <h2 class="section-title">The Push vs. Pull Dilemma</h2>
+            <p class="section-subtitle">Successful AI integration relies on frontline-led transformation rather than isolated generic software pilots.</p>
             <div class="split-grid">
                 <article class="model-box push">
-                    <h3>The Old Way: The 'Push' Model</h3>
-                    <p>Organisations deploy generic technology tools globally and expect staff to adapt blindly without operational or process redesign.</p>
-                    <div class="quote-box">
-                        "You cannot transform a workflow without the people who run it."
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80" alt="Rigid engineering process diagram" class="model-image">
+                        <h3>The Old Way: The 'Push' Model</h3>
+                        <p style="margin-top: 1rem;">Organisations deploy generic technology tools globally and expect staff to adapt blindly without operational or process redesign.</p>
+                        <div class="quote-box">
+                            "You cannot transform a workflow without the people who run it."
+                        </div>
                     </div>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Result: Consistently low adoption rates and poor return on investment.</p>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; font-weight: bold; margin-top: 1rem;">Result: Consistently low adoption rates and poor return on investment.</p>
                 </article>
                 <article class="model-box pull">
-                    <h3>The New Way: The 'Pull' Principle</h3>
-                    <p>We target an isolated, critical workflow, comprehensively redesign the pathway, and upskill the local frontline workforce to natively <strong>pull AI systems</strong> into their everyday operations.</p>
-                    <p style="margin-top: 1rem; color: var(--accent-orange); font-weight: 600;">Result: Immediate operational adoption and robust, self-sustaining growth scales.</p>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80" alt="Collaborative clinical technology training" class="model-image">
+                        <h3>The New Way: The 'Pull' Principle</h3>
+                        <p style="margin-top: 1rem;">We target an isolated, critical workflow, comprehensively redesign the pathway, and upskill the local frontline workforce to natively <strong>pull AI systems</strong> into their everyday operations.</p>
+                    </div>
+                    <p style="margin-top: 2rem; color: var(--accent-orange); font-weight: bold; font-size: 0.95rem;">Result: Immediate operational adoption and robust, self-sustaining growth scales.</p>
                 </article>
             </div>
         </section>
 
+        <!-- Delivery Roadmap Section -->
         <section id="roadmap">
             <h2 class="section-title">The Three-Stage Delivery Roadmap</h2>
+            <p class="section-subtitle">A controlled framework built to minimize execution risk while capturing clear capability metrics.</p>
             <div class="roadmap">
                 <div class="step-card active">
                     <div class="step-badge">Stage A: Weeks 1–6</div>
                     <h3>Prove</h3>
                     <p>Focus intensely on <strong>1 single workflow</strong> and <strong>2 internal staff members</strong> to demonstrate rapid, low-risk proof of value.</p>
-                    <div style="margin-top: 1rem; font-weight: bold; color: var(--accent-orange);">Initial 2:1 Return</div>
+                    <div style="margin-top: 1.5rem; font-weight: bold; color: var(--accent-orange); font-size: 1.1rem;">Initial 2:1 Return</div>
                 </div>
                 <div class="step-card">
                     <div class="step-badge">Stage B: Expansion</div>
                     <h3>Build</h3>
                     <p>Engage a dedicated executive sponsor and empower <strong>2–3 local Intrapreneurs</strong> to systematically scale the proofed model framework.</p>
-                    <div style="margin-top: 1rem; font-weight: bold; color: var(--nhs-blue);">Standard 5:1 Return</div>
+                    <div style="margin-top: 1.5rem; font-weight: bold; color: var(--nhs-blue); font-size: 1.1rem;">Standard 5:1 Return</div>
                 </div>
                 <div class="step-card">
                     <div class="step-badge">Stage C: Standardisation</div>
                     <h3>Scale</h3>
                     <p>Execute a coordinated, organisation-wide rollout leveraging centralized delivery platforms and diagnostic performance dashboards.</p>
-                    <div style="margin-top: 1rem; font-weight: bold; color: var(--primary-navy);">Systemic 10:1+ Return</div>
+                    <div style="margin-top: 1.5rem; font-weight: bold; color: var(--primary-navy); font-size: 1.1rem;">Systemic 10:1+ Return</div>
                 </div>
             </div>
         </section>
 
+        <!-- Dynamic Self-Funding Flywheel Section -->
         <section id="why-us">
-            <div class="flywheel-section">
-                <h2 style="color: #ffffff;">The Self-Funding Flywheel</h2>
-                <div class="flywheel-grid">
+            <div class="interactive-calculator">
+                <h2>The Self-Funding Flywheel</h2>
+                <p style="opacity: 0.8; max-width: 600px; margin: 0 auto;">Adjust your program allocation below to estimate your targeted systemic value return built on our 5:1 framework model[cite: 2].</p>
+                
+                <div class="slider-container">
+                    <label for="investmentSlider" style="display: block; font-weight: 600; margin-bottom: 1rem; font-size: 1.1rem;">Program Investment: <span id="investmentLabel">£100,000</span></label>
+                    <input type="range" min="50000" max="1000000" step="50000" value="100000" class="range-slider" id="investmentSlider">
+                </div>
+
+                <div class="calculator-results">
                     <article>
-                        <div class="metric-highlight">5:1</div>
-                        <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Guaranteed Standard ROI</h4>
-                        <p style="opacity: 0.8; font-size: 0.9rem;">For every £1 allocated into the uPull.ai platform, £5 is reliably returned through cashable efficiencies and direct systemic baseline optimization.</p>
+                        <p style="opacity: 0.7; font-size: 0.9rem; font-weight: 600; uppercase; letter-spacing: 1px;">Projected Return Value</p>
+                        <div class="calc-metric" id="returnMetric">£500,000</div>
                     </article>
                     <article>
-                        <div class="metric-highlight">£51M</div>
-                        <h4 style="color: #ffffff; margin-bottom: 0.5rem;">Regional Scaling Impact</h4>
-                        <p style="opacity: 0.8; font-size: 0.9rem;">Demonstrated regional potential scaling value across expanding networks of Integrated Care Boards and collective health groups.</p>
-                    </article>
-                    <article>
-                        <div class="metric-highlight">>£250M</div>
-                        <h4 style="color: #ffffff; margin-bottom: 0.5rem;">National Potential Value</h4>
-                        <p style="opacity: 0.8; font-size: 0.9rem;">Projected aggregate net saving value unlocked upon standardized replication across the broader national framework layout.</p>
+                        <p style="opacity: 0.7; font-size: 0.9rem; font-weight: 600; uppercase; letter-spacing: 1px;">Standard ROI Ratio</p>
+                        <div class="calc-metric" style="color: #ffffff;">5:1</div>
                     </article>
                 </div>
             </div>
         </section>
 
+        <!-- Case Studies Section -->
         <section id="cases">
             <h2 class="section-title">Healthcare Case Studies</h2>
+            <p class="section-subtitle">Real results from deploying tailored AI workflows across complex modern healthcare landscapes.</p>
             <div class="case-grid">
                 <article class="case-card">
-                    <span class="case-tag">Clinical Efficiency</span>
-                    <h3>Ambient Voice Integration & Medical Scribing</h3>
-                    <p><strong>The Challenge:</strong> Frontline clinical teams spending vital diagnostic timeline blocks typing up encounter paperwork, escalating administrative fatigue.</p>
-                    <p style="margin-top: 0.5rem;"><strong>The Redesign:</strong> Embedded real-time processing ambient tools allowing clinicians to prioritize patient dialogue while records are structured safely under manual validation.</p>
-                    <p style="margin-top: 0.5rem; font-weight: bold; color: var(--nhs-blue);">Outcome: Documentation time reduced by 45%, recovering 43 minutes daily.</p>
+                    <img src="https://images.unsplash.com/photo-1584515933487-75982139b2a1?auto=format&fit=crop&w=600&q=80" alt="Clinician writing medical record notes" class="case-banner">
+                    <div class="case-content">
+                        <span class="case-tag">Clinical Efficiency</span>
+                        <h3>Ambient Voice Integration & Medical Scribing</h3>
+                        <p><strong>The Challenge:</strong> Frontline clinical teams spending vital diagnostic timeline blocks typing up encounter paperwork, escalating administrative fatigue.</p>
+                        <p style="margin-top: 0.75rem;"><strong>The Redesign:</strong> Embedded real-time processing ambient tools allowing clinicians to prioritize patient dialogue while records are structured safely under manual validation.</p>
+                        <p style="margin-top: 1rem; font-weight: bold; color: var(--nhs-blue);">Outcome: Documentation time reduced by 45%, recovering 43 minutes daily.</p>
+                    </div>
                 </article>
                 <article class="case-card">
-                    <span class="case-tag">Operational Flow</span>
-                    <h3>Intelligent Care Triage Automation</h3>
-                    <p><strong>The Challenge:</strong> Disjointed legacy documentation architectures leading to severe backlogs during initial patient processing lines and referrals data-entry loops.</p>
-                    <p style="margin-top: 0.5rem;"><strong>The Redesign:</strong> Deployed automated classification engines that intelligently extract patient histories into baseline Electronic Health Record platforms.</p>
-                    <p style="margin-top: 0.5rem; font-weight: bold; color: var(--nhs-blue);">Outcome: Automated over 85% of standard patient referral pathways safely.</p>
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=600&q=80" alt="Hospital reception management corridor" class="case-banner">
+                    <div class="case-content">
+                        <span class="case-tag">Operational Flow</span>
+                        <h3>Intelligent Care Triage Automation</h3>
+                        <p><strong>The Challenge:</strong> Disjointed legacy documentation architectures leading to severe backlogs during initial patient processing lines and referrals data-entry loops.</p>
+                        <p style="margin-top: 0.75rem;"><strong>The Redesign:</strong> Deployed automated classification engines that intelligently extract patient histories into baseline Electronic Health Record platforms.</p>
+                        <p style="margin-top: 1rem; font-weight: bold; color: var(--nhs-blue);">Outcome: Automated over 85% of standard patient referral pathways safely.</p>
+                    </div>
                 </article>
             </div>
         </section>
 
+        <!-- Founders & Consultants Section -->
         <section id="leadership">
             <h2 class="section-title">Our Visionaries & Leaders</h2>
+            <p class="section-subtitle">A team dedicated to frontline-led digital capability building and rigorous AI safety governance.</p>
             <div class="team-grid">
+                <!-- Profile Card: Alex Cheung -->
                 <article class="team-card">
-                    <div class="member-avatar">PC</div>
-                    <h3>Pak Yeung Alex Cheung</h3>
-                    <div class="member-role">Co-Founder & Principal AI Strategist</div>
-                    <p>An accomplished AI strategist and technology visionary dedicated to leading sustainable digital transformation initiatives. Specialising in moving organisations away from rigid IT procurement toward frontline-led capability building, his work focuses heavily on the governance, technical auditing, and maturity scoring of AI agents to ensure autonomous systems remain safe and compliant.</p>
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&h=200&q=80" alt="Pak Yeung Alex Cheung Headshot" class="member-avatar">
+                    <h3>Alex Cheung</h3>
+                    <div class="member-role">Co-Founder & Principal AI Strategist[cite: 2]</div>
+                    <p>An accomplished AI strategist and technology visionary dedicated to leading sustainable digital transformation initiatives[cite: 2]. Specialising in moving organisations away from rigid IT procurement toward frontline-led capability building, his work focuses heavily on the governance, technical auditing, and maturity scoring of AI agents to ensure autonomous systems remain safe and compliant[cite: 2].</p>
                 </article>
 
+                <!-- Profile Card: Hassan Chaudry -->
                 <article class="team-card">
-                    <div class="member-avatar">HC</div>
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&h=200&q=80" alt="Hassan Chaudry Headshot" class="member-avatar">
                     <h3>Hassan Chaudry</h3>
-                    <div class="member-role">Co-Founder</div>
-                    <p>Brings deep operational and strategic insight into health-tech scaling frameworks, ensuring all implementation models are optimally integrated into existing legacy infrastructure with strong regulatory alignment.</p>
+                    <div class="member-role">Co-Founder[cite: 2]</div>
+                    <p>Brings deep operational and strategic insight into health-tech scaling frameworks, ensuring all implementation models are optimally integrated into existing legacy infrastructure with strong regulatory alignment[cite: 2].</p>
                 </article>
 
+                <!-- Profile Card: Suki Panesar -->
                 <article class="team-card">
-                    <div class="member-avatar">SP</div>
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&h=200&q=80" alt="Suki Panesar Headshot" class="member-avatar">
                     <h3>Suki Panesar</h3>
-                    <div class="member-role">Co-Founder</div>
-                    <p>Specialises in systemic clinical informatics and change management, empowering frontline practitioners to master technological tools to solve local capability deficits sustainably.</p>
+                    <div class="member-role">Co-Founder[cite: 2]</div>
+                    <p>Specialises in systemic clinical informatics and change management, empowering frontline practitioners to master technological tools to solve local capability deficits sustainably[cite: 2].</p>
                 </article>
             </div>
         </section>
 
+        <!-- Conversional Action Funnel Element -->
         <section class="funnel-banner" id="contact">
-            <h2>Ready to bridge your digital delivery gap?</h2>
-            <p style="opacity: 0.9; margin-top: 0.5rem;">Begin your Proof of Value journey today.</p>
+            <h2>Ready to bridge your digital delivery gap?[cite: 2]</h2>
+            <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 1.1rem;">Begin your Proof of Value journey today[cite: 2].</p>
             <div class="funnel-steps">
                 <div class="funnel-step">
                     <num>1</num>
-                    <h4 style="margin: 0.5rem 0; color: #ffffff;">Identify 1 Workflow</h4>
-                    <p style="font-size: 0.85rem; opacity: 0.8;">Pinpoint a single operational process ripe for digital transformation.</p>
+                    <h4 style="margin: 0.5rem 0; color: #ffffff;">Identify 1 Workflow[cite: 2]</h4>
+                    <p style="font-size: 0.85rem; opacity: 0.8;">Pinpoint a single operational process ripe for digital transformation[cite: 2].</p>
                 </div>
                 <div class="funnel-step">
                     <num>2</num>
-                    <h4 style="margin: 0.5rem 0; color: #ffffff;">Select 2 Staff</h4>
-                    <p style="font-size: 0.85rem; opacity: 0.8;">Choose two internal team members to become your first practitioners.</p>
+                    <h4 style="margin: 0.5rem 0; color: #ffffff;">Select 2 Staff[cite: 2]</h4>
+                    <p style="font-size: 0.85rem; opacity: 0.8;">Choose two internal team members to become your first practitioners[cite: 2].</p>
                 </div>
                 <div class="funnel-step">
                     <num>3</num>
-                    <h4 style="margin: 0.5rem 0; color: #ffffff;">Begin Proof of Value</h4>
-                    <p style="font-size: 0.85rem; opacity: 0.8;">Start the journey with a focused, entirely low-risk localized pilot.</p>
+                    <h4 style="margin: 0.5rem 0; color: #ffffff;">Begin Proof of Value[cite: 2]</h4>
+                    <p style="font-size: 0.85rem; opacity: 0.8;">Start the journey with a focused, entirely low-risk localized pilot[cite: 2].</p>
                 </div>
             </div>
-            <a href="mailto:inquiries@upull.ai" class="cta-btn" style="background: #ffffff; color: var(--primary-navy); padding: 0.8rem 2rem; font-size: 1.1rem;">Launch Pilot Initiative</a>
+            <a href="mailto:inquiries@upull.ai" class="cta-btn" style="background: #ffffff; color: var(--primary-navy); padding: 1rem 2.5rem; font-size: 1.1rem;">Launch Pilot Initiative</a>
         </section>
     </main>
 
+    <!-- Footer Content -->
     <footer>
-        <p><strong>uPull.ai Ltd.</strong> &bull; Registered Office: London, United Kingdom &bull; <a href="mailto:inquiries@upull.ai">inquiries@upull.ai</a></p>
-        <p style="margin-top: 0.8rem; font-size: 0.8rem; opacity: 0.5;">&copy; 2026 uPull.ai Ltd. All rights reserved. Standard UK English Edition. Powered by Google Gemini Frameworks.</p>
+        <p><strong>uPull.ai Ltd.</strong>[cite: 2] &bull; Registered Office: London, United Kingdom[cite: 2] &bull; <a href="mailto:inquiries@upull.ai">inquiries@upull.ai</a>[cite: 2]</p>
+        <p style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.5;">&copy; 2026 uPull.ai Ltd. All rights reserved. Standard UK English Edition. Powered by Google Gemini Frameworks[cite: 2].</p>
     </footer>
 
+    <!-- Slider Logic Script Component -->
+    <script>
+        const slider = document.getElementById('investmentSlider');
+        const label = document.getElementById('investmentLabel');
+        const metric = document.getElementById('returnMetric');
+
+        slider.addEventListener('input', function() {
+            const val = parseInt(this.value);
+            label.textContent = '£' + val.toLocaleString('en-GB');
+            metric.textContent = '£' + (val * 5).toLocaleString('en-GB');
+        });
+    </script>
 </body>
 </html>
