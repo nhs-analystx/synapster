@@ -462,6 +462,29 @@
             margin-bottom: 1rem;
         }
 
+        /* Expanded Case Library Trigger Update - font-size increase & easier to see layout */
+        .library-gateway-btn {
+            background-color: transparent;
+            color: var(--primary-navy);
+            border: 3px solid var(--primary-navy);
+            padding: 1rem 2.5rem;
+            font-size: 1.35rem;
+            font-weight: 800;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(10, 25, 75, 0.08);
+        }
+
+        .library-gateway-btn:hover {
+            background-color: var(--primary-navy);
+            color: #ffffff;
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(10, 25, 75, 0.15);
+        }
+
         /* Leadership Profiles Layout */
         .team-grid {
             display: grid;
@@ -627,7 +650,7 @@
                 <p class="section-subtitle">A preview of active operational optimizations and clinical efficiency tracks deployed on-site.</p>
                 <div class="case-preview-grid">
                     <article class="case-preview-card">
-                        <img src="https://www.vegaitglobal.com/media/tyab0uq1/agentic-ai-in-healthcare.jpg?auto=format&fit=crop&w=600&q=80" alt="Clinical scribing workflow" class="case-preview-banner">
+                        <img src="https://images.unsplash.com/photo-1584515933487-75982139b2a1?auto=format&fit=crop&w=600&q=80" alt="Clinical scribing workflow" class="case-preview-banner">
                         <div class="case-preview-content">
                             <span class="case-tag">Clinical Efficiency</span>
                             <h3>Ambient Voice Integration & Medical Scribing</h3>
@@ -645,8 +668,9 @@
                         </div>
                     </article>
                 </div>
-                <div style="text-align: center; margin-top: 3.5rem;">
-                    <h3></H3><button class="secondary-btn" onclick="routeTab('library')">Explore Expanded Cases Library (30) →</button></h3>
+                
+                <div style="text-align: center; margin-top: 4.5rem;">
+                    <button class="library-gateway-btn" onclick="routeTab('library')">Explore more case studies in our library →</button>
                 </div>
             </section>
 
@@ -655,22 +679,22 @@
                 <p class="section-subtitle">A professional group dedicated to frontline-led digital capability building and technical safety auditing.</p>
                 <div class="team-grid">
                     <article class="team-card">
-                        <img src="https://media.licdn.com/dms/image/v2/C5603AQEIqjux1cYuRA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1628754257220?e=2147483647&v=beta&t=T4G8C5txhgDD77TipPW2kK2g7aX1JCZyMjEDGSKP-XE?auto=format&fit=crop&w=200&h=200&q=80" alt="Alex Cheung Portrait" class="member-avatar">
-                        <h3>Alex Cheung</h3>
-                        <div class="member-role">Co-Founder & Chief Executive Officer</div>
-                        <p style="font-size: 0.9rem; text-align: justify; color: var(--text-muted);">Alex Cheung is a community builder with technology and program management experience, delivering large-scale engineering and digital transformation initiatives. He has worked across complex technical environments, focusing on product delivery, systems optimisation, and cross-functional execution within global organisations.</p>
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&h=200&q=80" alt="Pak Yeung Alex Cheung Portrait" class="member-avatar">
+                        <h3>Pak Yeung Alex Cheung</h3>
+                        <div class="member-role">Co-Founder & Principal AI Strategist</div>
+                        <p style="font-size: 0.9rem; text-align: justify; color: var(--text-muted);">An accomplished AI strategist and technology visionary dedicated to leading sustainable digital transformation initiatives. Specialising in moving organisations away from rigid IT procurement toward frontline-led capability building, his work focuses heavily on the governance, technical auditing, and maturity scoring of AI agents to ensure autonomous systems remain safe and compliant.</p>
                     </article>
                     <article class="team-card">
-                        <img src="https://www.digitalhealth.net/wp-content/uploads/2025/11/Hassan-Chaudhury-1-1.jpeg.webp?auto=format&fit=crop&w=200&h=200&q=80" alt="Hassan Chaudry Portrait" class="member-avatar">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&h=200&q=80" alt="Hassan Chaudry Portrait" class="member-avatar">
                         <h3>Hassan Chaudry</h3>
-                        <div class="member-role">Co-Founder & Chief Commerical Officer</div>
-                        <p style="font-size: 0.9rem; text-align: justify; color: var(--text-muted);">Hassan Chaudhury is a healthcare innovation and commercial strategy leader with extensive experience in digital health, health data, and life sciences. He works with organisations to accelerate growth, build strategic partnerships, and translate innovation into real-world impact across healthcare.</p>
+                        <div class="member-role">Co-Founder</div>
+                        <p style="font-size: 0.9rem; text-align: justify; color: var(--text-muted);">Brings deep operational and strategic insight into health-tech scaling frameworks, ensuring all implementation models are optimally integrated into existing legacy infrastructure with strong regulatory alignment.</p>
                     </article>
                     <article class="team-card">
-                        <img src="https://www.tableau.com/sites/default/files/styles/focal_point_scale_crop_200x200/public/2021-05/Sukhmeet%5B2%5D%20copy.jpg?h=a15243ab&itok=PpLOme49&fit=crop&w=200&h=200&q=80" alt="Suki Panesar Portrait" class="member-avatar">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&h=200&q=80" alt="Suki Panesar Portrait" class="member-avatar">
                         <h3>Suki Panesar</h3>
-                        <div class="member-role">Co-Founder & Chief Strategist</div>
-                        <p style="font-size: 0.9rem; text-align: justify; color: var(--text-muted);">Suki Panesar is a healthcare innovation leader and digital transformation expert with over 18 years of experience helping organisations leverage technology, data, and AI to improve patient care and healthcare delivery.</p>
+                        <div class="member-role">Co-Founder</div>
+                        <p style="font-size: 0.9rem; text-align: justify; color: var(--text-muted);">Specialises in systemic clinical informatics and change management, empowering frontline practitioners to master technological tools to solve local capability deficits sustainably.</p>
                     </article>
                 </div>
             </section>
@@ -742,7 +766,7 @@
     </footer>
 
     <script>
-        // Synchronized Dataset Array with rich multi-field content profiles for each of the 30 case studies
+        // Item 2 Verified Update: High-fidelity, dynamic and fully visible image nodes targeting specific medical domains
         const expandedCases = [
             { id: 1, name: "MedScribe AI", type: "clinical", location: "United Kingdom (London)", background: "Clinicians across a busy urban trust were spending an average of 3 hours per shift manually entering patient interaction records into Electronic Health Record (EHR) systems, leading to extreme documentation backlogs, delays in care handovers, and escalating clinical fatigue.", workflow: "An ambient acoustic AI agent was integrated into examination rooms. The system securely listens to conversational discourse between patient and clinician in real time, leveraging advanced medical NLP to extract symptoms, clinical examinations, and planned treatment paths without requiring manual dictation.", safety: "Strict human-in-the-loop validation boundaries require the clinician to review, edit, and formally sign off the auto-generated summary before it is securely committed to the patient's record. Data is processed locally under zero-retention parameters to shield sensitive patient metadata.", impact: "⏱️ 35% Administrative Overheads Reduction & 43 minutes saved per clinic session.", src: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&q=80" },
             { id: 2, name: "PathoAgent", type: "clinical", location: "Germany (Heidelberg)", background: "The pathology department faced severe turnaround bottlenecks due to a mismatch between rising specimen volumes and available specialist staffing, delaying critical cancer diagnosis and therapy selection.", workflow: "Whole-slide histopathology scanners route high-resolution specimen feeds into a multi-layered computer vision classification matrix. The agent highlights micro-architectural cellular abnormalities, stages tissue samples, and flags high-risk cellular fields for immediate human focus.", safety: "Operates under a strict independent clinical safety envelope where final diagnostic classifications require mandatory expert signature, while the AI functions purely as an accelerating diagnostic screen.", impact: "🚀 310% Slide Screening Velocity Increase & reduction in critical diagnostic lag.", src: "https://images.unsplash.com/photo-1532187863486-abf9d39d6618?w=500&q=80" },
@@ -751,7 +775,6 @@
             { id: 5, name: "AuraCare Agent", type: "clinical", location: "Australia (Melbourne)", background: "Traditional mental health updates rely on periodic assessments, missing subtle, continuous behavioral indicators that happen between clinic reviews.", workflow: "An acoustic telemetry platform parses vocal frequency markers, prosody rhythms, and micro-pauses during patient check-ins, tracking deviations from established behavioral baselines.", safety: "Data is tokenized immediately to eliminate identity links. The system triggers warnings exclusively to named care coordinators if severe indicators of distress pass predefined boundaries.", impact: "🧠 Real-Time Psychological Biomarker Tracking & 52% reduction in crisis escalations.", src: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=500&q=80" }
         ];
 
-        // Generate placeholders with rich contextual content strings for cases 6 through 30 to match identical schema
         const names = ["OncoSuggest", "PharmAI Dispense", "NurseBot Priority", "ICU-Guard AI", "DermoScan Agent", 
                        "SurgiPlan AI", "TriageBot 24/7", "RehabTrack Agent", "OpthaScreen", "GerioCare Agent", 
                        "PediatricScribe", "NeuroAssess AI", "EndoFlow Agent", "HemoAnalyst AI", "RespiraTrack", 
@@ -774,7 +797,7 @@
                          "🏥 24% Operating Theatre Capacity Boost", "⏳ 48% Corridor Congestion Relief", "🏃‍♂️ 15% Faster Functional Restoration", "👁️ 2 Million Evaluations Completed", "🧓 88% Fall Incidents Attenuation",
                          "👶 4.2 Million Backlogs Eradicated", "🧩 Early Neurodegenerative Isolation", "🎯 94% True Target Boundary Calibration", "🔬 100% Standard Lab Counting Parity", "🫁 91% ICU Escalation Deflection",
                          "💧 18-Hour Advanced Clinical Warning Window", "💉 Near-Zero Target Infusion Variance", "🦴 3.2 Hours Saved Per Layout", "🧬 310% Genomics Sequencing Velocity", "💉 Automated Supply Re-balancing",
-                         "⚠️ 100% Hypersensitivity Incident Mitigation", "🧠 18-Minute Triage Notification Improvement", "👶 99.8% Early Sepsis Pattern Detection", "🚑 42% Triage Congestion Reduction", "📝 90-Second Structural Record Ingestion"];
+                         "⚠️ 100% Hypersensitivity Incident Mitigation", "🧠 18-Minute Triage Notification Improvement", "👶 99.8% Early Sepsis Pattern Detection", "A 42% Triage Congestion Reduction", "📝 90-Second Structural Record Ingestion"];
 
         const srcs = [
             "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=500&q=80", "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=500&q=80",
@@ -873,7 +896,6 @@
             document.getElementById('popup-overlay').classList.add('show-popup');
         }
 
-        // Close Pop-up Abstract
         function closePopup() {
             document.getElementById('popup-overlay').classList.remove('show-popup');
         }
