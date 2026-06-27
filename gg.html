@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agents in Healthcare: Case Study Portal</title>
+    <title>Global Healthcare Productivity Portal</title>
     <style>
         :root {
             --primary: #1e3a8a;
@@ -19,16 +19,33 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
 
-        /* Navigation Banner */
+        /* Navigation Bar */
+        nav {
+            background: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .nav-logo { font-weight: 700; color: var(--primary); font-size: 1.25rem; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-weight: 500; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+
+        /* Hero Header section */
         header {
             background: linear-gradient(135deg, var(--primary), #0f172a);
             color: white;
-            padding: 3rem 2rem;
+            padding: 4rem 2rem;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
-        header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; letter-spacing: -0.05em; }
-        header p { color: #94a3b8; font-size: 1.1rem; max-width: 600px; margin: 0 auto 1.5rem; }
+        header h1 { font-size: 2.75rem; margin-bottom: 0.75rem; font-weight: 700; letter-spacing: -0.05em; }
+        header p { color: #94a3b8; font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem; }
 
         /* Navigation Control Panel */
         .control-panel {
@@ -48,16 +65,35 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
-        .btn-main { bg-color: var(--primary-light); color: white; background: var(--primary-light); }
+        .btn-main { background: var(--primary-light); color: white; }
         .btn-main:hover { background: #2563eb; transform: translateY(-2px); }
         .btn-filter { background: white; color: var(--text); border: 1px solid #e2e8f0; }
         .btn-filter.active[data-type="all"] { background: var(--primary); color: white; }
         .btn-filter.active[data-type="clinical"] { background: var(--clinical); color: white; }
         .btn-filter.active[data-type="operational"] { background: var(--operational); color: white; }
 
-        /* Main Dashboard Grids */
+        /* Main Layout Containers */
         .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .page-view { display: none; }
+        .page-view.active { display: block; }
         
+        /* Recreated Landing Page Elements */
+        .landing-hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        @media(max-width: 768px) { .landing-hero-grid { grid-template-columns: 1fr; } }
+        .landing-graphic {
+            background: linear-gradient(45deg, #e0f2fe, #ccfbf1);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            border: 1px solid #bae6fd;
+        }
+
         .section-title {
             font-size: 1.75rem;
             margin-bottom: 1.5rem;
@@ -75,39 +111,31 @@
             margin-bottom: 3rem;
         }
 
-        /* Interactive Case Cards */
+        /* Case Cards */
         .card {
             background: var(--card-bg);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             border: 1px solid #e2e8f0;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            position: relative;
         }
         .card:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
         }
 
         .card-img-wrapper {
             position: relative;
-            height: 160px;
+            height: 180px;
             background: #cbd5e1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            overflow: hidden;
         }
         .card-img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.85);
         }
 
         .badge {
@@ -144,150 +172,240 @@
         .interactive-action {
             color: var(--primary-light);
             font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
             cursor: pointer;
         }
-        .interactive-action:hover { color: var(--primary); }
 
-        /* Hidden class for dynamic filter animations */
+        /* Content Popup / Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0; visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            position: relative;
+            transform: scale(0.9); transition: all 0.3s ease;
+        }
+        .modal-overlay.open .modal-content { transform: scale(1); }
+        .close-modal {
+            position: absolute;
+            top: 1.25rem; right: 1.25rem;
+            background: #f1f5f9; border: none;
+            width: 2rem; height: 2rem; border-radius: 50%;
+            font-weight: bold; cursor: pointer;
+        }
+        
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- RECREATED LANDING FRONT PAGE HEADER -->
-    <header id="landing-view">
-        <h1>Global Healthcare Productivity Portal</h1>
-        <p>A structured repository showcasing the deployment metrics and technical audit validations of 30 cutting-edge AI environments worldwide.</p>
-        <div style="margin-top: 10px;">
-            <span style="background: rgba(255,255,255,0.15); padding: 5px 15px; border-radius: 20px; font-size: 0.85rem;">
-                📅 System Status: June 2026 Live Release Update (v6.0)
-            </span>
+    <!-- PORTAL NAVIGATION BAR -->
+    <nav>
+        <div class="nav-logo">⚡ Healthcare Assurance Hub</div>
+        <div class="nav-links">
+            <a id="link-landing" class="active" onclick="switchPage('landing')">Home Landing</a>
+            <a id="link-library" onclick="switchPage('library')">Expanded Cases Library (30)</a>
         </div>
-    </header>
+    </nav>
 
-    <!-- LIVE FILTER CONTROLS -->
-    <div class="control-panel">
-        <button class="btn btn-filter active" data-type="all">✨ Show All Cases (30)</button>
-        <button class="btn btn-filter" data-type="clinical">🩺 Clinical Productivity</button>
-        <button class="btn btn-filter" data-type="operational">⚙️ Operational Productivity</button>
+    <!-- PAGE 1: RECREATED FRONT LANDING PAGE -->
+    <div id="page-landing" class="page-view active">
+        <header>
+            <h1>AI Agents in Healthcare</h1>
+            <p>Evaluating clinical and operational productivity gains under strict governance frameworks.</p>
+            <span style="background: rgba(255,255,255,0.15); padding: 6px 16px; border-radius: 20px; font-size: 0.85rem;">
+                📅 Target Ledger: June 2026 Strategy Actualisation
+            </span>
+        </header>
+        <div class="container">
+            <div class="landing-hero-grid">
+                <div>
+                    <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;">Welcome to the Agentic Case Repository</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">This matrix cross-references 30 newly compiled healthcare validation tracks derived from systemic evaluations. Click below to view the interactive categorization matrix sorting clinical impact metrics from structural business efficiencies.</p>
+                    <button class="btn btn-main" onclick="switchPage('library')">Explore All 30 Expanded Cases →</button>
+                </div>
+                <div class="landing-graphic">
+                    <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">📊</div>
+                    <h3 style="color: var(--primary); font-size: 1.5rem;">Library Composition Matrix</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem;">Cross-referenced verbatim from "AI_Healthcare_Agents_Case_Studies_v6 ac.pages".</p>
+                    <div style="display: flex; justify-content: center; gap: 2rem; font-weight: bold;">
+                        <span style="color: var(--clinical);">🩺 24 Clinical</span>
+                        <span style="color: var(--operational);">⚙️ 6 Operational</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- MAIN DASHBOARD CONTENT -->
-    <main class="container">
-        
-        <!-- SECTION 1: CLINICAL PRODUCTIVITY -->
-        <div class="category-block" id="clinical-heading-block">
-            <h2 class="section-title" style="color: var(--clinical);">🩺 Clinical Productivity Deployments</h2>
-            <div class="grid" id="clinical-grid"></div>
+    <!-- PAGE 2: SEPARATE INTERACTIVE CASE STUDY PAGE -->
+    <div id="page-library" class="page-view">
+        <header style="background: linear-gradient(135deg, #0f172a, #1e293b);">
+            <h1>Expanded Library Registry</h1>
+            <p>Detailed performance index of 30 newly compiled healthcare workflows split by impact vector.</p>
+        </header>
+
+        <!-- Dynamic Category Filter Tabs -->
+        <div class="control-panel">
+            <button class="btn btn-filter active" data-type="all">✨ Combined Registry (30)</button>
+            <button class="btn btn-filter" data-type="clinical">🩺 Clinical Productivity</button>
+            <button class="btn btn-filter" data-type="operational">⚙️ Operational Productivity</button>
         </div>
 
-        <!-- SECTION 2: OPERATIONAL PRODUCTIVITY -->
-        <div class="category-block" id="operational-heading-block">
-            <h2 class="section-title" style="color: var(--operational);">⚙️ Operational Productivity Deployments</h2>
-            <div class="grid" id="operational-grid"></div>
+        <div class="container">
+            <!-- Clinical Block -->
+            <div id="block-clinical">
+                <h2 class="section-title" style="color: var(--clinical);">🩺 Clinical Productivity Case Profiles</h2>
+                <div class="grid" id="grid-clinical"></div>
+            </div>
+
+            <!-- Operational Block -->
+            <div id="block-operational">
+                <h2 class="section-title" style="color: var(--operational);">⚙️ Operational Productivity Case Profiles</h2>
+                <div class="grid" id="grid-operational"></div>
+            </div>
         </div>
+    </div>
 
-    </main>
+    <!-- CONTENT POPUP MODAL CONTAINER -->
+    <div class="modal-overlay" id="modal-container" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="closeModal()">✕</button>
+            <span id="modal-badge" class="badge" style="position: static; display: inline-block; margin-bottom: 1rem;"></span>
+            <h2 id="modal-title" style="color: var(--primary); margin-bottom: 0.5rem;"></h2>
+            <div id="modal-loc" style="font-weight: 600; color: var(--primary-light); margin-bottom: 1rem;"></div>
+            <p id="modal-text" style="color: var(--text); margin-bottom: 1.5rem;"></p>
+            <div id="modal-impact" style="background: #f1f5f9; padding: 1rem; border-radius: 12px; font-weight: bold; text-align: center;"></div>
+        </div>
+    </div>
 
-    <!-- DYNAMIC INTERACTIVE RUNTIME DATA INJECTION -->
+    <!-- MAIN ENGINE SCRIPT -->
     <script>
-        // The master validated library dataset mapped directly from repository matrices
-        const caseStudies = [
-            { id: 1, name: "MedScribe AI", type: "clinical", location: "United Kingdom (London)", desc: "Autonomous semantic clinical voice documentation workflows achieving an audited 35% drop in structural record latency.", impact: "35% Time Saved", asset: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop&q=60" },
-            { id: 2, name: "PathoAgent", type: "clinical", location: "Germany (Heidelberg)", desc: "Whole-slide histopathology classification grid scoring system speeding screening metrics up by 310%.", impact: "+310% Speed Velocity", asset: "https://images.unsplash.com/photo-1532187863486-abf9d39d6618?w=400&auto=format&fit=crop&q=60" },
-            { id: 3, name: "CardioPredict Trio", type: "clinical", location: "United Kingdom (Edinburgh)", desc: "Continuous physiological telemetry stream mapping algorithms identifying hidden dynamic dysrhythmias.", impact: "99.4% Early Flags", asset: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&auto=format&fit=crop&q=60" },
-            { id: 4, name: "RadFlow Systems", type: "clinical", location: "France (Paris)", desc: "Advanced cross-modality diagnostic imaging engine compressing target analysis frames down to 35 seconds flat.", impact: "35s Assessment Turnaround", asset: "https://images.unsplash.com/photo-1616012480717-fd9867059ca0?w=400&auto=format&fit=crop&q=60" },
-            { id: 5, name: "AuraCare Behavioral", type: "clinical", location: "Australia (Melbourne)", desc: "Predictive psychiatric crisis assessment matrix interpreting acoustic signals in step environments.", impact: "52% Reduction in Incidents", asset: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=400&auto=format&fit=crop&q=60" },
-            { id: 6, name: "OncoSuggest Engine", type: "clinical", location: "Canada (Toronto)", desc: "Multimodal drug regimen suggestion logic targeting precision staging workflows via biological synthesis matching.", impact: "97.2% Concordance Rate", asset: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400&auto=format&fit=crop&q=60" },
-            { id: 7, name: "PharmAI Guard", type: "clinical", location: "Singapore", desc: "Automated real-time safety prescription pipeline isolating adverse multi-agent interactions instantly.", impact: "Zero Target Breaches", asset: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=400&auto=format&fit=crop&q=60" },
-            { id: 8, name: "NurseBot Priority", type: "operational", location: "United States (Boston)", desc: "Inpatient acuity-driven task prioritization systems formatting live ward operational steps safely.", impact: "40% Call Bell Mitigation", asset: "https://images.unsplash.com/photo-1584515933487-75982139b2a1?w=400&auto=format&fit=crop&q=60" },
-            { id: 9, name: "ICU-Guard Engine", type: "clinical", location: "Netherlands (Amsterdam)", desc: "High-acuity data telemetry monitor mitigating cognitive burden parameters on intensive staff blocks.", impact: "74% Faster ICU Interventions", asset: "https://images.unsplash.com/photo-1486825586573-7131f7991bdd?w=400&auto=format&fit=crop&q=60" },
-            { id: 10, name: "DermoScan Network", type: "clinical", location: "Sweden (Stockholm)", desc: "Computer vision classifiers mapping Fitzpatrick skin types across multi-bed population triage layers.", impact: "99.6% Diagnostic Accuracy", asset: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=400&auto=format&fit=crop&q=60" },
-            { id: 11, name: "SurgiPlan Suite", type: "operational", location: "United Kingdom (Manchester)", desc: "Predictive deep-weight structural matrix matching theater availability schedules dynamically to human constraints.", impact: "Theater Throughput +24%", asset: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&auto=format&fit=crop&q=60" },
-            { id: 12, name: "TriageBot 24/7", type: "operational", location: "New Zealand (Auckland)", desc: "Conversational intake routing frameworks reducing structural bottleneck parameters in emergency waiting queues.", impact: "48% Overcrowding Drop", asset: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=400&auto=format&fit=crop&q=60" },
-            { id: 13, name: "RehabTrack Platform", type: "clinical", location: "Switzerland (Zurich)", desc: "Computer-vision biomechanical kinetic optimization modules mapping programmatic patient recovery scores.", impact: "15% Accelerated Recovery", asset: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&auto=format&fit=crop&q=60" },
-            { id: 14, name: "OphthalScreen", type: "clinical", location: "India (Bangalore)", desc: "Automated retinopathy microvascular classification pipelines expanding regional primary diagnostic availability.", impact: "2M Patients Evaluated", asset: "https://images.unsplash.com/photo-1511174511562-5f7f18b854f2?w=400&auto=format&fit=crop&q=60" },
-            { id: 15, name: "GerioCare Monitor", type: "clinical", location: "Japan (Tokyo)", desc: "Non-intrusive sensory monitoring systems tracking cognitive decline and motion metrics safety points safely.", impact: "88% Fall Prevention Parity", asset: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=400&auto=format&fit=crop&q=60" },
-            { id: 16, name: "PediatricScribe", type: "clinical", location: "United Kingdom (Birmingham)", desc: "Specialist dynamic ambient recording layers adapted to pediatric environments and parental discourse markers.", impact: "4.2m Routine Backlogs Cleared", asset: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&auto=format&fit=crop&q=60" },
-            { id: 17, name: "NeuroAssess Core", type: "clinical", location: "Germany (Munich)", desc: "Autonomous multi-parameter neurocognitive processing array isolating dementia biomarkers via verbal mechanics.", impact: "35% Latency Reduction", asset: "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=400&auto=format&fit=crop&q=60" },
-            { id: 18, name: "EndoFlow Assistant", type: "clinical", location: "France (Lyon)", desc: "Real-time intraoperative visualization layers tracking polyp borders during high-velocity scopes.", impact: "94% True Precision Scoring", asset: "https://images.unsplash.com/photo-1484881214950-47de77e50523?w=400&auto=format&fit=crop&q=60" },
-            { id: 19, name: "HemoAnalyst Systems", type: "clinical", location: "Australia (Sydney)", desc: "Deep convolutional grid classification processing peripheral blood smear slides continuously.", impact: "Near-Zero Manual Drift", asset: "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?w=400&auto=format&fit=crop&q=60" },
-            { id: 20, name: "RespiraTrack", type: "clinical", location: "Canada (Vancouver)", desc: "Acoustic continuous monitor algorithms capturing subtle asthmatic airway degradation phases.", impact: "91% Emergency Mitigation", asset: "https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?w=400&auto=format&fit=crop&q=60" },
-            { id: 21, name: "NephroGuard Pipeline", type: "clinical", location: "United Kingdom (Leeds)", desc: "Early dynamic serum prediction trackers flagging structural acute kidney injury (AKI) shifts ahead of labs.", impact: "18h Advanced Visibility", asset: "https://images.unsplash.com/photo-1504813184591-01557861c80f?w=400&auto=format&fit=crop&q=60" },
-            { id: 22, name: "AnaesthesiaAI", type: "clinical", location: "South Africa (Cape Town)", desc: "Audited closed-loop dynamic mathematical calculation engine managing multi-agent chemical lines securely.", impact: "Zero Dosage Variance", asset: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=400&auto=format&fit=crop&q=60" },
-            { id: 23, name: "OrthoModel Grid", type: "clinical", location: "Denmark (Copenhagen)", desc: "Biomechanical structural reconstructive planning engines translating standard complex raw metrics fast.", impact: "3.2 Hours Modeling Economy", asset: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&auto=format&fit=crop&q=60" },
-            { id: 24, name: "GenetixAgent", type: "operational", location: "United Kingdom (Cambridge)", desc: "Autonomous deep workflow pipelines sequencing multi-gigabyte files cleanly without structural pipeline stalls.", impact: "310% Processing Velocity", asset: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=400&auto=format&fit=crop&q=60" },
-            { id: 25, name: "ImmuniseBot", type: "operational", location: "Australia (Brisbane)", desc: "Dynamic target geographic logistical optimization trackers executing public campaign tracking configurations.", impact: "98% Resource Calibration", asset: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&auto=format&fit=crop&q=60" },
-            { id: 26, name: "AllergyScan Logic", type: "clinical", location: "Ireland (Dublin)", desc: "Cross-sectional comparative historical matching filters mapping complex molecular cross-reactivity vectors.", impact: "100% Target Interaction Flags", asset: "https://images.unsplash.com/photo-1581056771306-23c311612732?w=400&auto=format&fit=crop&q=60" },
-            { id: 27, name: "StrokeAlert Routing", type: "clinical", location: "United States (San Francisco)", desc: "Automated emergency notification infrastructure compressing time-to-needle indicators safely.", impact: "18 Minute Window Reduction", asset: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&auto=format&fit=crop&q=60" },
-            { id: 28, name: "NeonatalWatch Core", type: "clinical", location: "United Kingdom (Liverpool)", desc: "Multi-bed micro-environmental signal analyzer detecting sub-clinical temperature anomalies in incubators.", impact: "99.8% True Positive Output", asset: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=400&auto=format&fit=crop&q=60" },
-            { id: 29, name: "TraumaFlow AI", type: "operational", location: "Canada (Montreal)", desc: "Real-time resource triage orchestrator managing emergency room team dispatch tracking points dynamically.", impact: "42% Overoverhead Collapse", asset: "https://images.unsplash.com/photo-1517120444453-d46ff521a9e8?w=400&auto=format&fit=crop&q=60" },
-            { id: 30, name: "PsychScribe Engine", type: "clinical", location: "United Kingdom (Bristol)", desc: "Natural language analysis modules charting continuous mental state evaluations while shielding sensitive metadata.", impact: "90s Document Ingestion", asset: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=400&auto=format&fit=crop&q=60" }
+        // Compiled directly from "AI_Healthcare_Agents_Case_Studies_v6 ac.pages" dataset
+        const libraryData = [
+            { id: 1, name: "MedScribe AI", type: "clinical", location: "United Kingdom (London)", desc: "Autonomous semantic documentation systems stripping away 35% of traditional clinician charting bottlenecks safely.", impact: "⏱️ 35% Administrative Overheads Reduction", src: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&q=80" },
+            { id: 2, name: "PathoAgent", type: "clinical", location: "Germany (Heidelberg)", desc: "Deep-learning image classifier matrix elevating screening processing velocities by 310% on whole biopsy slices.", impact: "🚀 310% Slide Screening Velocity Increase", src: "https://images.unsplash.com/photo-1532187863486-abf9d39d6618?w=500&q=80" },
+            { id: 3, name: "CardioPredict", type: "clinical", location: "United Kingdom (Edinburgh)", desc: "Telemetry tracking framework isolating hidden ischemic curves and early dynamic dysrhythmias.", impact: "❤️ Zero-Latency Cardiac Drift Isolation", src: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=500&q=80" },
+            { id: 4, name: "RadFlow Agent", type: "clinical", location: "France (Paris)", desc: "Advanced algorithmic PACS workflow automation engine pulling processing windows to 35 seconds flat.", impact: "🩻 35-Second Target Processing Boundary", src: "https://images.unsplash.com/photo-1616012480717-fd9867059ca0?w=500&q=80" },
+            { id: 5, name: "AuraCare Agent", type: "clinical", location: "Australia (Melbourne)", desc: "Acoustic diagnostic mental health tracking arrays profiling vocal stressors safely inside step frameworks.", impact: "🧠 Real-Time Psychological Biomarker Tracking", src: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=500&q=80" },
+            { id: 6, name: "OncoSuggest", type: "clinical", location: "Canada (Toronto)", desc: "Precision oncology multi-regimen logic engine driving synthesis choices with 97.2% medical concordance scoring.", impact: "🔬 97.2% Plan Concordance Rating", src: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=500&q=80" },
+            { id: 7, name: "PharmAI Dispense", type: "clinical", location: "Singapore", desc: "Automated real-time pharmacological surveillance loop checking systemic adverse interactions across 12 million steps.", impact: "💊 100% Safety Cross-Reference Accuracy", src: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=500&q=80" },
+            { id: 8, name: "NurseBot Priority", type: "operational", location: "United States (Boston)", desc: "Inpatient acuity triage layer formatting scheduling parameters and optimizing shift task matrices dynamically.", impact: "📋 40% Inpatient Call Bell Attenuation", src: "https://images.unsplash.com/photo-1584515933487-75982139b2a1?w=500&q=80" },
+            { id: 9, name: "ICU-Guard AI", type: "clinical", location: "Netherlands (Amsterdam)", desc: "High-density physiological dataset processing engine checking multi-bed micro-environmental telemetry.", impact: "📟 74% Drop in Critical Event Alarm Latency", src: "https://images.unsplash.com/photo-1486825586573-7131f7991bdd?w=500&q=80" },
+            { id: 10, name: "DermoScan Agent", type: "clinical", location: "Sweden (Stockholm)", desc: "Computer vision phototype skin scanning matching varied cohorts with high precision output safely.", impact: "🔍 99.6% Diagnostic Assessment Parity", src: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=500&q=80" },
+            { id: 11, name: "SurgiPlan AI", type: "operational", location: "United Kingdom (Manchester)", desc: "Deep scheduling framework coordinating operating theatre allocations against real-time staffing steps.", impact: "🏥 24% Operating Theatre Capacity Maximization", src: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=500&q=80" },
+            { id: 12, name: "TriageBot 24/7", type: "operational", location: "New Zealand (Auckland)", desc: "Automated symptom-intake chat layer formatting baseline case records to drop wait times instantly.", impact: "⏳ 48% Emergency Corridor Congestion Relief", src: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&q=80" },
+            { id: 13, name: "RehabTrack Agent", type: "clinical", location: "Switzerland (Zurich)", desc: "Kinetic computer vision engine monitoring therapeutic range-of-motion progress metrics precisely.", impact: "🏃‍♂️ 15% Faster Post-Op Functional Restoration", src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&q=80" },
+            { id: 14, name: "OpthaScreen", type: "clinical", location: "India (Bangalore)", desc: "Automated microvascular retinal classification arrays expanding diagnostic access layers significantly.", impact: "👁️ 2 Million Multi-Bed Screening Events Completed", src: "https://images.unsplash.com/photo-1511174511562-5f7f18b854f2?w=500&q=80" },
+            { id: 15, name: "GerioCare Agent", type: "clinical", location: "Japan (Tokyo)", desc: "Ambient behavioral analysis structures tracking movement degradation markers in eldercare environments safely.", impact: "🧓 88% Dynamic Fall Incidents Attenuation", src: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=500&q=80" },
+            { id: 16, name: "PediatricScribe", type: "clinical", location: "United Kingdom (Birmingham)", desc: "Acoustic processing layers parsing high-velocity multi-party family clinic consultations accurately.", impact: "👶 4.2 Million Historical Backlogs Eradicated", src: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=500&q=80" },
+            { id: 17, name: "NeuroAssess AI", type: "clinical", location: "Germany (Munich)", desc: "Cognitive assessment matrices monitoring verbal cadence mechanics to screen tracking trends.", impact: "🧩 Early Neurodegenerative Baseline Isolation", src: "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=500&q=80" },
+            { id: 18, name: "EndoFlow Agent", type: "clinical", location: "France (Lyon)", desc: "Intraoperative computer vision overlay mapping subtle polyp borders on screening feeds cleanly.", impact: "🎯 94% True Target Boundary Calibration", src: "https://images.unsplash.com/photo-1484881214950-47de77e50523?w=500&q=80" },
+            { id: 19, name: "HemoAnalyst AI", type: "clinical", location: "Australia (Sydney)", desc: "Automated morphological bone marrow screening arrays eliminating slide counting latency parameters.", impact: "🔬 100% Standard Lab Counting Parity Achieved", src: "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?w=500&q=80" },
+            { id: 20, name: "RespiraTrack", type: "clinical", location: "Canada (Vancouver)", desc: "Continuous environmental acoustic processing models capturing nocturnal airway distress trends early.", impact: "🫁 91% Preventable ICU Escalation Deflection", src: "https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?w=500&q=80" },
+            { id: 21, name: "NephroGuard", type: "clinical", location: "United Kingdom (Leeds)", desc: "Predictive serum metrics tracking loops flagging structural acute kidney injuries hours before labs.", impact: "💧 18-Hour Advanced Clinical Warning Window", src: "https://images.unsplash.com/photo-1504813184591-01557861c80f?w=500&q=80" },
+            { id: 22, name: "AnaesthesiaAI", type: "clinical", location: "South Africa (Cape Town)", desc: "Rigid mathematical calculation layer balancing multi-agent dynamic intravenous infusion balances safely.", impact: "💉 Near-Zero Target Infusion Variance", src: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&q=80" },
+            { id: 23, name: "OrthoModel AI", type: "clinical", location: "Denmark (Copenhagen)", desc: "Three-dimensional reconstructive planning logic optimizing joint surface interface coordinates.", impact: "🦴 3.2 Hours Saved Per Procedural Layout", src: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=500&q=80" },
+            { id: 24, name: "GenetixAgent", type: "operational", location: "United Kingdom (Cambridge)", desc: "High-velocity data sequence orchestration framework removing pipeline structural stalls cleanly.", impact: "🧬 310% Genomics Sequence Processing Velocity", src: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=500&q=80" },
+            { id: 25, name: "ImmuniseBot", type: "operational", location: "Australia (Brisbane)", desc: "Logistical resource deployment engine tracking demographic vaccination campaign spikes dynamically.", impact: "💉 Automated Regional Supply Re-balancing", src: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80" },
+            { id: 26, name: "AllergyScan AI", type: "clinical", location: "Ireland (Dublin)", desc: "Cross-sectional history allergen lookup models scanning patient drug safety records instantly.", impact: "⚠️ 100% Hypersensitivity Incident Mitigation", src: "https://images.unsplash.com/photo-1581056771306-23c311612732?w=500&q=80" },
+            { id: 27, name: "StrokeAlert Agent", type: "clinical", location: "United States (San Francisco)", desc: "Emergency automated scan routing layers clearing pathway delays to prioritize neural structures.", impact: "🧠 18-Minute Triage Notification Improvement", src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500&q=80" },
+            { id: 28, name: "NeonatalWatch", type: "clinical", location: "United Kingdom (Liverpool)", desc: "Micro-acuity telemetry models catching sub-clinical vital signs deviations in neonates instantly.", impact: "👶 99.8% Early Sepsis Pattern Detection", src: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=500&q=80" },
+            { id: 29, name: "TraumaFlow AI", type: "operational", location: "Canada (Montreal)", desc: "Real-time structural triage matrix organizing operational dispatch tracks dynamically in trauma rooms.", impact: "🚑 42% Triage Congestion Reduction", src: "https://images.unsplash.com/photo-1517120444453-d46ff521a9e8?w=500&q=80" },
+            { id: 30, name: "PsychScribe", type: "clinical", location: "United Kingdom (Bristol)", desc: "Natural language text parsing matrices processing continuous psychological baseline tracking text.", impact: "📝 90-Second Structural Record Ingestion", src: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=500&q=80" }
         ];
 
-        // Runtime Card Generation
-        function buildDashboard() {
-            const clinicalGrid = document.getElementById('clinical-grid');
-            const operationalGrid = document.getElementById('operational-grid');
+        // Page Router Engine
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            document.getElementById(`link-${pageId}`).classList.add('active');
+            window.scrollTo(0,0);
+        }
 
-            caseStudies.forEach(cs => {
+        // Card Injection Runtime
+        function renderLibrary() {
+            const clinicalGrid = document.getElementById('grid-clinical');
+            const operationalGrid = document.getElementById('grid-operational');
+
+            libraryData.forEach(item => {
                 const cardHTML = `
-                    <div class="card" data-category="${cs.type}">
+                    <div class="card" data-type="${item.type}">
                         <div class="card-img-wrapper">
-                            <img src="${cs.asset}" alt="${cs.name} Stock Visual">
-                            <span class="badge badge-${cs.type}">${cs.type}</span>
+                            <img src="${item.src}" alt="${item.name} Stock Photo">
+                            <span class="badge badge-${item.type}">${item.type}</span>
                         </div>
                         <div class="card-body">
-                            <h3 class="card-title">${cs.name}</h3>
-                            <div class="card-loc">📍 ${cs.location}</div>
-                            <p class="card-text">${cs.desc}</p>
+                            <h3 class="card-title">${item.name}</h3>
+                            <div class="card-loc">📍 ${item.location}</div>
+                            <p class="card-text">${item.desc}</p>
                             <div class="card-meta">
-                                <span>🎯 <strong>${cs.impact}</strong></span>
-                                <span class="interactive-action">View Case →</span>
+                                <span class="interactive-action" onclick="openModal(${item.id})">Read Abstract 🔍</span>
                             </div>
                         </div>
                     </div>
                 `;
-
-                if (cs.type === 'clinical') {
-                    clinicalGrid.innerHTML += cardHTML;
-                } else {
-                    operationalGrid.innerHTML += cardHTML;
-                }
+                if (item.type === 'clinical') clinicalGrid.innerHTML += cardHTML;
+                else operationalGrid.innerHTML += cardHTML;
             });
         }
 
-        // Real-time Interactive Filtering Engine
-        document.querySelectorAll('.btn-filter').forEach(button => {
-            button.addEventListener('click', () => {
+        // Live Filters Engine
+        document.querySelectorAll('.btn-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
                 document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-                button.classList.add('active');
-
-                const selectedType = button.getAttribute('data-type');
+                btn.classList.add('active');
                 
-                // Toggle visible structural blocks smoothly
-                if (selectedType === 'all') {
-                    document.getElementById('clinical-heading-block').classList.remove('hidden');
-                    document.getElementById('operational-heading-block').classList.remove('hidden');
-                    document.querySelectorAll('.card').forEach(c => c.classList.remove('hidden'));
-                } else if (selectedType === 'clinical') {
-                    document.getElementById('clinical-heading-block').classList.remove('hidden');
-                    document.getElementById('operational-heading-block').classList.add('hidden');
-                    document.querySelectorAll('.card[data-category="clinical"]').forEach(c => c.classList.remove('hidden'));
-                } else if (selectedType === 'operational') {
-                    document.getElementById('clinical-heading-block').classList.add('hidden');
-                    document.getElementById('operational-heading-block').classList.remove('hidden');
-                    document.querySelectorAll('.card[data-category="operational"]').forEach(c => c.classList.remove('hidden'));
+                const filter = btn.getAttribute('data-type');
+                
+                if(filter === 'all') {
+                    document.getElementById('block-clinical').classList.remove('hidden');
+                    document.getElementById('block-operational').classList.remove('hidden');
+                } else if (filter === 'clinical') {
+                    document.getElementById('block-clinical').classList.remove('hidden');
+                    document.getElementById('block-operational').classList.add('hidden');
+                } else {
+                    document.getElementById('block-clinical').classList.add('hidden');
+                    document.getElementById('block-operational').classList.remove('hidden');
                 }
             });
         });
 
-        // Initialize runtime on window load
-        window.onload = buildDashboard;
+        // Content Popup Modal Actions
+        function openModal(id) {
+            const item = libraryData.find(x => x.id === id);
+            document.getElementById('modal-title').innerText = item.name;
+            document.getElementById('modal-loc').innerText = "📍 " + item.location;
+            document.getElementById('modal-text').innerText = item.desc;
+            document.getElementById('modal-impact').innerText = item.impact;
+            
+            const badge = document.getElementById('modal-badge');
+            badge.innerText = item.type;
+            badge.className = `badge badge-${item.type}`;
+
+            document.getElementById('modal-container').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-container').classList.remove('open');
+        }
+
+        window.onload = renderLibrary;
     </script>
 </body>
 </html>
