@@ -32,10 +32,10 @@
             line-height: 1.6;
         }
 
-        /* Unified Portal Navigation */
+        /* Unified Portal Navigation — Mobile Friendly Tweak */
         header {
             background-color: var(--primary-navy);
-            padding: 1.2rem 5%;
+            padding: 1rem 5%;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -49,6 +49,8 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .logo {
@@ -66,12 +68,13 @@
         nav {
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         nav a {
             color: #ffffff;
             text-decoration: none;
-            margin-left: 1.8rem;
             font-weight: 500;
             font-size: 0.95rem;
             transition: color 0.3s;
@@ -138,7 +141,7 @@
             line-height: 1.5;
         }
 
-        /* Hero Banner Settings */
+        /* Hero & Bottom Banner Settings — Mobile Friendly Layout Adjustments */
         .hero-banner {
             background: linear-gradient(rgba(10, 25, 47, 0.88), rgba(10, 25, 47, 0.96)), 
                         url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
@@ -151,11 +154,6 @@
             align-items: center;
             margin-top: 2rem;
             box-shadow: 0 10px 20px -3px rgba(0,0,0,0.08);
-        }
-
-        @media (max-width: 900px) {
-            .hero-banner, .split-grid, .team-grid, .case-preview-grid, .library-grid { grid-template-columns: 1fr !important; }
-            .hero-banner { padding: 2.5rem; }
         }
 
         .hero-left h1 {
@@ -202,6 +200,22 @@
             font-size: 1.25rem;
         }
 
+        /* Responsive Breakpoints for Banners */
+        @media (max-width: 900px) {
+            .hero-banner { 
+                grid-template-columns: 1fr; 
+                padding: 2.5rem 2rem; 
+                text-align: center; 
+                gap: 2.5rem;
+            }
+            .hero-left h1 { font-size: 2.2rem; }
+            .hero-left p { margin-bottom: 1.75rem; font-size: 1.1rem; }
+            .funnel-banner { padding: 3.5rem 1.5rem !important; }
+            .funnel-steps { justify-content: center; }
+            .nav-container { justify-content: center; text-align: center; }
+            nav { justify-content: center; width: 100%; }
+        }
+
         /* Strategic Matrix Elements */
         .pressures-grid {
             display: grid;
@@ -231,6 +245,10 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .split-grid, .team-grid, .case-preview-grid, .library-grid { grid-template-columns: 1fr !important; }
         }
 
         .model-box {
@@ -301,6 +319,11 @@
             text-align: center;
         }
 
+        @media (max-width: 600px) {
+            .interactive-calculator { padding: 2.5rem 1.5rem; }
+            .calculator-results { flex-direction: column; gap: 2rem !important; }
+        }
+
         .range-slider {
             -webkit-appearance: none;
             width: 100%;
@@ -360,6 +383,7 @@
             justify-content: center;
             gap: 1rem;
             margin: -1.5rem auto 3rem;
+            flex-wrap: wrap;
         }
 
         .filter-btn {
@@ -529,7 +553,7 @@
             <nav aria-label="Global Workspace Route Navigation">
                 <a id="tab-landing" class="active-tab" onclick="routeTab('landing')">Strategic Core</a>
                 <a id="tab-library" onclick="routeTab('library')">Expanded Cases Library (30)</a>
-                <a href="mailto:inquiries@upull.ai" class="cta-btn" style="margin-left: 1.8rem;">Proof of Value</a>
+                <a href="mailto:inquiries@upull.ai" class="cta-btn">Proof of Value</a>
             </nav>
         </div>
     </header>
@@ -717,18 +741,20 @@
         </main>
     </div>
 
-    <main>
-        <section class="funnel-banner" id="contact">
-            <h2>Ready to bridge your digital delivery gap?</h2>
-            <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 1.1rem;">Begin your Proof of Value journey today.</p>
-            <div class="funnel-steps">
-                <div class="funnel-step"><num>1</num><h4 style="color:#fff; margin:0.5rem 0;">Identify 1 Workflow</h4><p style="font-size:0.85rem; opacity:0.8;">Pinpoint a single operational process ripe for automation.</p></div>
-                <div class="funnel-step"><num>2</num><h4 style="color:#fff; margin:0.5rem 0;">Select 2 Staff</h4><p style="font-size:0.85rem; opacity:0.8;">Choose two internal team members to become your core practitioners.</p></div>
-                <div class="funnel-step"><num>3</num><h4 style="color:#fff; margin:0.5rem 0;">Begin Proof of Value</h4><p style="font-size:0.85rem; opacity:0.8;">Start the journey with a focused, entirely low-risk localized pilot.</p></div>
-            </div>
-            <a href="mailto:inquiries@upull.ai" class="cta-btn" style="background:#fff; color:var(--primary-navy); padding:1rem 2.5rem;">Launch Pilot Initiative</a>
-        </section>
-    </main>
+    <div id="view-funnel">
+        <main>
+            <section class="funnel-banner" id="contact">
+                <h2>Ready to bridge your digital delivery gap?</h2>
+                <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 1.1rem;">Begin your Proof of Value journey today.</p>
+                <div class="funnel-steps">
+                    <div class="funnel-step"><num>1</num><h4 style="color:#fff; margin:0.5rem 0;">Identify 1 Workflow</h4><p style="font-size:0.85rem; opacity:0.8;">Pinpoint a single operational process ripe for automation.</p></div>
+                    <div class="funnel-step"><num>2</num><h4 style="color:#fff; margin:0.5rem 0;">Select 2 Staff</h4><p style="font-size:0.85rem; opacity:0.8;">Choose two internal team members to become your core practitioners.</p></div>
+                    <div class="funnel-step"><num>3</num><h4 style="color:#fff; margin:0.5rem 0;">Begin Proof of Value</h4><p style="font-size:0.85rem; opacity:0.8;">Start the journey with a focused, entirely low-risk localized pilot.</p></div>
+                </div>
+                <a href="mailto:inquiries@upull.ai" class="cta-btn" style="background:#fff; color:var(--primary-navy); padding:1rem 2.5rem;">Launch Pilot Initiative</a>
+            </section>
+        </main>
+    </div>
 
     <div class="popup-overlay" id="popup-overlay" onclick="closePopup()">
         <div class="popup-window" onclick="event.stopPropagation()">
@@ -815,13 +841,6 @@
         ];
 
         // Specific high-fidelity image overrides from relevant clinical stock assets
-        // Index 1 (PathoAgent) -> Diagnostic Microscope Cell Scan
-        // Index 2 (NurseBot Priority) -> Medical ward call system asset
-        // Index 8 (OpthaScreen) -> Retinal scanner imaging asset
-        // Index 12 (EndoFlow Agent) -> Medical endoscopy monitoring feed asset
-        // Index 14 (RespiraTrack) -> Ventilator monitoring interface asset
-        // Index 15 (NephroGuard) -> Laboratory blood filtering analytics asset
-        // Index 23 (TraumaFlow AI) -> Emergency surgery theater setup asset
         srcs[1] = "https://images.unsplash.com/photo-1578496479763-941f30d0c315?w=500&auto=format&fit=crop&q=80"; 
         srcs[2] = "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&auto=format&fit=crop&q=80";
         srcs[8] = "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&auto=format&fit=crop&q=80";
