@@ -651,11 +651,32 @@
     // fill remaining 18 with generic but reasonable data
   ];
 
-  const names = ["OncoSuggest","NurseBot Priority","ICU-Guard AI","SurgiPlan AI","TriageBot 24/7","RehabTrack Agent","OpthaScreen","GerioCare Agent","PediatricScribe","NeuroAssess AI","AnaesthesiaAI","OrthoModel AI","ImmuniseBot","AllergyScan AI","StrokeAlert Agent","NeonatalWatch","TraumaFlow AI","PsychScribe"];
+  const names = ["OncoSuggest","NurseBot Priority","ICU-Guard AI","SurgiPlan AI","TriageBot 24/7",
+                 "RehabTrack Agent","OpthaScreen","GerioCare Agent","PediatricScribe",
+                 "NeuroAssess AI","AnaesthesiaAI","OrthoModel AI","ImmuniseBot",
+                 "AllergyScan AI","StrokeAlert Agent",
+                 "NeonatalWatch","TraumaFlow AI","PsychScribe"];
   const locations = ["United Kingdom (Birmingham)","New Zealand (Auckland)","Switzerland (Zurich)","India (Bangalore)","Japan (Tokyo)","United Kingdom (Leeds)","Germany (Munich)","France (Lyon)","Australia (Sydney)","Canada (Vancouver)","United Kingdom (Liverpool)","South Africa (Cape Town)","Denmark (Copenhagen)","Australia (Brisbane)","Ireland (Dublin)","United States (San Francisco)","Canada (Montreal)","United Kingdom (Bristol)"];
   const types = ["clinical","clinical","clinical","operational","operational","clinical","clinical","clinical","clinical","clinical","clinical","operational","clinical","clinical","clinical","clinical","operational","clinical"];
   const impacts = ["🔬 97.2% Plan Concordance","📋 40% Inpatient Call Bell Attenuation","📟 74% Drop in Alarm Latency","🏥 24% Operating Theatre Capacity Boost","⏳ 48% Corridor Congestion Relief","🏃 15% Faster Functional Restoration","👁️ 2M Evaluations Completed","🧓 88% Fall Incidents Attenuation","👶 4.2M Backlogs Eradicated","🧩 Early Neurodegenerative Isolation","💉 Near-Zero Target Infusion Variance","🦴 3.2 Hours Saved Per Layout","💉 Automated Supply Re-balancing","⚠️ 100% Hypersensitivity Mitigation","🧠 18-Min Triage Notification","👶 99.8% Early Sepsis Detection","A 42% Triage Congestion Reduction","📝 90-Second Record Ingestion"];
-  const srcs = ["https://img.magnific.com/free-photo/3d-rendering-futuristic-technologies_23-2151941521.jpg?semt=ais_hybrid&w=740&q=80?w=500&q=80","https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=500&q=80","https://images.unsplash.com/photo-1584515933487-75982139b2a1?w=500&q=80","https://images.unsplash.com/photo-1486825586573-7131f7991bdd?w=500&q=80","https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=500&q=80","https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=500&q=80","https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&q=80","https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&q=80","https://images.unsplash.com/photo-1511174511562-5f7f18b854f2?w=500&q=80","https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=500&q=80","https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=500&q=80","https://images.unsplash.com/photo-1559757175-5700dde675bc?w=500&q=80","https://images.unsplash.com/photo-1484881214950-47de77e50523?w=500&q=80","https://images.unsplash.com/photo-1614850523060-8da1d56ae167?w=500&q=80","https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?w=500&q=80","https://images.unsplash.com/photo-1504813184591-01557861c80f?w=500&q=80","https://images.unsplash.com/photo-1582719508461-905c673771fd?w=500&q=80","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80"];
+  const srcs = ["https://img.magnific.com/free-photo/modern-healthcare-equipment-illuminates-empty-hospital-ward-generated-by-ai_188544-20212.jpg?semt=ais_hybrid&w=740&q=80?semt=ais_hybrid&w=740&q=80?w=500&q=80","
+                https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=500&q=80",
+                "https://img.magnific.com/free-photo/modern-healthcare-equipment-illuminates-empty-hospital-ward-generated-by-ai_188544-20212.jpg?semt=ais_hybrid&w=740&q=80?w=500&q=80",
+                "https://images.unsplash.com/photo-1486825586573-7131f7991bdd?w=500&q=80",
+                  "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=500&q=80",
+                  "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=500&q=80",
+                  "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&q=80",
+                  "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&q=80",
+                  "https://img.magnific.com/premium-photo/pediatrician-engaging-with-child-patient-through-00575-02_883586-153471.jpg?semt=ais_hybrid&w=740&q=80w=500&q=80",
+                  "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=500&q=80",
+                  "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=500&q=80",
+                  "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=500&q=80",
+                  "https://images.pexels.com/photos/5207018/pexels-photo-5207018.jpeg?cs=tinysrgb&dpr=1&w=500?w=500&q=80",
+                  "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?w=500&q=80",
+                  "https://img.magnific.com/free-photo/paramedic-placing-cervical-collar-injured-woman-from-car-accident_53876-146582.jpg?semt=ais_hybrid&w=740&q=80?w=500&q=80",
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzhDHytsjWBKBtc0JAzajExTdLi2eHt8-zFQ&s?w=500&q=80",
+                  "https://elements-resized.envatousercontent.com/envato-dam-assets-production/bf1c8381-32aa-4189-aaf6-1c4bd8917591/cd014c93-64b5-48c4-9d50-2d3d0c8a5de6.jpg?w=500&cf_fit=scale-down&mark-alpha=18&mark=https%3A%2F%2Felements-assets.envato.com%2Fstatic%2Fwatermark4.png&q=85&format=auto&s=84a44e150cba307857e5cd7651908110670d7a9c2d6cc95250725cbdc8d04fa9?w=500&q=80",
+                  "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80"];
 
   // add remaining 18 (starting id=13)
   let idCounter = 13;
